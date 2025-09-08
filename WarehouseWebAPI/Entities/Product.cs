@@ -13,7 +13,7 @@ namespace Entities
     {
         [Key]
         public Guid ProductID { get; set; }
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
         public Guid? CategoryID { get; set; }
         public Guid? ManufacturerID { get; set; }
         [Range(0.0001, 5000, ErrorMessage = "Weight must be greater than 0")]

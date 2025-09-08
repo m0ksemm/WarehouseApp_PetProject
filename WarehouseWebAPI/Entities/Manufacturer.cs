@@ -12,7 +12,7 @@ namespace Entities
         [Key]
         public Guid ManufacturerID { get; set; }
         [StringLength(50)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int Deliveries { get; set; }
     }
 }

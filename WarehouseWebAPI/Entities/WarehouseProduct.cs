@@ -17,7 +17,5 @@ namespace Entities
         public int Count { get; set; }
         public Warehouse? Warehouse { get; set; }
         public Product? Product { get; set; }
-
-
     }
 }
