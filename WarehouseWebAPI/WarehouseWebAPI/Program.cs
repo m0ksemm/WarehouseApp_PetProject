@@ -1,17 +1,41 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
+using Repositories;
+using RepositoryContracts;
+using ServiceContracts.CategoriesServiceContracts;
+using Services.CategoriesServices;
+using WarehouseWebAPI.StartupExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.ConfigureServices(builder.Configuration);
+
+
+
+////Repositories
+//builder.Services.AddScoped<ICategoryRepository, CategoriesRepository>();
+
+
+////Services
+//builder.Services.AddScoped<ICategoriesAdderService, CategoriesAdderService>();
+//builder.Services.AddScoped<ICategoriesDeleterService, CategoriesDeleterService>();
+//builder.Services.AddScoped<ICategoriesGetterService, CategoriesGetterService>();
+//builder.Services.AddScoped<ICategoriesUpdaterService, CategoriesUpdaterService>();
+
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+//    b => b.MigrationsAssembly("Entities")));
+
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-    b => b.MigrationsAssembly("Entities")));
+
+
 
 var app = builder.Build();
 
@@ -24,6 +48,8 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/openapi/v1.json","api");
     });
 }
+
+
 
 app.UseHttpsRedirection();
 
