@@ -14,6 +14,6 @@ namespace RepositoryContracts
         Task<Category?> GetCategoryById(Guid guid);
         Task<Category?> GetCategoryByName(string categoryName);
         Task<Category> UpdateCategory(Category category); 
-        Task<Category> DeleteCategory(Guid guid);
+        Task<bool> DeleteCategory(Guid guid);
     }
 }
