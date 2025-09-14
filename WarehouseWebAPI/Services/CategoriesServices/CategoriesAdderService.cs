@@ -2,6 +2,7 @@
 using RepositoryContracts;
 using ServiceContracts.CategoriesServiceContracts;
 using ServiceContracts.DTOs.CategoryDTOs;
+using Services.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,9 @@ namespace Services.CategoriesServices
             {
                 throw new ArgumentException("Category with a given name already exists.");
             }
+
+            ValidationHelper.ModelValidation(categoryAddRequest);
+
             Category category = categoryAddRequest.ToCategory();
             category.CategoryID = Guid.NewGuid();
             

@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using ServiceContracts.CategoriesServiceContracts;
 using ServiceContracts.DTOs.CategoryDTOs;
+using WarehouseWebAPI.Filters;
 
 namespace WarehouseWebAPI.Controllers
 {
     [ApiController]
+    [TypeFilter(typeof(HandleExceptionFilter))]
     [Route("[controller]")]
     public class CategoriesController : Controller
     {
