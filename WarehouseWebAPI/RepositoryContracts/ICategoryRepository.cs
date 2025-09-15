@@ -13,7 +13,7 @@ namespace RepositoryContracts
         Task<List<Category>> GetAllCategories();
         Task<Category?> GetCategoryById(Guid guid);
         Task<Category?> GetCategoryByName(string categoryName);
-        Task<Category> UpdateCategory(Category category); 
+        Task<Category?> UpdateCategory(Category category); 
         Task<bool> DeleteCategory(Guid guid);
     }
 }
