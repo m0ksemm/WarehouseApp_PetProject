@@ -13,6 +13,7 @@ namespace ServiceContracts.DTOs.CategoryDTOs
         [Required(ErrorMessage = "Category ID can't be blank")]
         public Guid CategoryID { get; set; }
         [Required(ErrorMessage = "Category Name can't be blank")]
+        [StringLength(50, ErrorMessage = "Category name is too long. It has to be less than 50 characters.")]
         public string? CategoryName { get; set; }
 
         public Category ToCategory() 
