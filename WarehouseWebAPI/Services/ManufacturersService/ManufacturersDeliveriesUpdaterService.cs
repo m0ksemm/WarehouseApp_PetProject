@@ -1,7 +1,5 @@
 ﻿using Entities;
 using RepositoryContracts;
-using ServiceContracts.CategoriesServiceContracts;
-using ServiceContracts.DTOs.CategoryDTOs;
 using ServiceContracts.DTOs.ManufacturersDTO;
 using ServiceContracts.ManufacturersServiceContracts;
 using Services.Helpers;
@@ -13,28 +11,31 @@ using System.Threading.Tasks;
 
 namespace Services.ManufacturersService
 {
-    public class ManufacturersUpdaterService : IManufacturersUpdaterService
+    internal class ManufacturersDeliveriesUpdaterService : IManufacturersDeliveriesUpdaterService
     {
         private readonly IManufacturerRepository _manufacturerRepository;
-        public ManufacturersUpdaterService(IManufacturerRepository manufacturerRepository)
+        public ManufacturersDeliveriesUpdaterService(IManufacturerRepository manufacturerRepository)
         {
             _manufacturerRepository = manufacturerRepository;
         }
-        public async Task<ManufacturerResponse> UpdateManufacturer(ManufacturerUpdateRequest? manufacturerUpdateRequest)
+        public async Task<ManufacturerResponse> UpdateManufacturerDeliveries(Guid? guid, int deliveries)
         {
-            if (manufacturerUpdateRequest == null)
+            if (guid == null || guid == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(manufacturerUpdateRequest));
+                throw new ArgumentNullException(nameof(guid));
             }
-            ValidationHelper.ModelValidation(manufacturerUpdateRequest);
-
+            if (deliveries == 0)
+            {
+                throw new ArgumentException(nameof(deliveries));
+            }
             Manufacturer? matchingManufacturer = await _manufacturerRepository
-                .GetManufacturerById(manufacturerUpdateRequest.ManufacturerID);
+                .GetManufacturerById(guid.Value);
             if (matchingManufacturer == null)
             {
                 throw new ArgumentException("Given Manufacturer ID does not exist.");
             }
-            matchingManufacturer.ManufacturerName = manufacturerUpdateRequest.ManufacturerName;
+
+            matchingManufacturer.Deliveries = checked(matchingManufacturer.Deliveries + deliveries);
 
             await _manufacturerRepository.UpdateManufacturer(matchingManufacturer);
             return matchingManufacturer.ToManufacturerResponse();
