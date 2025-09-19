@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,5 +14,9 @@ namespace ServiceContracts.DTOs.ManufacturersDTO
         public string? ManufacturerName { get; set; }
         [Range(0, int.MaxValue, ErrorMessage = "Deliveries count can not be less than zero.")]
         public int Deliveries { get; set; }
+        public Manufacturer ToManufacturer()
+        {
+            return new Manufacturer() { ManufacturerName = ManufacturerName, Deliveries = Deliveries };
+        }
     }
 }
