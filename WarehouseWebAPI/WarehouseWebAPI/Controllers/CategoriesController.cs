@@ -29,7 +29,7 @@ namespace WarehouseWebAPI.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<ActionResult<IEnumerable<CategoryResponse>>> CreateCategory(CategoryAddRequest categoryAddRequest)
+        public async Task<ActionResult<CategoryResponse>> CreateCategory(CategoryAddRequest categoryAddRequest)
         {
             CategoryResponse countryResponse = await _categoriesAdderService.AddCategory(categoryAddRequest);
             if (countryResponse == null)

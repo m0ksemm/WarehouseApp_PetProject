@@ -9,6 +9,6 @@ namespace ServiceContracts.ManufacturersServiceContracts
 {
     public interface IManufacturersDeliveriesUpdaterService
     {
-        Task<ManufacturerResponse> UpdateManufacturerDeliveries(Guid guid, int deliveries);
+        Task<ManufacturerResponse> UpdateManufacturerDeliveries(Guid? guid, int deliveries);
     }
 }
