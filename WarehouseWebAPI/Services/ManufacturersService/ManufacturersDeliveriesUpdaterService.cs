@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Services.ManufacturersService
 {
-    internal class ManufacturersDeliveriesUpdaterService : IManufacturersDeliveriesUpdaterService
+    public class ManufacturersDeliveriesUpdaterService : IManufacturersDeliveriesUpdaterService
     {
         private readonly IManufacturerRepository _manufacturerRepository;
         public ManufacturersDeliveriesUpdaterService(IManufacturerRepository manufacturerRepository)

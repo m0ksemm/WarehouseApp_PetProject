@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 
 namespace Services.ManufacturersService
 {
-    public class ManufacturersAddedService : IManufacturersAdderService
+    public class ManufacturersAdderService : IManufacturersAdderService
     {
         private readonly IManufacturerRepository _manufacturerRepository;
-        public ManufacturersAddedService(IManufacturerRepository manufacturerRepository) 
+        public ManufacturersAdderService(IManufacturerRepository manufacturerRepository) 
         {
             _manufacturerRepository = manufacturerRepository;
         }

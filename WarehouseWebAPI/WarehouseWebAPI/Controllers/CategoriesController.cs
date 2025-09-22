@@ -42,7 +42,7 @@ namespace WarehouseWebAPI.Controllers
 
         [HttpGet]
         [Route("[action]")]
-        public async Task<ActionResult<IEnumerable<CategoryResponse>>> ReadAllCategories()
+        public async Task<ActionResult<IEnumerable<CategoryResponse>>> GetAllCategories()
         {
             List<CategoryResponse> categories = await _categoriesGetterService.GetAllCategories();
             if (categories == null)
@@ -54,7 +54,7 @@ namespace WarehouseWebAPI.Controllers
 
         [HttpGet]
         [Route("[action]/{categoryID}")]
-        public async Task<ActionResult<CategoryResponse>> ReadCategoryById(Guid categoryID)
+        public async Task<ActionResult<CategoryResponse>> GetCategoryById(Guid categoryID)
         {
             CategoryResponse? categoryResponse = await _categoriesGetterService.GetCategoryById(categoryID);
             if (categoryResponse == null)
@@ -82,7 +82,7 @@ namespace WarehouseWebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("[action]/{countryID}")]
+        [Route("[action]/{categoryID}")]
         public async Task<ActionResult<CategoryResponse>> UpdateCategory(CategoryUpdateRequest categoryUpdateRequest)
         {
             CategoryResponse? categoryResponse = await _categoriesGetterService.GetCategoryById(categoryUpdateRequest.CategoryID);
