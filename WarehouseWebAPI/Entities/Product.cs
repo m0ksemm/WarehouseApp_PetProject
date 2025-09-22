@@ -13,13 +13,16 @@ namespace Entities
     {
         [Key]
         public Guid ProductID { get; set; }
+        [StringLength(60)]
         public string? ProductName { get; set; }
         public Guid? CategoryID { get; set; }
         public Guid? ManufacturerID { get; set; }
         [Range(0.0001, 5000, ErrorMessage = "Weight must be greater than 0")]
-        public double Weight { get; set; }
+        public double? Weight { get; set; }
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")] 
-        public double Price { get; set; }
+        public double? Price { get; set; }
+        [StringLength(30)]
+        public string? BarCode { get; set; }
         [ForeignKey("CategoryID")]
         public Category? Category { get; set; }
         [ForeignKey("ManufacturerID")]
