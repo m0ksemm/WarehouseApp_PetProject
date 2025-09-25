@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ServiceContracts.DTOs.ProductsDTO
 {
-    public class ProductsAddRequest
+    public class ProductAddRequest
     {
         [StringLength(60, ErrorMessage = "Product name is too long. It has to be less than 60 characters.")]
         [Required(ErrorMessage = "Product Name can not be blank.")]

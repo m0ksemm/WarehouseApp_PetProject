@@ -10,5 +10,6 @@ namespace ServiceContracts.ManufacturersServiceContracts
     public interface IManufacturersUpdaterService
     {
         Task<ManufacturerResponse> UpdateManufacturer(ManufacturerUpdateRequest? manufacturerUpdateRequest);
+        Task<ManufacturerResponse> UpdateManufacturerDeliveries(Guid? guid, int deliveries);
     }
 }

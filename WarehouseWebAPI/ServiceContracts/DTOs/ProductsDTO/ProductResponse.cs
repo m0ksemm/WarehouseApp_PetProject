@@ -44,7 +44,7 @@ namespace ServiceContracts.DTOs.ProductsDTO
 
     public static class ProductExtensions
     {
-        public static ProductResponse ToManufacturerResponse(this Product product)
+        public static ProductResponse ToProductResponse(this Product product)
         {
             return new ProductResponse
             {

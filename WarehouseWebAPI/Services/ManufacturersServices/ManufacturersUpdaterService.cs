@@ -1,5 +1,7 @@
 ﻿using Entities;
 using RepositoryContracts;
+using ServiceContracts.CategoriesServiceContracts;
+using ServiceContracts.DTOs.CategoryDTOs;
 using ServiceContracts.DTOs.ManufacturersDTO;
 using ServiceContracts.ManufacturersServiceContracts;
 using Services.Helpers;
@@ -11,13 +13,33 @@ using System.Threading.Tasks;
 
 namespace Services.ManufacturersService
 {
-    public class ManufacturersDeliveriesUpdaterService : IManufacturersDeliveriesUpdaterService
+    public class ManufacturersUpdaterService : IManufacturersUpdaterService
     {
         private readonly IManufacturerRepository _manufacturerRepository;
-        public ManufacturersDeliveriesUpdaterService(IManufacturerRepository manufacturerRepository)
+        public ManufacturersUpdaterService(IManufacturerRepository manufacturerRepository)
         {
             _manufacturerRepository = manufacturerRepository;
         }
+        public async Task<ManufacturerResponse> UpdateManufacturer(ManufacturerUpdateRequest? manufacturerUpdateRequest)
+        {
+            if (manufacturerUpdateRequest == null)
+            {
+                throw new ArgumentNullException(nameof(manufacturerUpdateRequest));
+            }
+            ValidationHelper.ModelValidation(manufacturerUpdateRequest);
+
+            Manufacturer? matchingManufacturer = await _manufacturerRepository
+                .GetManufacturerById(manufacturerUpdateRequest.ManufacturerID);
+            if (matchingManufacturer == null)
+            {
+                throw new ArgumentException("Given Manufacturer ID does not exist.");
+            }
+            matchingManufacturer.ManufacturerName = manufacturerUpdateRequest.ManufacturerName;
+
+            await _manufacturerRepository.UpdateManufacturer(matchingManufacturer);
+            return matchingManufacturer.ToManufacturerResponse();
+        }
+
         public async Task<ManufacturerResponse> UpdateManufacturerDeliveries(Guid? guid, int deliveries)
         {
             if (guid == null || guid == Guid.Empty)
