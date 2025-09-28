@@ -34,6 +34,13 @@ namespace Services.ManufacturersService
             {
                 throw new ArgumentException("Given Manufacturer ID does not exist.");
             }
+
+            List<Manufacturer> manufacturers = await _manufacturerRepository.GetAllManufacturers();
+            if (manufacturers.Select(manufacturer => manufacturer.ManufacturerName).Contains(manufacturerUpdateRequest.ManufacturerName))
+            {
+                throw new ArgumentException("Manufacturer with this name already exists.");
+            }
+
             matchingManufacturer.ManufacturerName = manufacturerUpdateRequest.ManufacturerName;
 
             await _manufacturerRepository.UpdateManufacturer(matchingManufacturer);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceContracts.ProductsServiceContracts
 {
-    internal interface IProductsDeleterService
+    public interface IProductsDeleterService
     {
         Task<bool> DeleteProduct(Guid? productID);
     }

@@ -4,8 +4,10 @@ using Repositories;
 using RepositoryContracts;
 using ServiceContracts.CategoriesServiceContracts;
 using ServiceContracts.ManufacturersServiceContracts;
+using ServiceContracts.ProductsServiceContracts;
 using Services.CategoriesServices;
 using Services.ManufacturersService;
+using Services.ProductsServices;
 
 namespace WarehouseWebAPI.StartupExtensions
 {
@@ -17,6 +19,7 @@ namespace WarehouseWebAPI.StartupExtensions
             //Repositories
             services.AddScoped<ICategoryRepository, CategoriesRepository>();
             services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
 
             //Services
             services.AddScoped<ICategoriesAdderService, CategoriesAdderService>();
@@ -28,9 +31,12 @@ namespace WarehouseWebAPI.StartupExtensions
             services.AddScoped<IManufacturersDeleterService, ManufacturersDeleterService>();
             services.AddScoped<IManufacturersGetterService, ManufacturersGetterService>();
             services.AddScoped<IManufacturersUpdaterService, ManufacturersUpdaterService>();
-            services.AddScoped<IManufacturersDeliveriesUpdaterService, ManufacturersDeliveriesUpdaterService>();
 
-            
+            services.AddScoped<IProductsAdderService, ProductsAdderService>();
+            services.AddScoped<IProductsDeleterService, ProductsDeleterService>();
+            services.AddScoped<IProductsGetterService, ProductsGetterService>();
+            services.AddScoped<IProductsUpdaterService, ProductsUpdaterService>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("Entities")));

@@ -92,12 +92,6 @@ namespace WarehouseWebAPI.Controllers
                 return NotFound("Manufacturer does not exist.");
             }
 
-            List<ManufacturerResponse> manufacturers = await _manufacturersGetterService.GetAllManufacturers();
-            if (manufacturers.Select(manufacturer => manufacturer.ManufacturerName).Contains(manufacturerUpdateRequest.ManufacturerName))
-            {
-                return BadRequest("Manufacturer with this name already exists.");
-            }
-
             ManufacturerResponse updatedManufacturerResponse = await _manufacturersUpdaterService.UpdateManufacturer(manufacturerUpdateRequest);
             return Ok(updatedManufacturerResponse);
         }
