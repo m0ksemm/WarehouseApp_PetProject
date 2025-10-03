@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,22 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WarehouseApp.ViewModels;
 
 namespace WarehouseApp.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ProductsView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ProductsView : UserControl
     {
-        public MainWindow()
+        public ProductsView()
         {
-            
-            //MainViewModel viewModel = new MainViewModel();
             InitializeComponent();
-            //DataContext = viewModel;
-
         }
     }
 }
