@@ -13,7 +13,7 @@ namespace ServiceContracts.DTOs.ManufacturersDTO
         [Required(ErrorMessage = "Manufacturer Name can't be blank")]
         [StringLength(60, ErrorMessage = "Manufacturer name is too long. It has to be less than 60 characters.")]
         public string? ManufacturerName { get; set; }
-        [Required(ErrorMessage = "Manufacturer Name can't be blank")]
+        [Required(ErrorMessage = "Deliveries can't be zero")]
         [Range(0, int.MaxValue, ErrorMessage = "Deliveries count can not be less than zero.")]
         public int Deliveries { get; set; }
         public Manufacturer ToManufacturer()

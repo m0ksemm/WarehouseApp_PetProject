@@ -95,5 +95,19 @@ namespace WarehouseWebAPI.Controllers
             ManufacturerResponse updatedManufacturerResponse = await _manufacturersUpdaterService.UpdateManufacturer(manufacturerUpdateRequest);
             return Ok(updatedManufacturerResponse);
         }
+
+        [HttpPut]
+        [Route("[action]/{manufacturerID}")]
+        public async Task<ActionResult<ManufacturerResponse>> UpdateManufacturerDeliveries(Guid manufacturerID, int deliveriesUpdateNumber)
+        {
+            ManufacturerResponse? manufacturerResponse = await _manufacturersGetterService.GetManufacturerById(manufacturerID);
+            if (manufacturerResponse == null)
+            {
+                return NotFound("Manufacturer does not exist.");
+            }
+
+            ManufacturerResponse updatedManufacturerResponse = await _manufacturersUpdaterService.UpdateManufacturerDeliveries(manufacturerID, deliveriesUpdateNumber);
+            return Ok(updatedManufacturerResponse);
+        }
     }
 }

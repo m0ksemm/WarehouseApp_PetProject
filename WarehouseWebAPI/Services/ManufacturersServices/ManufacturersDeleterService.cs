@@ -12,9 +12,12 @@ namespace Services.ManufacturersService
     public class ManufacturersDeleterService : IManufacturersDeleterService
     {
         private readonly IManufacturerRepository _manufacturerRepository;
-        public ManufacturersDeleterService(IManufacturerRepository manufacturerRepository)
+        private readonly IProductRepository _productRepository;
+
+        public ManufacturersDeleterService(IManufacturerRepository manufacturerRepository, IProductRepository productRepository)
         {
             _manufacturerRepository = manufacturerRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<bool> DeleteManufacturer(Guid? manufacturerID)
@@ -28,8 +31,11 @@ namespace Services.ManufacturersService
             {
                 return false;
             }
-            //List<Product> products = 
-            //Chech if products with such category exist
+            List<Product> products = await _productRepository.GetAllProducts();
+            if (products.Select(product => product.ManufacturerID == manufacturerID).Count() != 0)
+            {
+                throw new ArgumentException("This manufacturer can not be deleted since there are products that belong to it.");
+            }
             await _manufacturerRepository.DeleteManufacturer(manufacturerID.Value);
             return true;
         }

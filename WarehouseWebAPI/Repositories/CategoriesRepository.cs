@@ -46,17 +46,17 @@ namespace Repositories
             return await _dbContext.Categories.FirstOrDefaultAsync(temp => temp.CategoryName == categoryName);
         }
 
-        public async Task<Category?> UpdateCategory(Category category)
+        public async Task<bool> UpdateCategory(Category category)
         {
             Category? matchingCategory = await _dbContext.Categories
                 .FirstOrDefaultAsync(temp => temp.CategoryID == category.CategoryID);
             if (matchingCategory == null) 
             {
-                return null;
+                return false;
             }
             matchingCategory.CategoryName = category.CategoryName;
             int countUpdated = await _dbContext.SaveChangesAsync();
-            return matchingCategory;
+            return countUpdated > 0;
         }
     }
 }

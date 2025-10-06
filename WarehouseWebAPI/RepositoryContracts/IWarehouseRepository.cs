@@ -13,7 +13,7 @@ namespace RepositoryContracts
         Task<List<Warehouse>> GetAllWarehouses();
         Task<Warehouse?> GetWarehouseById(Guid guid);
         Task<Warehouse?> GetWarehouseByName(string warehouseName);
-        Task<Warehouse> UpdateWarehouse(Warehouse warehouse);
-        Task<Warehouse> DeleteWarehouse(Guid guid);
+        Task<bool> UpdateWarehouse(Warehouse warehouse);
+        Task<bool> DeleteWarehouse(Guid guid);
     }
 }

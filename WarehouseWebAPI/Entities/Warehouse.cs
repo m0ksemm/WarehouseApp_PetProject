@@ -14,7 +14,6 @@ namespace Entities
         public string? Name { get; set; }
         [Range(typeof(decimal), "100", "1000000")]
         public double SquareArea { get; set; }
-        public Guid? CityID { get; set; }
         public string? Address { get; set; }
     }
 }
