@@ -92,8 +92,6 @@ namespace WarehouseWebAPI.Controllers
                 return NotFound("Product does not exist.");
             }
 
-            
-
             ProductResponse updatedProductResponse = await _productsUpdaterService.UpdateProduct(productUpdateRequest);
             return Ok(updatedProductResponse);
         }
