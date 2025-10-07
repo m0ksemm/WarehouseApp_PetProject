@@ -14,6 +14,7 @@ namespace Entities
         public Guid WarehouseID { get; set; }
         public Guid ProductID { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than 0")]
+        public DateTime UpdatedAt { get; set; }
         public int Count { get; set; }
         public Warehouse? Warehouse { get; set; }
         public Product? Product { get; set; }

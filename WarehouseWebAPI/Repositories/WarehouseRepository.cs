@@ -42,7 +42,7 @@ namespace Repositories
 
         public async Task<Warehouse?> GetWarehouseByName(string warehouseName)
         {
-            return await _dbContext.Warehouses.FirstOrDefaultAsync(temp => temp.Name == warehouseName);
+            return await _dbContext.Warehouses.FirstOrDefaultAsync(temp => temp.WarehouseName == warehouseName);
         }
 
         public async Task<bool> UpdateWarehouse(Warehouse warehouse)
@@ -53,7 +53,7 @@ namespace Repositories
             {
                 return false;
             }
-            matchingWarehouse.Name = warehouse.Name;
+            matchingWarehouse.WarehouseName = warehouse.WarehouseName;
             matchingWarehouse.SquareArea = warehouse.SquareArea;
             matchingWarehouse.Address = warehouse.Address;
 

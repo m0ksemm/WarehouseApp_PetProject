@@ -11,7 +11,7 @@ namespace Entities
     {
         [Key]
         public Guid WarehouseID { get; set; }
-        public string? Name { get; set; }
+        public string? WarehouseName { get; set; }
         [Range(typeof(decimal), "100", "1000000")]
         public double SquareArea { get; set; }
         public string? Address { get; set; }

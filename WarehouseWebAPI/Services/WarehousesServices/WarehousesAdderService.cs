@@ -29,9 +29,9 @@ namespace Services.WarehousesServices
                 throw new ArgumentException(nameof(warehouseAddRequest.Name));
             }
             List<Warehouse> warehouses = await _warehouseRepository.GetAllWarehouses();
-            if (warehouses.Select(warehouse => warehouse.Name == warehouseAddRequest.Name &&
+            if (warehouses.Any(warehouse => warehouse.WarehouseName == warehouseAddRequest.Name &&
                 warehouse.SquareArea == warehouseAddRequest.SquareArea &&
-                warehouse.Address == warehouseAddRequest.Address) != null)
+                warehouse.Address == warehouseAddRequest.Address))
             {
                 throw new ArgumentException("Such warehouse already exists.");
             }

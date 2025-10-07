@@ -41,7 +41,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
             return new WarehouseResponse
             {
                 WarehouseID = warehouse.WarehouseID,
-                Name = warehouse.Name,
+                Name = warehouse.WarehouseName,
                 SquareArea = warehouse.SquareArea,
                 Address = warehouse.Address
             };
