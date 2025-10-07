@@ -25,10 +25,6 @@ namespace ServiceContracts.DTOs.ProductsDTO
         [StringLength(30, ErrorMessage = "Bar Code is too long. It has to be less than 30 characters.")]
         [Required(ErrorMessage = "Bar Code can not be blank.")]
         public string? BarCode { get; set; }
-        [ForeignKey("CategoryID")]
-        public Category? Category { get; set; }
-        [ForeignKey("ManufacturerID")]
-        public Manufacturer? Manufacturer { get; set; }
 
         public Product ToProduct()
         {

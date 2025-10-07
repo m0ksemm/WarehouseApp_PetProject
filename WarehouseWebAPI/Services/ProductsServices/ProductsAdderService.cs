@@ -35,12 +35,12 @@ namespace Services.ProductsServices
             }
 
             List<Product> products = await _productsRepository.GetAllProducts();
-            if (products.FirstOrDefault(product => product.ProductName == productAddRequest.ProductName &&
+            if (products.Any(product => product.ProductName == productAddRequest.ProductName &&
                         product.ManufacturerID == productAddRequest.ManufacturerID && 
                         product.CategoryID == productAddRequest.CategoryID && 
                         product.Weight == productAddRequest.Weight && 
                         product.Price == productAddRequest.Price &&
-                        product.BarCode == productAddRequest.BarCode) == null)
+                        product.BarCode == productAddRequest.BarCode))
             {
                 throw new ArgumentException("Such product already exists.");
             }

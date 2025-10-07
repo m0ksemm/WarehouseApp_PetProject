@@ -54,7 +54,17 @@ namespace ServiceContracts.DTOs.ProductsDTO
                 ManufacturerID = product.ManufacturerID,
                 Weight = product.Weight,
                 Price = product.Price,
-                BarCode = product.BarCode
+                BarCode = product.BarCode,
+                Category = new Category() 
+                { 
+                    CategoryID = product.Category!.CategoryID, 
+                    CategoryName = product.Category.CategoryName 
+                },
+                Manufacturer = new Manufacturer()
+                {
+                    ManufacturerID = product.Manufacturer!.ManufacturerID,
+                    ManufacturerName = product.Manufacturer.ManufacturerName,
+                }
             };
         }
     }
