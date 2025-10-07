@@ -12,7 +12,7 @@ namespace RepositoryContracts
         Task<WarehouseProduct> AddWarehouseProduct(WarehouseProduct warehouseProduct);
         Task<List<WarehouseProduct>> GetAllWarehouseProducts();
         Task<WarehouseProduct?> GetWarehouseProductById(Guid guid);
-        Task<WarehouseProduct> UpdateWarehouseProduct(WarehouseProduct warehouseProduct);
-        Task<WarehouseProduct> DeleteWarehouseProduct(Guid guid);
+        Task<bool> UpdateWarehouseProduct(WarehouseProduct warehouseProduct);
+        Task<bool> DeleteWarehouseProduct(Guid warehouseProductID);
     }
 }
