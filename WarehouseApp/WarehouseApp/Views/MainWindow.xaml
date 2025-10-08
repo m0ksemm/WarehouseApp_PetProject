@@ -1,42 +1,75 @@
 ﻿<Window x:Class="WarehouseApp.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="WarehouseApp" Height="500" Width="800">
+        Title="WarehouseApp" Height="700" Width="1200">
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Меню -->
-        <StackPanel Background="#2D2D30" Grid.Column="0">
-            <Button Content="Categories"
-                    Foreground="White"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontSize="16"
-                    Padding="10"
-                    Command="{Binding NavigateToCategoriesCommand}"/>
+        <!-- Бічне меню -->
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Background="#2D2D30"
+                      Grid.Column="0">
+            <StackPanel>
+                <!-- Categories -->
+                <Button Content="Categories"
+                        Foreground="White"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        FontSize="16"
+                        Padding="10"
+                        Command="{Binding NavigateToCategoriesCommand}"/>
 
-            <Button Content="Products"
-                    Foreground="White"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontSize="16"
-                    Padding="10"
-                    Command="{Binding NavigateToProductsCommand}"/>
-            <Button Content="Manufacturers"
-                    Foreground="White" Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontSize="16"
-                    Padding="10"/>
-            <Button Content="Warehouses"
-                    Foreground="White" Background="Transparent"
-                    BorderBrush="Transparent"
-                    FontSize="16"
-                    Padding="10"/>  
-        </StackPanel>
+                <!-- Products -->
+                <Button Content="Products"
+                        Foreground="White"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        FontSize="16"
+                        Padding="10"
+                        Command="{Binding NavigateToProductsCommand}"/>
+
+                <!-- Manufacturers -->
+                <Button Content="Manufacturers"
+                        Foreground="White"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        FontSize="16"
+                        Padding="10"
+                        Command="{Binding NavigateToManufacturersCommand}"/> 
+
+                <!-- Warehouses -->
+                <Button Content="Warehouses"
+                        Foreground="White"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        FontSize="16"
+                        Padding="10"
+                        Command="{Binding ToggleWarehousesMenuCommand}"/>
+
+                <!-- Підменю складів -->
+                <ItemsControl ItemsSource="{Binding Warehouses}"
+                              Visibility="{Binding IsWarehousesExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding}"
+                                    Foreground="#E0E0E0"
+                                    Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    FontSize="14"
+                                    Padding="20,5,5,5"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding DataContext.SelectWarehouseCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
 
         <!-- Контент -->
         <ContentControl Grid.Column="1"

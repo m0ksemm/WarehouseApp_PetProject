@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ServiceContracts.WarehouseProductsServiceContracts
 {
-    public interface IWarehousesWarehouseProductsDeleterService
+    public interface IWarehouseProductsDeleterService
     {
         Task<bool> DeleteWarehouseProduct(Guid? warehouseProductID);
     }

@@ -13,9 +13,9 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
     public class WarehouseProductResponse
     {
         public Guid WarehouseProductID { get; set; }
-        public Guid WarehouseID { get; set; }
-        public Guid ProductID { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public Guid? WarehouseID { get; set; }
+        public Guid? ProductID { get; set; }
+        public DateTime? UpdatedAt { get; set; }
         public int Count { get; set; }
         public Warehouse? Warehouse { get; set; }
         public Product? Product { get; set; }
@@ -36,6 +36,10 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
                 ProductID == warehouseProductResponse.ProductID &&
                 UpdatedAt == warehouseProductResponse.UpdatedAt &&
                 Count == warehouseProductResponse.Count;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 

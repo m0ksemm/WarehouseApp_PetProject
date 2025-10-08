@@ -11,9 +11,9 @@ namespace Entities
     {
         [Key]
         public Guid WarehouseProductID { get; set; }
-        public Guid WarehouseID { get; set; }
-        public Guid ProductID { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public Guid? WarehouseID { get; set; }
+        public Guid? ProductID { get; set; }
+        public DateTime? UpdatedAt { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than 0")]
         public int Count { get; set; }
         public Warehouse? Warehouse { get; set; }

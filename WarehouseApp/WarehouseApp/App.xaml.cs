@@ -26,6 +26,7 @@ namespace WarehouseApp
             services.AddSingleton<MainViewModel>();
             services.AddTransient<CategoriesViewModel>();
             services.AddTransient<ProductsViewModel>();
+            services.AddTransient<ManufacturersViewModel>();
 
             // Вікна
             services.AddSingleton<Views.MainWindow>();

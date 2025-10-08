@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ServiceContracts.WarehouseProductsServiceContracts
 {
-    public interface IWarehousesWarehouseProductsUpdaterService
+    public interface IWarehouseProductsUpdaterService
     {
         Task<bool> UpdateWarehouseProduct(WarehouseProductUpdateRequest? warehouseProductUpdateRequest);
     }
