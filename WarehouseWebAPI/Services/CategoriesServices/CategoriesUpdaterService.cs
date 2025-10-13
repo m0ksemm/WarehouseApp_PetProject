@@ -26,12 +26,19 @@ namespace Services.CategoriesServices
             }
             ValidationHelper.ModelValidation(categoryUpdateRequest);
 
-            Category? matchingCategory = await _categoryRepository
-                .GetCategoryById(categoryUpdateRequest.CategoryID);
-            if (matchingCategory == null) 
+            List<Category> categories = await _categoryRepository.GetAllCategories();
+
+            Category? matchingCategory = categories.FirstOrDefault(category => category.CategoryID == categoryUpdateRequest.CategoryID);
+            if (matchingCategory == null)
             {
                 throw new ArgumentException("Given Category ID does not exist.");
             }
+
+            if (categories.Any(category => category.CategoryName == categoryUpdateRequest.CategoryName))
+            {
+                throw new ArgumentException("Category with this name already exists.");
+            }
+
             matchingCategory.CategoryName = categoryUpdateRequest.CategoryName;
             await _categoryRepository.UpdateCategory(matchingCategory);
             return matchingCategory.ToCategoryResponse();

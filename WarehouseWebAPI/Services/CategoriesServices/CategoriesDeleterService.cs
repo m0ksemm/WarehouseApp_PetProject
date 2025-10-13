@@ -12,9 +12,13 @@ namespace Services.CategoriesServices
     public class CategoriesDeleterService : ICategoriesDeleterService
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoriesDeleterService(ICategoryRepository categoryRepository)
+        private readonly IProductRepository _productRepository;
+
+        public CategoriesDeleterService(ICategoryRepository categoryRepository, 
+            IProductRepository productRepository)
         {
             _categoryRepository = categoryRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<bool> DeleteCategory(Guid? categoryID)
@@ -27,6 +31,11 @@ namespace Services.CategoriesServices
             if (category == null) 
             {
                 return false;
+            }
+            List<Product> products = await _productRepository.GetAllProducts();
+            if (products.Select(product => product.CategoryID == categoryID).Count() != 0)
+            {
+                throw new ArgumentException("This Category can not be deleted since there are products that belong to it.");
             }
             await _categoryRepository.DeleteCategory(categoryID.Value);
             return true;
