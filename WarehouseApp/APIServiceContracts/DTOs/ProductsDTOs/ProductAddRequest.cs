@@ -8,6 +8,11 @@ namespace APIServiceContracts.DTOs.ProductsDTOs
 {
     public class ProductAddRequest
     {
-
+        public string? ProductName { get; set; }
+        public Guid? CategoryID { get; set; }
+        public Guid? ManufacturerID { get; set; }
+        public double? Weight { get; set; }
+        public double? Price { get; set; }
+        public string? BarCode { get; set; }
     }
 }
