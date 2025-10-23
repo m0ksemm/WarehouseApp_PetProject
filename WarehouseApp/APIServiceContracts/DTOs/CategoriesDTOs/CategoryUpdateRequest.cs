@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APIServiceContracts.DTOs.CategoriesDTOs
+namespace ServiceContracts.DTOs.CategoriesDTOs
 {
     public class CategoryUpdateRequest
     {

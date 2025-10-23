@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APIServiceContracts.DTOs.ProductsDTOs
+namespace ServiceContracts.DTOs.ProductsDTOs
 {
     public class ProductResponse
     {

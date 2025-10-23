@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServiceContracts.DTOs.CategoriesDTOs
+namespace Services
 {
-    public class CategoryAddRequest
+    public class CategoriesService
     {
-        public string? CategoryName { get; set; }
     }
 }
