@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entities.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace Entities.Migrations
                 columns: table => new
                 {
                     CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CategoryName = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,7 +28,7 @@ namespace Entities.Migrations
                 columns: table => new
                 {
                     ManufacturerID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ManufacturerName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
                     Deliveries = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -41,10 +41,9 @@ namespace Entities.Migrations
                 columns: table => new
                 {
                     WarehouseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WarehouseName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SquareArea = table.Column<double>(type: "float", nullable: false),
-                    CityID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,11 +55,12 @@ namespace Entities.Migrations
                 columns: table => new
                 {
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
                     CategoryID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ManufacturerID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Weight = table.Column<double>(type: "float", nullable: false),
-                    Price = table.Column<double>(type: "float", nullable: false)
+                    Weight = table.Column<double>(type: "float", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true),
+                    BarCode = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,8 +82,9 @@ namespace Entities.Migrations
                 columns: table => new
                 {
                     WarehouseProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WarehouseID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WarehouseID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Count = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -93,14 +94,12 @@ namespace Entities.Migrations
                         name: "FK_WarehouseProducts_Products_ProductID",
                         column: x => x.ProductID,
                         principalTable: "Products",
-                        principalColumn: "ProductID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProductID");
                     table.ForeignKey(
                         name: "FK_WarehouseProducts_Warehouses_WarehouseID",
                         column: x => x.WarehouseID,
                         principalTable: "Warehouses",
-                        principalColumn: "WarehouseID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "WarehouseID");
                 });
 
             migrationBuilder.CreateIndex(

@@ -23,6 +23,8 @@ namespace WarehouseWebAPI.StartupExtensions
             services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+            services.AddScoped<IWarehouseProductRepository, WarehouseProductRepository>();
+
 
             //Services
             services.AddScoped<ICategoriesAdderService, CategoriesAdderService>();
