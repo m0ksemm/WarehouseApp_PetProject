@@ -90,5 +90,20 @@
             </Button.Template>
         </Button>
 
+
+        <DataGrid Grid.Row="2" Grid.ColumnSpan="5"
+          ItemsSource="{Binding Categories}"
+          SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+          AutoGenerateColumns="False"
+          HeadersVisibility="Column"
+          CanUserAddRows="False"
+          Margin="10"
+          FontSize="16"
+          Foreground="#2D2D30">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№" Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, Path=AlternationIndex, Converter={StaticResource RowIndexConverter}}" Width="50"/>
+                <DataGridTextColumn Header="Category Name" Binding="{Binding CategoryName}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

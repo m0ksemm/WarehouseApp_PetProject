@@ -19,6 +19,7 @@
         </DataTemplate>
 
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <conv:RowIndexConverter x:Key="RowIndexConverter" />
 
         <Style x:Key="RoundedSearchBoxStyle" TargetType="TextBox">
             <Setter Property="FontSize" Value="18"/>

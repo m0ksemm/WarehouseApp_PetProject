@@ -21,6 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ServiceContracts\ServiceContracts.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\product.png" />
     <Resource Include="Images\categories.png" />
     <Resource Include="Images\manufacture.png" />
