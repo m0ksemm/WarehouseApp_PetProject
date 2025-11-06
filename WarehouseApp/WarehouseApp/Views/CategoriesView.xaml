@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:WarehouseApp.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid Background="White">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -14,12 +15,14 @@
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
         <TextBlock Text="Categories Page"
                    FontSize="20"
                    Grid.ColumnSpan="2"
@@ -27,90 +30,124 @@
                    Foreground="#2D2D30"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
-        <Button Grid.Row="1"  Content="Add" FontSize="16" FontWeight="Bold" Foreground="#2D2D30">
+
+        <!-- Кнопка Add -->
+        <Button Grid.Row="1"
+                Content="Add"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="#2D2D30"
+                Command="{Binding AddCommand}">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
-                    CornerRadius="15"
-                    Margin="5"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="3">
+                            CornerRadius="15"
+                            Margin="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="3">
                         <ContentPresenter HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Button.Template>
         </Button>
 
-        <Button Grid.Row="1" Grid.Column="1" Content="Update" FontSize="16" FontWeight="Bold" Foreground="#2D2D30">
+        <!-- Кнопка Update -->
+        <Button Grid.Row="1"
+                Grid.Column="1"
+                Content="Update"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="#2D2D30"
+                Command="{Binding UpdateCommand}">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
-            CornerRadius="15"
-            Margin="5"
-            BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="3">
+                            CornerRadius="15"
+                            Margin="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="3">
                         <ContentPresenter HorizontalAlignment="Center"
-                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Button.Template>
         </Button>
 
-        <Button Grid.Row="1" Grid.Column="2" Content="Delete" FontSize="16" FontWeight="Bold" Foreground="#2D2D30">
+        <!-- Кнопка Delete -->
+        <Button Grid.Row="1"
+                Grid.Column="2"
+                Content="Delete"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="#2D2D30"
+                Command="{Binding DeleteCommand}">
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
-                        CornerRadius="15"
-                        Margin="5"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            CornerRadius="15"
+                            Margin="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Button.Template>
         </Button>
 
-        <TextBox Grid.Row="1" Grid.Column="3" Style="{StaticResource RoundedSearchBoxStyle}"
-         Tag="Search..."
-         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+        <!-- Поле пошуку -->
+        <TextBox Grid.Row="1"
+                 Grid.Column="3"
+                 Style="{StaticResource RoundedSearchBoxStyle}"
+                 Tag="Search..."
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Button Grid.Row="1" Grid.Column="6" FontSize="16" FontWeight="Bold" Foreground="#2D2D30">
+        <!-- Кнопка пошуку -->
+        <Button Grid.Row="1"
+                Grid.Column="4"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="#2D2D30"
+                Command="{Binding SearchCommand}">
             <Image Source="/Images/search.png" Width="30" Height="30"/>
             <Button.Template>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
-                CornerRadius="15"
-                Margin="5"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            CornerRadius="15"
+                            Margin="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Button.Template>
         </Button>
 
-
-        <DataGrid Grid.Row="2" Grid.ColumnSpan="5"
-          ItemsSource="{Binding Categories}"
-          SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
-          AutoGenerateColumns="False"
-          HeadersVisibility="Column"
-          CanUserAddRows="False"
-          AlternationCount="9999"
-          Margin="10"
-          FontSize="20"
-          Foreground="#2D2D30"
-          IsReadOnly="True">
+        <!-- Таблиця категорій -->
+        <DataGrid Grid.Row="2"
+                  Grid.ColumnSpan="5"
+                  ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  AlternationCount="9999"
+                  Margin="10"
+                  FontSize="20"
+                  Foreground="#2D2D30"
+                  IsReadOnly="True">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="№" 
-                            Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow}, 
-                                              Path=AlternationIndex, 
-                                              Converter={StaticResource RowIndexConverter}}" 
-                            Width="50"/>
-                <DataGridTextColumn Header="Category Name" Binding="{Binding CategoryName}" Width="*"/>
+                <DataGridTextColumn Header="№"
+                                    Binding="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
+                                                      Path=AlternationIndex,
+                                                      Converter={StaticResource RowIndexConverter}}"
+                                    Width="50"/>
+                <DataGridTextColumn Header="Category Name"
+                                    Binding="{Binding CategoryName}"
+                                    Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        
     </Grid>
 </UserControl>

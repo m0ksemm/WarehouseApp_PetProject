@@ -10,6 +10,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WarehouseApp.Views;
 
 namespace WarehouseApp.ViewModels
 {
@@ -119,31 +120,31 @@ namespace WarehouseApp.ViewModels
             }
         }
 
-        private async Task AddCategory()
-        {
-            // TODO: викликати діалогове вікно для введення назви нової категорії
-            var newCategory = new CategoryAddRequest { CategoryName = "New category" };
+        //private async Task AddCategory()
+        //{
+        //    // TODO: викликати діалогове вікно для введення назви нової категорії
+        //    var newCategory = new CategoryAddRequest { CategoryName = "New category" };
 
-            var response = await _httpClient.PostAsJsonAsync(BaseUrl, newCategory);
-            if (response.IsSuccessStatusCode)
-                await LoadCategories();
-        }
+        //    var response = await _httpClient.PostAsJsonAsync(BaseUrl, newCategory);
+        //    if (response.IsSuccessStatusCode)
+        //        await LoadCategories();
+        //}
 
-        private async Task UpdateCategory()
-        {
-            if (SelectedCategory == null) return;
+        //private async Task UpdateCategory()
+        //{
+        //    if (SelectedCategory == null) return;
 
-            // TODO: відкрити вікно редагування (наприклад, CategoryEditDialog)
-            var updated = new CategoryUpdateRequest
-            {
-                CategoryID = SelectedCategory.CategoryID,
-                CategoryName = SelectedCategory.CategoryName + " (edited)"
-            };
+        //    // TODO: відкрити вікно редагування (наприклад, CategoryEditDialog)
+        //    var updated = new CategoryUpdateRequest
+        //    {
+        //        CategoryID = SelectedCategory.CategoryID,
+        //        CategoryName = SelectedCategory.CategoryName + " (edited)"
+        //    };
 
-            var response = await _httpClient.PutAsJsonAsync($"{BaseUrl}/{updated.CategoryID}", updated);
-            if (response.IsSuccessStatusCode)
-                await LoadCategories();
-        }
+        //    var response = await _httpClient.PutAsJsonAsync($"{BaseUrl}/{updated.CategoryID}", updated);
+        //    if (response.IsSuccessStatusCode)
+        //        await LoadCategories();
+        //}
 
         private async Task DeleteCategory()
         {
@@ -152,6 +153,48 @@ namespace WarehouseApp.ViewModels
             var response = await _httpClient.DeleteAsync($"{BaseUrl}/{SelectedCategory.CategoryID}");
             if (response.IsSuccessStatusCode)
                 await LoadCategories();
+        }
+
+        private async Task AddCategory()
+        {
+            var window = new CategoryEditView();
+            var vm = new CategoryEditViewModel(window, async result =>
+            {
+                if (result != null)
+                {
+                    var addReq = new CategoryAddRequest { CategoryName = result.CategoryName };
+                    var response = await _httpClient.PostAsJsonAsync("https://localhost:7053/Categories/CreateCategory", addReq);
+                    if (response.IsSuccessStatusCode)
+                        await LoadCategories();
+                }
+            });
+            window.DataContext = vm;
+            window.ShowDialog();
+        }
+
+        private async Task UpdateCategory()
+        {
+            if (SelectedCategory == null) return;
+
+            var window = new CategoryEditView();
+            var vm = new CategoryEditViewModel(window, async result =>
+            {
+                if (result != null)
+                {
+                    var updateReq = new CategoryUpdateRequest
+                    {
+                        CategoryID = SelectedCategory.CategoryID,
+                        CategoryName = result.CategoryName
+                    };
+
+                    var response = await _httpClient.PutAsJsonAsync($"{BaseUrl}/{updateReq.CategoryID}", updateReq);
+                    if (response.IsSuccessStatusCode)
+                        await LoadCategories();
+                }
+            }, SelectedCategory);
+
+            window.DataContext = vm;
+            window.ShowDialog();
         }
     }
 }
