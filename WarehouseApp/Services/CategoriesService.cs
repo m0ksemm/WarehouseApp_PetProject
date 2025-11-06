@@ -19,9 +19,25 @@ namespace Services
             _httpClient = new HttpClient();
         }
 
-        public Task<bool> AddCategory(CategoryAddRequest category)
+        public async Task<bool> AddCategory(CategoryAddRequest categoryAddRequest)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7053/Categories/CreateCategory", categoryAddRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                // Зчитуємо текст помилки, який повертає HandleExceptionFilter
+                string errorMessage = await response.Content.ReadAsStringAsync();
+
+                // Якщо сервер не повернув текст — даємо дефолт
+                if (string.IsNullOrWhiteSpace(errorMessage))
+                    errorMessage = $"Server returned error code: {response.StatusCode}";
+
+                throw new Exception(errorMessage);
+            }
         }
 
         public Task<bool> DeleteCategory(Guid guid)
@@ -31,20 +47,12 @@ namespace Services
 
         public async Task<List<CategoryResponse>> GetAllCategories()
         {
-            try
+            var categories = await _httpClient.GetFromJsonAsync<List<CategoryResponse>>("https://localhost:7053/Categories/GetAllCategories");
+            if (categories != null)
             {
-                var categories = await _httpClient.GetFromJsonAsync<List<CategoryResponse>>("https://localhost:7053/Categories/GetAllCategories");
-                if (categories != null)
-                {
-                    return categories;
-                }
-                else return null;
+                return categories;
             }
-            catch (Exception ex)
-            {
-                // TODO: додати логування або повідомлення користувачу
-                throw new Exception($"Помилка при завантаженні категорій: {ex.Message}");
-            }
+            else return null;
         }
 
         public Task<CategoryResponse?> GetCategoryById(Guid guid)

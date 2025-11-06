@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WarehouseApp.Views;
 
@@ -163,8 +164,15 @@ namespace WarehouseApp.ViewModels
                 if (result != null)
                 {
                     var addReq = new CategoryAddRequest { CategoryName = result.CategoryName };
-                    var response = await _httpClient.PostAsJsonAsync("https://localhost:7053/Categories/CreateCategory", addReq);
-                    if (response.IsSuccessStatusCode)
+                    try
+                    {
+                        await _categoriesService.AddCategory(addReq);
+                    }
+                    catch (Exception ex)
+                    { 
+                        MessageBox.Show($"Error adding category: {ex.Message}");
+                    }
+                        
                         await LoadCategories();
                 }
             });
