@@ -11,7 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using WarehouseApp.ViewModels.CategoriesViewModels;
 using WarehouseApp.Views;
+using WarehouseApp.Views.CategoriesViews;
 
 namespace WarehouseApp.ViewModels
 {
@@ -113,12 +115,6 @@ namespace WarehouseApp.ViewModels
             }
 
             // Пронумеруємо рядки для відображення (як ID)
-            int index = 1;
-            foreach (var c in Categories)
-            {
-                // Можеш у DataGrid просто показувати індекс через DataGridTemplateColumn
-                // або додати сюди тимчасову властивість Number, якщо хочеш напряму
-            }
         }
 
         //private async Task AddCategory()
@@ -149,31 +145,46 @@ namespace WarehouseApp.ViewModels
 
         private async Task DeleteCategory()
         {
-            if (SelectedCategory == null) return;
-
-            var response = await _httpClient.DeleteAsync($"{BaseUrl}/{SelectedCategory.CategoryID}");
-            if (response.IsSuccessStatusCode)
-                await LoadCategories();
+            var window = new CategoryDeleteView();
+            var vm = new CategoryDeleteViewModel(window, SelectedCategory.CategoryName ?? "this category", async confirmed =>
+            {
+                if (confirmed)
+                {
+                    try
+                    {
+                        await _categoriesService.DeleteCategory(SelectedCategory.CategoryID);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting category: {ex.Message}");
+                    }
+                    await LoadCategories();
+                }
+            });
+            window.DataContext = vm;
+            window.ShowDialog();
         }
+
+
 
         private async Task AddCategory()
         {
             var window = new CategoryEditView();
-            var vm = new CategoryEditViewModel(window, async result =>
+            var vm =  new CategoryEditViewModel(window, async result => 
             {
                 if (result != null)
                 {
                     var addReq = new CategoryAddRequest { CategoryName = result.CategoryName };
                     try
                     {
-                        await _categoriesService.AddCategory(addReq);
+                         await _categoriesService.AddCategory(addReq);
                     }
                     catch (Exception ex)
                     { 
                         MessageBox.Show($"Error adding category: {ex.Message}");
                     }
                         
-                        await LoadCategories();
+                    await LoadCategories();
                 }
             });
             window.DataContext = vm;
@@ -189,20 +200,30 @@ namespace WarehouseApp.ViewModels
             {
                 if (result != null)
                 {
-                    var updateReq = new CategoryUpdateRequest
+                    var updateRequest = new CategoryUpdateRequest
                     {
                         CategoryID = SelectedCategory.CategoryID,
                         CategoryName = result.CategoryName
                     };
 
-                    var response = await _httpClient.PutAsJsonAsync($"{BaseUrl}/{updateReq.CategoryID}", updateReq);
-                    if (response.IsSuccessStatusCode)
-                        await LoadCategories();
+                    try
+                    {
+                        await _categoriesService.UpdateCategory(updateRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error adding category: {ex.Message}");
+                    }
+
+                    await LoadCategories();
                 }
             }, SelectedCategory);
 
             window.DataContext = vm;
             window.ShowDialog();
         }
+
     }
+
+
 }

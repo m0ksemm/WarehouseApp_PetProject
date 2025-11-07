@@ -92,7 +92,7 @@ namespace WarehouseWebAPI.Controllers
             }
 
             List<CategoryResponse> categories = await _categoriesGetterService.GetAllCategories();
-            if (categories.Select(category => category.CategoryName == categoryUpdateRequest.CategoryName).Count() != 0) 
+            if (categories.Any(category => category.CategoryName == categoryUpdateRequest.CategoryName)) 
             {
                 return BadRequest("Category with this name already exists.");
             }

@@ -29,20 +29,32 @@ namespace Services
             }
             else
             {
-                // Зчитуємо текст помилки, який повертає HandleExceptionFilter
                 string errorMessage = await response.Content.ReadAsStringAsync();
 
-                // Якщо сервер не повернув текст — даємо дефолт
                 if (string.IsNullOrWhiteSpace(errorMessage))
-                    errorMessage = $"Server returned error code: {response.StatusCode}";
+                    errorMessage = $"Error: \n{response.StatusCode}";
 
                 throw new Exception(errorMessage);
             }
         }
 
-        public Task<bool> DeleteCategory(Guid guid)
+        public async Task<bool> DeleteCategory(Guid guid)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.DeleteAsync($"https://localhost:7053/Categories/DeleteCategory/{guid}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                string errorMessage = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrWhiteSpace(errorMessage))
+                    errorMessage = $"Error: \n{response.StatusCode}";
+
+                throw new Exception(errorMessage);
+            }
         }
 
         public async Task<List<CategoryResponse>> GetAllCategories()
@@ -52,7 +64,7 @@ namespace Services
             {
                 return categories;
             }
-            else return null;
+            else throw new Exception("There are no categories.");
         }
 
         public Task<CategoryResponse?> GetCategoryById(Guid guid)
@@ -65,9 +77,23 @@ namespace Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateCategory(CategoryUpdateRequest category)
+        public async Task<bool> UpdateCategory(CategoryUpdateRequest categoryUpdateRequest)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7053/Categories/UpdateCategory/{categoryUpdateRequest.CategoryID}", categoryUpdateRequest);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                string errorMessage = await response.Content.ReadAsStringAsync();
+
+                if (string.IsNullOrWhiteSpace(errorMessage))
+                    errorMessage = $"Error: \n{response.StatusCode}";
+
+                throw new Exception(errorMessage);
+            }
         }
     }
 }

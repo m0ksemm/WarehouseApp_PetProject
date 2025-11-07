@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Edit Category"
         Height="200" Width="400"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow"
         Background="White">
@@ -48,11 +48,11 @@
             <!-- Save -->
             <Button Content="Save"
                     Command="{Binding SaveCommand}"
-                    FontSize="12"
+                    FontSize="14"
                     FontWeight="Bold"
                     Foreground="#2D2D30"
                     Width="90"
-                    Height="40">
+                    Height="45">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="15"
@@ -71,11 +71,11 @@
             <!-- Cancel -->
             <Button Content="Cancel"
                     Command="{Binding CancelCommand}"
-                    FontSize="12"
+                    FontSize="14"
                     FontWeight="Bold"
                     Foreground="#2D2D30"
                     Width="90"
-                    Height="40">
+                    Height="45">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
                         <Border CornerRadius="15"
