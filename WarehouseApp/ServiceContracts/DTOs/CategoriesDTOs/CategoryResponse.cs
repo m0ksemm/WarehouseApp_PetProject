@@ -10,5 +10,7 @@ namespace ServiceContracts.DTOs.CategoriesDTOs
     {
         public Guid CategoryID { get; set; }
         public string? CategoryName { get; set; }
+
+        public int RowNumber { get; set; }
     }
 }

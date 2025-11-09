@@ -7,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WarehouseApp.ViewModels.CategoriesViewModels;
+using WarehouseApp.ViewModels.ManufacturersViewModels;
+using WarehouseApp.ViewModels.ProductsViewModels;
 
 namespace WarehouseApp.ViewModels
 {

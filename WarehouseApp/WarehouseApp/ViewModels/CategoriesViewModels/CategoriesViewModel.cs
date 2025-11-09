@@ -11,11 +11,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using WarehouseApp.ViewModels.CategoriesViewModels;
 using WarehouseApp.Views;
 using WarehouseApp.Views.CategoriesViews;
 
-namespace WarehouseApp.ViewModels
+namespace WarehouseApp.ViewModels.CategoriesViewModels
 {
     public class CategoriesViewModel : BaseViewModel
     {
@@ -24,8 +23,6 @@ namespace WarehouseApp.ViewModels
 
         private readonly HttpClient _httpClient;
         private readonly ICategoriesService _categoriesService;
-
-        private const string BaseUrl = "https://localhost:7096/api/categories"; // свій API endpoint
 
         private ObservableCollection<CategoryResponse> _categories = new();
         public ObservableCollection<CategoryResponse> Categories
@@ -85,63 +82,48 @@ namespace WarehouseApp.ViewModels
         {
             try
             {
-
                 List<CategoryResponse> categories = await _categoriesService.GetAllCategories();
 
                 if (categories != null)
                 {
+                    // Присвоюємо номери рядків
+                    for (int i = 0; i < categories.Count; i++)
+                        categories[i].RowNumber = i + 1;
+
                     _allCategories = new ObservableCollection<CategoryResponse>(categories);
                     ApplyFilter();
                 }
             }
             catch (Exception ex)
             {
-                // TODO: додати логування або повідомлення користувачу
-                Console.WriteLine($"Помилка при завантаженні категорій: {ex.Message}");
+                Console.WriteLine($"Error with downloading categories: {ex.Message}");
             }
         }
 
         private void ApplyFilter()
         {
+            IEnumerable<CategoryResponse> filtered;
+
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                Categories = new ObservableCollection<CategoryResponse>(_allCategories);
+                filtered = _allCategories;
             }
             else
             {
-                Categories = new ObservableCollection<CategoryResponse>(
-                    _allCategories.Where(c => c.CategoryName != null &&
-                                              c.CategoryName.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+                filtered = _allCategories.Where(c =>
+                    c.CategoryName != null &&
+                    c.CategoryName.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
             }
 
-            // Пронумеруємо рядки для відображення (як ID)
+            var resultList = filtered.Select((c, index) =>
+            {
+                c.RowNumber = index + 1;
+                return c;
+            }).ToList();
+
+            Categories = new ObservableCollection<CategoryResponse>(resultList);
         }
 
-        //private async Task AddCategory()
-        //{
-        //    // TODO: викликати діалогове вікно для введення назви нової категорії
-        //    var newCategory = new CategoryAddRequest { CategoryName = "New category" };
-
-        //    var response = await _httpClient.PostAsJsonAsync(BaseUrl, newCategory);
-        //    if (response.IsSuccessStatusCode)
-        //        await LoadCategories();
-        //}
-
-        //private async Task UpdateCategory()
-        //{
-        //    if (SelectedCategory == null) return;
-
-        //    // TODO: відкрити вікно редагування (наприклад, CategoryEditDialog)
-        //    var updated = new CategoryUpdateRequest
-        //    {
-        //        CategoryID = SelectedCategory.CategoryID,
-        //        CategoryName = SelectedCategory.CategoryName + " (edited)"
-        //    };
-
-        //    var response = await _httpClient.PutAsJsonAsync($"{BaseUrl}/{updated.CategoryID}", updated);
-        //    if (response.IsSuccessStatusCode)
-        //        await LoadCategories();
-        //}
 
         private async Task DeleteCategory()
         {
@@ -169,7 +151,7 @@ namespace WarehouseApp.ViewModels
 
         private async Task AddCategory()
         {
-            var window = new CategoryEditView();
+            var window = new Views.CategoriesViews.CategoryEditView();
             var vm =  new CategoryEditViewModel(window, async result => 
             {
                 if (result != null)

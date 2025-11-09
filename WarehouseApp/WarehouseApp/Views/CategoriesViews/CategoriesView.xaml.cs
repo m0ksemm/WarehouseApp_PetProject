@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WarehouseApp.Views
+namespace WarehouseApp.Views.CategoriesViews
 {
     /// <summary>
-    /// Interaction logic for ManufacturersView.xaml
+    /// Interaction logic for CategoriesView.xaml
     /// </summary>
-    public partial class ManufacturersView : UserControl
+    public partial class CategoriesView : UserControl
     {
-        public ManufacturersView()
+        public CategoriesView()
         {
             InitializeComponent();
         }

@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WarehouseApp.Views
+namespace WarehouseApp.Views.CategoriesViews
 {
     /// <summary>
-    /// Interaction logic for ProductsView.xaml
+    /// Interaction logic for CategoryEditView.xaml
     /// </summary>
-    public partial class ProductsView : UserControl
+    public partial class CategoryEditView : Window
     {
-        public ProductsView()
+        public CategoryEditView()
         {
             InitializeComponent();
         }

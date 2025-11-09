@@ -5,6 +5,9 @@ using System.Data;
 using System.Windows;
 using System.Windows.Navigation;
 using WarehouseApp.ViewModels;
+using WarehouseApp.ViewModels.CategoriesViewModels;
+using WarehouseApp.ViewModels.ManufacturersViewModels;
+using WarehouseApp.ViewModels.ProductsViewModels;
 
 namespace WarehouseApp
 {

@@ -2,22 +2,22 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
   <ItemGroup>
-    <Compile Update="Views\CategoriesView.xaml.cs">
+    <Compile Update="Views\CategoriesViews\CategoriesView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\CategoriesViews\CategoryDeleteView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\CategoryEditView.xaml.cs">
+    <Compile Update="Views\CategoriesViews\CategoryEditView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ManufacturersView.xaml.cs">
+    <Compile Update="Views\ManufacturerViews\ManufacturersView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ProductsView.xaml.cs">
+    <Compile Update="Views\ProductsViews\ProductsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

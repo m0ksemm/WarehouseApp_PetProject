@@ -1,21 +1,26 @@
 ﻿<Application x:Class="WarehouseApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:WarehouseApp.ViewModels"
-             xmlns:views="clr-namespace:WarehouseApp.Views"
+             xmlns:vmCat="clr-namespace:WarehouseApp.ViewModels.CategoriesViewModels"
+             xmlns:vmProd="clr-namespace:WarehouseApp.ViewModels.ProductsViewModels"
+             xmlns:vmMan="clr-namespace:WarehouseApp.ViewModels.ManufacturersViewModels"
+             xmlns:vCat="clr-namespace:WarehouseApp.Views.CategoriesViews"
+             xmlns:vProd="clr-namespace:WarehouseApp.Views.ProductsViews"
+             xmlns:vMan="clr-namespace:WarehouseApp.Views.ManufacturersViews"
+
              xmlns:conv="clr-namespace:WarehouseApp.Converters"
              >
     <Application.Resources>
-        <DataTemplate DataType="{x:Type vm:CategoriesViewModel}">
-            <views:CategoriesView />
+        <DataTemplate DataType="{x:Type vmCat:CategoriesViewModel}">
+            <vCat:CategoriesView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:ProductsViewModel}">
-            <views:ProductsView />
+        <DataTemplate DataType="{x:Type vmProd:ProductsViewModel}">
+            <vProd:ProductsView />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:ManufacturersViewModel}">
-            <views:ManufacturersView />
+        <DataTemplate DataType="{x:Type vmMan:ManufacturersViewModel}">
+            <vMan:ManufacturersView />
         </DataTemplate>
 
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />

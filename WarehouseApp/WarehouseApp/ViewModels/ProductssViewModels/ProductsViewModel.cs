@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WarehouseApp.ViewModels
+namespace WarehouseApp.ViewModels.ProductsViewModels
 {
     public class ProductsViewModel : BaseViewModel
     {
