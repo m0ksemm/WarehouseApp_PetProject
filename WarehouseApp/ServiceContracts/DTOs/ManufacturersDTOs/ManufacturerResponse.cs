@@ -11,5 +11,7 @@ namespace ServiceContracts.DTOs.ManufacturersDTOs
         public Guid ManufacturerID { get; set; }
         public string? ManufacturerName { get; set; }
         public int Deliveries { get; set; }
+
+        public int RowNumber { get; set; }
     }
 }

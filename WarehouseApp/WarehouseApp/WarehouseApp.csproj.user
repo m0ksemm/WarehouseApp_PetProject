@@ -14,7 +14,13 @@
     <Compile Update="Views\MainWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\ManufacturerViews\ManufacturersView.xaml.cs">
+    <Compile Update="Views\ManufacturersViews\ManufacturerAddEditView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ManufacturersViews\ManufacturerDeleteView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ManufacturersViews\ManufacturersView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ProductsViews\ProductsView.xaml.cs">
