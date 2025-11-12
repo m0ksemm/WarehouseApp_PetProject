@@ -23,6 +23,7 @@
             <vMan:ManufacturersView />
         </DataTemplate>
 
+        <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <conv:RowIndexConverter x:Key="RowIndexConverter" />
 

@@ -3,15 +3,167 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:WarehouseApp.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="600">
+             d:DesignHeight="600" d:DesignWidth="1000">
+
     <Grid Background="White">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
         <TextBlock Text="Products Page"
-                   FontSize="28"
+                   FontSize="20"
+                   Grid.ColumnSpan="2"
                    FontWeight="Bold"
                    Foreground="#2D2D30"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
+
+        <!-- Кнопки -->
+        <Button Grid.Row="1" Content="Add"
+                FontSize="16" FontWeight="Bold"
+                Foreground="#2D2D30"
+                Command="{Binding AddCommand}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="15"
+                            Margin="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button Grid.Row="1" Grid.Column="1" Content="Update"
+                FontSize="16" FontWeight="Bold"
+                Foreground="#2D2D30"
+                Command="{Binding UpdateCommand}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="15"
+                            Margin="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <Button Grid.Row="1" Grid.Column="2" Content="Delete"
+                FontSize="16" FontWeight="Bold"
+                Foreground="#2D2D30"
+                Command="{Binding DeleteCommand}">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                            CornerRadius="15"
+                            Margin="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+
+        <TextBox Grid.Row="1"
+                 Grid.Column="3"
+                 Style="{StaticResource RoundedSearchBoxStyle}"
+                 Tag="Search..."
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <StackPanel Grid.Row="2"
+            Grid.ColumnSpan="4"
+            Orientation="Horizontal"
+            Margin="10,10,10,10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Height="40">
+
+            <!-- Category ComboBox -->
+            <ComboBox Width="280"
+              ItemsSource="{Binding CategoriesFilter}"
+              SelectedItem="{Binding SelectedCategoryFilter}"
+              FontSize="16"
+              Foreground="#2D2D30"
+              Margin="0,0,10,0">
+                <!-- Той самий шаблон з плейсхолдером -->
+            </ComboBox>
+
+            <!-- Manufacturer ComboBox -->
+            <ComboBox Width="280"
+              ItemsSource="{Binding ManufacturersFilter}"
+              SelectedItem="{Binding SelectedManufacturerFilter}"
+              FontSize="16"
+              Foreground="#2D2D30"
+              Margin="0,0,10,0">
+                <!-- Той самий шаблон з плейсхолдером -->
+            </ComboBox>
+
+            
+            
+            <!-- Min Price -->
+            <TextBox Width="120"
+             Text="{Binding MinPriceFilter, UpdateSourceTrigger=PropertyChanged}"
+             FontSize="16"
+             Foreground="#2D2D30"
+             Tag="Min Price"
+             Margin="0,0,10,0"
+             Style="{StaticResource RoundedSearchBoxStyle}"/>
+
+            <!-- Max Price -->
+            <TextBox Width="120"
+             Text="{Binding MaxPriceFilter, UpdateSourceTrigger=PropertyChanged}"
+             FontSize="16"
+             Foreground="#2D2D30"
+             Tag="Max Price"
+             Style="{StaticResource RoundedSearchBoxStyle}"/>
+
+        </StackPanel>
+
+        <!-- Таблиця -->
+        <DataGrid Grid.Row="3"
+                  Grid.ColumnSpan="4"
+                  ItemsSource="{Binding Products}"
+                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  Margin="10"
+                  FontSize="18"
+                  Foreground="#2D2D30"
+                  IsReadOnly="True"
+                  GridLinesVisibility="Horizontal"
+                  BorderThickness="0">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="50"/>
+                <DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}" Width="2*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category.CategoryName}" Width="*"/>
+                <DataGridTextColumn Header="Manufacturer" Binding="{Binding Manufacturer.ManufacturerName}" Width="*"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*" />
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
     </Grid>
 </UserControl>

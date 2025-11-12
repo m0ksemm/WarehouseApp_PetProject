@@ -18,5 +18,7 @@ namespace ServiceContracts.DTOs.ProductsDTOs
         public string? BarCode { get; set; }
         public Category? Category { get; set; }
         public Manufacturer? Manufacturer { get; set; }
+
+        public int RowNumber { get; set; }
     }
 }

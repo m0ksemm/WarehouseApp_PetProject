@@ -12,5 +12,10 @@ namespace ServiceContracts.DTOs.CategoriesDTOs
         public string? CategoryName { get; set; }
 
         public int RowNumber { get; set; }
+
+        public override string ToString()
+        {
+            return CategoryName;
+        }
     }
 }

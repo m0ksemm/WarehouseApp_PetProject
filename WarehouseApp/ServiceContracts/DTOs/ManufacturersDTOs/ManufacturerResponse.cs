@@ -13,5 +13,9 @@ namespace ServiceContracts.DTOs.ManufacturersDTOs
         public int Deliveries { get; set; }
 
         public int RowNumber { get; set; }
+        public override string ToString()
+        {
+            return ManufacturerName;
+        }
     }
 }
