@@ -61,28 +61,72 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             }
         }
 
+        private string _minPriceFilterText;
+        public string MinPriceFilterText
+        {
+            get => _minPriceFilterText;
+            set
+            {
+                _minPriceFilterText = value;
+                OnPropertyChanged();
+                if (decimal.TryParse(value, out var parsed))
+                    MinPriceFilter = parsed;
+                else
+                    MinPriceFilter = null;
+                ApplyFilter();
+            }
+        }
+
+        private string _maxPriceFilterText;
+        public string MaxPriceFilterText
+        {
+            get => _maxPriceFilterText;
+            set
+            {
+                _maxPriceFilterText = value;
+                OnPropertyChanged();
+                if (decimal.TryParse(value, out var parsed))
+                    MaxPriceFilter = parsed;
+                else
+                    MaxPriceFilter = null;
+                ApplyFilter();
+            }
+        }
+
+        //private string _categorySearchText;
+        //public string CategorySearchText
+        //{
+        //    get => _categorySearchText;
+        //    set
+        //    {
+        //        _categorySearchText = value;
+        //        OnPropertyChanged();
+        //        ApplyCategoryFilter();
+        //    }
+        //}
+
+        //private void ApplyCategoryFilter()
+        //{
+        //    if (string.IsNullOrWhiteSpace(CategorySearchText))
+        //        CategoriesFilter = new ObservableCollection<CategoryResponse>(_allCategories);
+        //    else
+        //        CategoriesFilter = new ObservableCollection<CategoryResponse>(
+        //            _allCategories.Where(c =>
+        //                c.CategoryName.Contains(CategorySearchText, StringComparison.OrdinalIgnoreCase)));
+        //}
+
         private decimal? _minPriceFilter;
         public decimal? MinPriceFilter
         {
             get => _minPriceFilter;
-            set
-            {
-                _minPriceFilter = value;
-                OnPropertyChanged();
-                ApplyFilter();
-            }
+            set { _minPriceFilter = value; OnPropertyChanged(); }
         }
 
         private decimal? _maxPriceFilter;
         public decimal? MaxPriceFilter
         {
             get => _maxPriceFilter;
-            set
-            {
-                _maxPriceFilter = value;
-                OnPropertyChanged();
-                ApplyFilter();
-            }
+            set { _maxPriceFilter = value; OnPropertyChanged(); }
         }
 
         public ICommand AddCommand { get; }
@@ -176,6 +220,8 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             Products = new ObservableCollection<ProductResponse>(filtered);
             OnPropertyChanged(nameof(Products));
         }
+
+
 
         // Далі залишаєш свій код для Add / Update / Delete
         private async Task AddProduct() { /* ... */ }

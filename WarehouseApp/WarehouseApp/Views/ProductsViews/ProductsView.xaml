@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:helpers="clr-namespace:WarehouseApp.Helpers"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
 
@@ -103,7 +104,7 @@
             <ComboBox Width="280"
               ItemsSource="{Binding CategoriesFilter}"
               SelectedItem="{Binding SelectedCategoryFilter}"
-              FontSize="16"
+              FontSize="20"
               Foreground="#2D2D30"
               Margin="0,0,10,0">
                 <!-- Той самий шаблон з плейсхолдером -->
@@ -113,32 +114,32 @@
             <ComboBox Width="280"
               ItemsSource="{Binding ManufacturersFilter}"
               SelectedItem="{Binding SelectedManufacturerFilter}"
-              FontSize="16"
+              FontSize="20"
               Foreground="#2D2D30"
               Margin="0,0,10,0">
                 <!-- Той самий шаблон з плейсхолдером -->
             </ComboBox>
 
-            
-            
+
             <!-- Min Price -->
             <TextBox Width="120"
-             Text="{Binding MinPriceFilter, UpdateSourceTrigger=PropertyChanged}"
-             FontSize="16"
-             Foreground="#2D2D30"
-             Tag="Min Price"
-             Margin="0,0,10,0"
-             Style="{StaticResource RoundedSearchBoxStyle}"/>
+         Style="{StaticResource NumericRoundedBoxStyle}"
+         Tag="Min Price"
+         Text="{Binding MinPriceFilterText, UpdateSourceTrigger=PropertyChanged}"
+         helpers:NumericInputBehavior.AllowOnlyNumbers="True"
+         Margin="10,0,10,0"/>
 
             <!-- Max Price -->
             <TextBox Width="120"
-             Text="{Binding MaxPriceFilter, UpdateSourceTrigger=PropertyChanged}"
-             FontSize="16"
-             Foreground="#2D2D30"
-             Tag="Max Price"
-             Style="{StaticResource RoundedSearchBoxStyle}"/>
+         Style="{StaticResource NumericRoundedBoxStyle}"
+         Tag="Max Price"
+         Text="{Binding MaxPriceFilterText, UpdateSourceTrigger=PropertyChanged}"
+         helpers:NumericInputBehavior.AllowOnlyNumbers="True"/>
+
+
 
         </StackPanel>
+
 
         <!-- Таблиця -->
         <DataGrid Grid.Row="3"
