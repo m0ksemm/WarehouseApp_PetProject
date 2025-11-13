@@ -26,17 +26,5 @@ namespace WarehouseApp.Views.ProductsViews
         {
             InitializeComponent();
         }
-
-        //private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (sender is ComboBox combo && combo.DataContext is ProductsViewModel vm)
-        //    {
-        //        // Якщо користувач обрав елемент зі списку, оновлюємо текст у полі
-        //        if (combo.SelectedItem is CategoryResponse category)
-        //        {
-        //            vm.CategorySearchText = category.CategoryName == "All Categories" ? "" : category.CategoryName;
-        //        }
-        //    }
-        //}
     }
 }
