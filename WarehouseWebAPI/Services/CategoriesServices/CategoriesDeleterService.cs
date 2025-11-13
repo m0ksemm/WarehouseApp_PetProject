@@ -33,7 +33,7 @@ namespace Services.CategoriesServices
                 return false;
             }
             List<Product> products = await _productRepository.GetAllProducts();
-            if (products.Select(product => product.CategoryID == categoryID).Count() != 0)
+            if (products.Any(product => product.CategoryID == categoryID))
             {
                 throw new ArgumentException("This Category can not be deleted since there are products that belong to it.");
             }

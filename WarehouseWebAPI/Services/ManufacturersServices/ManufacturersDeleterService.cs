@@ -32,7 +32,7 @@ namespace Services.ManufacturersService
                 return false;
             }
             List<Product> products = await _productRepository.GetAllProducts();
-            if (products.Select(product => product.ManufacturerID == manufacturerID).Count() != 0)
+            if (products.Any(product => product.ManufacturerID == manufacturerID))
             {
                 throw new ArgumentException("This manufacturer can not be deleted since there are products that belong to it.");
             }
