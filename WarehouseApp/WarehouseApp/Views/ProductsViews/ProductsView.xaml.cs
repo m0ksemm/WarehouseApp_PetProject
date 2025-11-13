@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceContracts.DTOs.CategoriesDTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WarehouseApp.ViewModels.ProductsViewModels;
 
 namespace WarehouseApp.Views.ProductsViews
 {
@@ -24,5 +26,17 @@ namespace WarehouseApp.Views.ProductsViews
         {
             InitializeComponent();
         }
+
+        //private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (sender is ComboBox combo && combo.DataContext is ProductsViewModel vm)
+        //    {
+        //        // Якщо користувач обрав елемент зі списку, оновлюємо текст у полі
+        //        if (combo.SelectedItem is CategoryResponse category)
+        //        {
+        //            vm.CategorySearchText = category.CategoryName == "All Categories" ? "" : category.CategoryName;
+        //        }
+        //    }
+        //}
     }
 }

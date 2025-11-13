@@ -35,55 +35,22 @@
         <Button Grid.Row="1" Content="Add"
                 FontSize="16" FontWeight="Bold"
                 Foreground="#2D2D30"
-                Command="{Binding AddCommand}">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                            CornerRadius="15"
-                            Margin="5"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
+                Command="{Binding AddCommand}"
+                Style="{StaticResource RoundedButtonStyle}">
         </Button>
 
         <Button Grid.Row="1" Grid.Column="1" Content="Update"
                 FontSize="16" FontWeight="Bold"
                 Foreground="#2D2D30"
-                Command="{Binding UpdateCommand}">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                            CornerRadius="15"
-                            Margin="5"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
+                Command="{Binding UpdateCommand}"
+            Style="{StaticResource RoundedButtonStyle}">
         </Button>
 
         <Button Grid.Row="1" Grid.Column="2" Content="Delete"
                 FontSize="16" FontWeight="Bold"
                 Foreground="#2D2D30"
-                Command="{Binding DeleteCommand}">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                            CornerRadius="15"
-                            Margin="5"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
+                Command="{Binding DeleteCommand}"
+                Style="{StaticResource RoundedButtonStyle}">
         </Button>
 
         <TextBox Grid.Row="1"
@@ -95,30 +62,53 @@
         <StackPanel Grid.Row="2"
             Grid.ColumnSpan="4"
             Orientation="Horizontal"
-            Margin="10,10,10,10"
+            Margin="0,10,10,10"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Height="40">
 
-            <!-- Category ComboBox -->
-            <ComboBox Width="280"
-              ItemsSource="{Binding CategoriesFilter}"
-              SelectedItem="{Binding SelectedCategoryFilter}"
-              FontSize="20"
-              Foreground="#2D2D30"
-              Margin="0,0,10,0">
-                <!-- Той самий шаблон з плейсхолдером -->
-            </ComboBox>
+            <TextBlock Text="Category:"
+                       FontSize="18"
+                       Margin="10,0,10,0"
+                       Foreground="#2D2D30"
+                       VerticalAlignment="Center"/>
 
+
+            <ComboBox Width="220"
+          IsEditable="True"
+          IsTextSearchEnabled="False"
+          StaysOpenOnEdit="True"
+          Text="{Binding CategorySearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+          ItemsSource="{Binding CategoriesFilter}"
+          SelectedItem="{Binding SelectedCategoryFilter, Mode=TwoWay}"
+          DisplayMemberPath="CategoryName"
+          FontSize="18"
+                      Padding="5"
+          Foreground="#2D2D30"
+          Margin="0,0,10,0"
+
+                      VerticalAlignment="Center"/>
+
+            <TextBlock Text="Manufacturer:"
+           FontSize="18"
+                       Margin="10,0,10,0"
+           Foreground="#2D2D30"
+           VerticalAlignment="Center"/>
+            
             <!-- Manufacturer ComboBox -->
-            <ComboBox Width="280"
-              ItemsSource="{Binding ManufacturersFilter}"
-              SelectedItem="{Binding SelectedManufacturerFilter}"
-              FontSize="20"
-              Foreground="#2D2D30"
-              Margin="0,0,10,0">
-                <!-- Той самий шаблон з плейсхолдером -->
-            </ComboBox>
+            <ComboBox Width="220"
+                       IsEditable="True"
+                      IsTextSearchEnabled="False"
+                      StaysOpenOnEdit="True"
+          Text="{Binding ManufacturerSearchText, UpdateSourceTrigger=PropertyChanged}"
+          ItemsSource="{Binding ManufacturersFilter}"
+          SelectedItem="{Binding SelectedManufacturerFilter, Mode=TwoWay}"
+          DisplayMemberPath="ManufacturerName"
+          FontSize="18"
+          Foreground="#2D2D30"
+          Margin="0,0,10,0"
+                      Padding="5"
+                      VerticalAlignment="Center"/>
 
 
             <!-- Min Price -->
@@ -159,10 +149,11 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="50"/>
                 <DataGridTextColumn Header="Product Name" Binding="{Binding ProductName}" Width="2*"/>
-                <DataGridTextColumn Header="Category" Binding="{Binding Category.CategoryName}" Width="*"/>
-                <DataGridTextColumn Header="Manufacturer" Binding="{Binding Manufacturer.ManufacturerName}" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category.CategoryName}" Width="1.25*"/>
+                <DataGridTextColumn Header="Manufacturer" Binding="{Binding Manufacturer.ManufacturerName}" Width="1.25*"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="*" />
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="*" />
+                <DataGridTextColumn Header="Weight" Binding="{Binding Weight}" Width="*" />
+                <DataGridTextColumn Header="Barcode" Binding="{Binding BarCode}" Width="1.5*" />
             </DataGrid.Columns>
         </DataGrid>
 

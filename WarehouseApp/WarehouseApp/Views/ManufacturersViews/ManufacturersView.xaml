@@ -33,19 +33,8 @@
             FontSize="16"
             FontWeight="Bold"
             Foreground="#2D2D30"
-            Command="{Binding AddCommand}">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                        CornerRadius="15"
-                        Margin="5"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
+            Command="{Binding AddCommand}"
+            Style="{StaticResource RoundedButtonStyle}">
         </Button>
 
         <Button Grid.Row="1"
@@ -54,19 +43,8 @@
             FontSize="16"
             FontWeight="Bold"
             Foreground="#2D2D30"
-            Command="{Binding UpdateCommand}">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                        CornerRadius="15"
-                        Margin="5"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
+            Command="{Binding UpdateCommand}"
+            Style="{StaticResource RoundedButtonStyle}">
         </Button>
 
         <Button Grid.Row="1"
@@ -75,19 +53,8 @@
             FontSize="16"
             FontWeight="Bold"
             Foreground="#2D2D30"
-            Command="{Binding DeleteCommand}">
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Border Background="{TemplateBinding Background}"
-                        CornerRadius="15"
-                        Margin="5"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="3">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                    </Border>
-                </ControlTemplate>
-            </Button.Template>
+            Command="{Binding DeleteCommand}"
+            Style="{StaticResource RoundedButtonStyle}">
         </Button>
 
         <TextBox Grid.Row="1"

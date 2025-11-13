@@ -28,83 +28,55 @@
         <conv:RowIndexConverter x:Key="RowIndexConverter" />
 
 
-        <Style x:Key="RoundedComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="OverridesDefaultStyle" Value="True"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="MinHeight" Value="40"/>
-            <Setter Property="Padding" Value="10,5"/>
+        <Style TargetType="Button" x:Key="RoundedButtonStyle">
+            <!-- Основні властивості -->
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#2D2D30"/>
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="BorderBrush" Value="#2D2D30"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="5"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <Border x:Name="Border"
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
                             CornerRadius="15"
-                            Background="White"
-                            BorderBrush="#2D2D30"
-                            BorderThickness="1"/>
-                            <Grid>
-                                <ToggleButton x:Name="ToggleButton"
-                                      Background="Transparent"
-                                      BorderThickness="0"
-                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                      Focusable="False"
-                                      ClickMode="Press">
-                                    <Path x:Name="Arrow"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Right"
-                                  Margin="0,0,10,0"
-                                  Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="#2D2D30"
-                                  Width="8"
-                                  Height="4"/>
-                                </ToggleButton>
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                        </Border>
 
-                                <ContentPresenter x:Name="ContentSite"
-                                          IsHitTestVisible="False"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                          Margin="10,0,25,0"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Left"/>
+                        <!-- Візуальні стани -->
+                        <ControlTemplate.Triggers>
+                            <!-- Наведення -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#D0D0D0"/>
+                            </Trigger>
 
-                                <TextBox x:Name="PART_EditableTextBox"
-                                 Style="{x:Null}"
-                                 Template="{x:Null}"
-                                 HorizontalAlignment="Left"
-                                 VerticalAlignment="Center"
-                                 Margin="10,0,25,0"
-                                 Focusable="True"
-                                 Background="Transparent"
-                                 Visibility="Hidden"
-                                 Foreground="#2D2D30"/>
-                            </Grid>
+                            <!-- Натискання -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#B0B0B0"/>
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.97" ScaleY="0.97"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
 
-                            <Popup x:Name="Popup"
-                           Placement="Bottom"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           PopupAnimation="Slide">
-                                <Border x:Name="DropDownBorder"
-                                CornerRadius="10"
-                                Background="White"
-                                BorderBrush="#2D2D30"
-                                BorderThickness="1">
-                                    <ScrollViewer Margin="4,6,4,6"
-                                          SnapsToDevicePixels="True">
-                                        <StackPanel IsItemsHost="True"
-                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                    </ScrollViewer>
-                                </Border>
-                            </Popup>
-                        </Grid>
+                            <!-- Вимкнена кнопка -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+
 
         <Style x:Key="NumericRoundedBoxStyle" TargetType="TextBox">
             <Setter Property="Template">

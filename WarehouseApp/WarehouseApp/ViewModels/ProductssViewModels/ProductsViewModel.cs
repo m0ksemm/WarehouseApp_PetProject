@@ -19,21 +19,49 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
         private readonly ICategoriesService _categoriesService;
         private readonly IManufacturersService _manufacturersService;
 
-        public ObservableCollection<ProductResponse> Products { get; set; } = new();
+        // Products
+        private ObservableCollection<ProductResponse> _products = new();
+        public ObservableCollection<ProductResponse> Products
+        {
+            get => _products;
+            set => SetProperty(ref _products, value);
+        }
         private ObservableCollection<ProductResponse> _allProducts = new();
 
-        public ObservableCollection<CategoryResponse> CategoriesFilter { get; set; } = new();
-        public ObservableCollection<ManufacturerResponse> ManufacturersFilter { get; set; } = new();
+        // Categories filters
+        private ObservableCollection<CategoryResponse> _categoriesFilter = new();
+        private ObservableCollection<CategoryResponse> _allCategories = new();
+        public ObservableCollection<CategoryResponse> CategoriesFilter
+        {
+            get => _categoriesFilter;
+            set => SetProperty(ref _categoriesFilter, value);
+        }
 
+        // Manufacturers filters
+        private ObservableCollection<ManufacturerResponse> _manufacturersFilter = new();
+        private ObservableCollection<ManufacturerResponse> _allManufacturers = new();
+        public ObservableCollection<ManufacturerResponse> ManufacturersFilter
+        {
+            get => _manufacturersFilter;
+            set => SetProperty(ref _manufacturersFilter, value);
+        }
+
+        // Selected filters
         private CategoryResponse _selectedCategoryFilter;
         public CategoryResponse SelectedCategoryFilter
         {
             get => _selectedCategoryFilter;
             set
             {
-                _selectedCategoryFilter = value;
-                OnPropertyChanged();
-                ApplyFilter();
+                if (SetProperty(ref _selectedCategoryFilter, value))
+                {
+                    if (value != null && value.CategoryName != "All Categories")
+                        CategorySearchText = value.CategoryName!;
+                    else
+                        CategorySearchText = string.Empty;
+
+                    ApplyFilter();
+                }
             }
         }
 
@@ -43,22 +71,40 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             get => _selectedManufacturerFilter;
             set
             {
-                _selectedManufacturerFilter = value;
-                OnPropertyChanged();
-                ApplyFilter();
+                if (SetProperty(ref _selectedManufacturerFilter, value))
+                    ApplyFilter();
             }
         }
 
+        // Search text for ComboBoxes (live filter)
+        private string _categorySearchText;
+        public string CategorySearchText
+        {
+            get => _categorySearchText;
+            set
+            {
+                if (SetProperty(ref _categorySearchText, value))
+                    ApplyCategorySearch();
+            }
+        }
+
+        private string _manufacturerSearchText;
+        public string ManufacturerSearchText
+        {
+            get => _manufacturerSearchText;
+            set
+            {
+                if (SetProperty(ref _manufacturerSearchText, value))
+                    ApplyManufacturerSearch();
+            }
+        }
+
+        // product search + price filters (text-backed)
         private string _searchText;
         public string SearchText
         {
             get => _searchText;
-            set
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                ApplyFilter();
-            }
+            set { if (SetProperty(ref _searchText, value)) ApplyFilter(); }
         }
 
         private string _minPriceFilterText;
@@ -67,13 +113,12 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             get => _minPriceFilterText;
             set
             {
-                _minPriceFilterText = value;
-                OnPropertyChanged();
-                if (decimal.TryParse(value, out var parsed))
-                    MinPriceFilter = parsed;
-                else
-                    MinPriceFilter = null;
-                ApplyFilter();
+                if (SetProperty(ref _minPriceFilterText, value))
+                {
+                    if (decimal.TryParse(value, out var p)) MinPriceFilter = p;
+                    else MinPriceFilter = null;
+                    ApplyFilter();
+                }
             }
         }
 
@@ -83,71 +128,51 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             get => _maxPriceFilterText;
             set
             {
-                _maxPriceFilterText = value;
-                OnPropertyChanged();
-                if (decimal.TryParse(value, out var parsed))
-                    MaxPriceFilter = parsed;
-                else
-                    MaxPriceFilter = null;
-                ApplyFilter();
+                if (SetProperty(ref _maxPriceFilterText, value))
+                {
+                    if (decimal.TryParse(value, out var p)) MaxPriceFilter = p;
+                    else MaxPriceFilter = null;
+                    ApplyFilter();
+                }
             }
         }
 
-        //private string _categorySearchText;
-        //public string CategorySearchText
-        //{
-        //    get => _categorySearchText;
-        //    set
-        //    {
-        //        _categorySearchText = value;
-        //        OnPropertyChanged();
-        //        ApplyCategoryFilter();
-        //    }
-        //}
-
-        //private void ApplyCategoryFilter()
-        //{
-        //    if (string.IsNullOrWhiteSpace(CategorySearchText))
-        //        CategoriesFilter = new ObservableCollection<CategoryResponse>(_allCategories);
-        //    else
-        //        CategoriesFilter = new ObservableCollection<CategoryResponse>(
-        //            _allCategories.Where(c =>
-        //                c.CategoryName.Contains(CategorySearchText, StringComparison.OrdinalIgnoreCase)));
-        //}
-
         private decimal? _minPriceFilter;
-        public decimal? MinPriceFilter
-        {
-            get => _minPriceFilter;
-            set { _minPriceFilter = value; OnPropertyChanged(); }
-        }
+        public decimal? MinPriceFilter { get => _minPriceFilter; set => SetProperty(ref _minPriceFilter, value); }
 
         private decimal? _maxPriceFilter;
-        public decimal? MaxPriceFilter
-        {
-            get => _maxPriceFilter;
-            set { _maxPriceFilter = value; OnPropertyChanged(); }
-        }
+        public decimal? MaxPriceFilter { get => _maxPriceFilter; set => SetProperty(ref _maxPriceFilter, value); }
 
+        // Commands (stubs)
         public ICommand AddCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
+
+        private ProductResponse _selectedProduct;
+        public ProductResponse SelectedProduct
+        {
+            get => _selectedProduct;
+            set => SetProperty(ref _selectedProduct, value);
+        }
 
         public ProductsViewModel()
         {
             _productsService = new ProductsService();
             _categoriesService = new CategoriesService();
-            _manufacturersService = new ManufacturersService();
+            _manufacturersService = new ManufacturersService(); // <- fix your field name if differs
 
             AddCommand = new RelayCommand(async _ => await AddProduct());
             UpdateCommand = new RelayCommand(async _ => await UpdateProduct(), _ => SelectedProduct != null);
             DeleteCommand = new RelayCommand(async _ => await DeleteProduct(), _ => SelectedProduct != null);
 
-            Task.Run(async () =>
-            {
-                await LoadFilters();
-                await LoadProducts();
-            });
+            // load on background
+            _ = InitializeAsync();
+        }
+
+        private async Task InitializeAsync()
+        {
+            await LoadFilters();
+            await LoadProducts();
         }
 
         private async Task LoadFilters()
@@ -157,19 +182,25 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
                 var categories = await _categoriesService.GetAllCategories();
                 var manufacturers = await _manufacturersService.GetAllManufacturers();
 
-                App.Current.Dispatcher.Invoke(() =>
-                {
-                    CategoriesFilter.Clear();
-                    ManufacturersFilter.Clear();
+                // keep full copies
+                _allCategories = new ObservableCollection<CategoryResponse>(categories ?? Enumerable.Empty<CategoryResponse>());
+                _allManufacturers = new ObservableCollection<ManufacturerResponse>(manufacturers ?? Enumerable.Empty<ManufacturerResponse>());
 
-                    CategoriesFilter.Add(new CategoryResponse { CategoryName = "All Categories" });
-                    foreach (var c in categories)
-                        CategoriesFilter.Add(c);
+                // add "All ..." item at top
+                var allCat = new CategoryResponse { CategoryID = Guid.Empty, CategoryName = "All Categories" };
+                var allMan = new ManufacturerResponse { ManufacturerID = Guid.Empty, ManufacturerName = "All Manufacturers" };
 
-                    ManufacturersFilter.Add(new ManufacturerResponse { ManufacturerName = "All Manufacturers" });
-                    foreach (var m in manufacturers)
-                        ManufacturersFilter.Add(m);
-                });
+                var cats = new ObservableCollection<CategoryResponse> { allCat };
+                foreach (var c in _allCategories) cats.Add(c);
+                CategoriesFilter = cats;
+
+                var mans = new ObservableCollection<ManufacturerResponse> { allMan };
+                foreach (var m in _allManufacturers) mans.Add(m);
+                ManufacturersFilter = mans;
+
+                // default selected
+                SelectedCategoryFilter = allCat;
+                SelectedManufacturerFilter = allMan;
             }
             catch (Exception ex)
             {
@@ -182,19 +213,59 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             try
             {
                 var products = await _productsService.GetAllProducts();
-
-                for (int i = 0; i < products.Count; i++)
-                    products[i].RowNumber = i + 1;
-
-                App.Current.Dispatcher.Invoke(() =>
+                if (products != null)
                 {
+                    for (int i = 0; i < products.Count; i++)
+                        products[i].RowNumber = i + 1;
+
                     _allProducts = new ObservableCollection<ProductResponse>(products);
                     ApplyFilter();
-                });
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading products: {ex.Message}");
+            }
+        }
+
+        private void ApplyCategorySearch()
+        {
+            if (string.IsNullOrWhiteSpace(CategorySearchText))
+            {
+                // rebuild from full
+                var cats = new ObservableCollection<CategoryResponse> { new CategoryResponse { CategoryID = Guid.Empty, CategoryName = "All Categories" } };
+                foreach (var c in _allCategories) cats.Add(c);
+                CategoriesFilter = cats;
+            }
+            else
+            {
+                var filtered = _allCategories
+                    .Where(c => !string.IsNullOrWhiteSpace(c.CategoryName) && c.CategoryName.IndexOf(CategorySearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
+
+                var cats = new ObservableCollection<CategoryResponse> { new CategoryResponse { CategoryID = Guid.Empty, CategoryName = "All Categories" } };
+                foreach (var c in filtered) cats.Add(c);
+                CategoriesFilter = cats;
+            }
+        }
+
+        private void ApplyManufacturerSearch()
+        {
+            if (string.IsNullOrWhiteSpace(ManufacturerSearchText))
+            {
+                var mans = new ObservableCollection<ManufacturerResponse> { new ManufacturerResponse { ManufacturerID = Guid.Empty, ManufacturerName = "All Manufacturers" } };
+                foreach (var m in _allManufacturers) mans.Add(m);
+                ManufacturersFilter = mans;
+            }
+            else
+            {
+                var filtered = _allManufacturers
+                    .Where(m => !string.IsNullOrWhiteSpace(m.ManufacturerName) && m.ManufacturerName.IndexOf(ManufacturerSearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
+
+                var mans = new ObservableCollection<ManufacturerResponse> { new ManufacturerResponse { ManufacturerID = Guid.Empty, ManufacturerName = "All Manufacturers" } };
+                foreach (var m in filtered) mans.Add(m);
+                ManufacturersFilter = mans;
             }
         }
 
@@ -203,13 +274,13 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             var filtered = _allProducts.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(SearchText))
-                filtered = filtered.Where(p => p.ProductName.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+                filtered = filtered.Where(p => !string.IsNullOrEmpty(p.ProductName) && p.ProductName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
 
-            if (SelectedCategoryFilter != null && SelectedCategoryFilter.CategoryName != "All Categories")
-                filtered = filtered.Where(p => p.Category.CategoryName == SelectedCategoryFilter.CategoryName);
+            if (SelectedCategoryFilter != null && SelectedCategoryFilter.CategoryID != Guid.Empty)
+                filtered = filtered.Where(p => p.Category != null && p.Category.CategoryID == SelectedCategoryFilter.CategoryID);
 
-            if (SelectedManufacturerFilter != null && SelectedManufacturerFilter.ManufacturerName != "All Manufacturers")
-                filtered = filtered.Where(p => p.Manufacturer.ManufacturerName == SelectedManufacturerFilter.ManufacturerName);
+            if (SelectedManufacturerFilter != null && SelectedManufacturerFilter.ManufacturerID != Guid.Empty)
+                filtered = filtered.Where(p => p.Manufacturer != null && p.Manufacturer.ManufacturerID == SelectedManufacturerFilter.ManufacturerID);
 
             if (MinPriceFilter.HasValue)
                 filtered = filtered.Where(p => p.Price >= (double)MinPriceFilter.Value);
@@ -217,27 +288,13 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             if (MaxPriceFilter.HasValue)
                 filtered = filtered.Where(p => p.Price <= (double)MaxPriceFilter.Value);
 
-            Products = new ObservableCollection<ProductResponse>(filtered);
-            OnPropertyChanged(nameof(Products));
+            var result = filtered.Select((p, idx) => { p.RowNumber = idx + 1; return p; }).ToList();
+            Products = new ObservableCollection<ProductResponse>(result);
         }
 
-
-
-        // Далі залишаєш свій код для Add / Update / Delete
-        private async Task AddProduct() { /* ... */ }
-        private async Task UpdateProduct() { /* ... */ }
-        private async Task DeleteProduct() { /* ... */ }
-
-        private ProductResponse _selectedProduct;
-        public ProductResponse SelectedProduct
-        {
-            get => _selectedProduct;
-            set
-            {
-                _selectedProduct = value;
-                OnPropertyChanged();
-            }
-        }
+        private Task AddProduct() => Task.CompletedTask;
+        private Task UpdateProduct() => Task.CompletedTask;
+        private Task DeleteProduct() => Task.CompletedTask;
     }
 }
 
