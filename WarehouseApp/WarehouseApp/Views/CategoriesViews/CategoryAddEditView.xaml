@@ -1,4 +1,4 @@
-﻿<Window x:Class="WarehouseApp.Views.CategoriesViews.CategoryEditView"
+﻿<Window x:Class="WarehouseApp.Views.CategoriesViews.CategoryAddEditView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Category"
@@ -61,7 +61,7 @@
                     Foreground="#2D2D30"
                     Width="90"
                     Height="40" 
-                    Style="{StaticResource RoundedCancelButtonStyle}"/>
+                    Style="{StaticResource RoundedDefaultButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Window>

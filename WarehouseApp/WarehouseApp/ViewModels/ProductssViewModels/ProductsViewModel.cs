@@ -1,4 +1,5 @@
-﻿using ServiceContracts.DTOs.CategoriesDTOs;
+﻿using Entities;
+using ServiceContracts.DTOs.CategoriesDTOs;
 using ServiceContracts.DTOs.ManufacturersDTOs;
 using ServiceContracts.DTOs.ProductsDTOs;
 using ServiceContracts.ServiceContracts;
@@ -9,7 +10,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using WarehouseApp.ViewModels.ManufacturersViewModels;
+using WarehouseApp.ViewModels.ProductssViewModels;
+using WarehouseApp.Views.ManufacturersViews;
+using WarehouseApp.Views.ProductsViews;
 
 namespace WarehouseApp.ViewModels.ProductsViewModels
 {
@@ -292,7 +298,46 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             Products = new ObservableCollection<ProductResponse>(result);
         }
 
-        private Task AddProduct() => Task.CompletedTask;
+        private async Task AddProduct()
+        {
+            var window = new ProductAddEditView();
+
+            var vm = new ProductAddEditViewModel(
+                window,
+                async result =>
+                {
+                    if (result != null)
+                    {
+                        var addReq = new ProductAddRequest
+                        {
+                            ProductName = result.ProductName,
+                            CategoryID = result.CategoryID,
+                            ManufacturerID = result.ManufacturerID,
+                            Weight = result.Weight,
+                            Price = result.Price,
+                            BarCode = result.BarCode
+                        };
+
+                        try
+                        {
+                            await _productsService.AddProduct(addReq);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error adding product: {ex.Message}");
+                        }
+
+                        await LoadProducts();
+                    }
+                },
+
+                _allCategories,        
+                _allManufacturers      
+            );
+
+            window.DataContext = vm;
+            window.ShowDialog();
+        }
         private Task UpdateProduct() => Task.CompletedTask;
         private Task DeleteProduct() => Task.CompletedTask;
     }

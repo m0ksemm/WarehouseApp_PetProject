@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace WarehouseApp.Views.CategoriesViews
+namespace WarehouseApp.Views.ProductsViews
 {
     /// <summary>
-    /// Interaction logic for CategoryEditView.xaml
+    /// Interaction logic for ProductAddEditView.xaml
     /// </summary>
-    public partial class CategoryEditView : Window
+    public partial class ProductAddEditView : Window
     {
-        public CategoryEditView()
+        public ProductAddEditView()
         {
             InitializeComponent();
         }

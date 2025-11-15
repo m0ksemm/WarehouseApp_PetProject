@@ -8,7 +8,7 @@
     <Compile Update="Views\CategoriesViews\CategoryDeleteView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\CategoriesViews\CategoryEditView.xaml.cs">
+    <Compile Update="Views\CategoriesViews\CategoryAddEditView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\MainWindow.xaml.cs">
@@ -21,6 +21,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ManufacturersViews\ManufacturersView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\ProductsViews\ProductAddEditView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ProductsViews\ProductsView.xaml.cs">

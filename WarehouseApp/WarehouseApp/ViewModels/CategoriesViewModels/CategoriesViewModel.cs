@@ -151,7 +151,7 @@ namespace WarehouseApp.ViewModels.CategoriesViewModels
 
         private async Task AddCategory()
         {
-            var window = new Views.CategoriesViews.CategoryEditView();
+            var window = new Views.CategoriesViews.CategoryAddEditView();
             var vm =  new CategoryEditViewModel(window, async result => 
             {
                 if (result != null)
@@ -177,7 +177,7 @@ namespace WarehouseApp.ViewModels.CategoriesViewModels
         {
             if (SelectedCategory == null) return;
 
-            var window = new CategoryEditView();
+            var window = new CategoryAddEditView();
             var vm = new CategoryEditViewModel(window, async result =>
             {
                 if (result != null)
