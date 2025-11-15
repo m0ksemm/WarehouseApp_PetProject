@@ -19,23 +19,80 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
         private readonly Window _window;
 
         // --- Properties ---  
-
         public string ProductName { get; set; } = string.Empty;
 
-        public ObservableCollection<CategoryResponse> Categories { get; set; }
-            = new ObservableCollection<CategoryResponse>();
+        public ObservableCollection<CategoryResponse> Categories { get; set; } = new ObservableCollection<CategoryResponse>();
 
-        public CategoryResponse? SelectedCategory { get; set; }
+        private CategoryResponse? _selectedCategory;
+        public CategoryResponse? SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                if (_selectedCategory != value)
+                {
+                    _selectedCategory = value;
+                    OnPropertyChanged();
+                    if (_selectedCategory != null)
+                    {
+                        _categorySearchText = _selectedCategory.CategoryName;
+                        OnPropertyChanged(nameof(CategorySearchText));
+                    }
+                }
+            }
+        }
 
-        public ObservableCollection<ManufacturerResponse> Manufacturers { get; set; }
-            = new ObservableCollection<ManufacturerResponse>();
+        public ObservableCollection<ManufacturerResponse> Manufacturers { get; set; } = new ObservableCollection<ManufacturerResponse>();
 
-        public ManufacturerResponse? SelectedManufacturer { get; set; }
+        private ManufacturerResponse? _selectedManufacturer;
+        public ManufacturerResponse? SelectedManufacturer
+        {
+            get => _selectedManufacturer;
+            set
+            {
+                if (_selectedManufacturer != value)
+                {
+                    _selectedManufacturer = value;
+                    OnPropertyChanged();
+                    if (_selectedManufacturer != null)
+                    {
+                        _manufacturerSearchText = _selectedManufacturer.ManufacturerName;
+                        OnPropertyChanged(nameof(ManufacturerSearchText));
+                    }
+                }
+            }
+        }
 
-        public double Weight { get; set; }
-        public double Price { get; set; }
+        // Змінюємо на string для вводу з Behavior
+        private string _weight = "0";
+        public string Weight
+        {
+            get => _weight;
+            set
+            {
+                if (_weight != value)
+                {
+                    _weight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _price = "0";
+        public string Price
+        {
+            get => _price;
+            set
+            {
+                if (_price != value)
+                {
+                    _price = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string BarCode { get; set; } = string.Empty;
-
         public Guid ProductID { get; set; }
 
         // --- Commands ---  
@@ -56,17 +113,19 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
             Categories = categories;
             Manufacturers = manufacturers;
 
-            // Якщо редагуємо — заповнюємо поля  
+            FilteredCategories = new ObservableCollection<CategoryResponse>(Categories);
+            FilteredManufacturers = new ObservableCollection<ManufacturerResponse>(Manufacturers);
+
             if (existingProduct != null)
             {
                 ProductID = existingProduct.ProductID;
                 ProductName = existingProduct.ProductName ?? "";
 
-                SelectedCategory = Categories.FirstOrDefault(c => c.CategoryID == existingProduct.CategoryID);
-                SelectedManufacturer = Manufacturers.FirstOrDefault(m => m.ManufacturerID == existingProduct.ManufacturerID);
+                SelectedCategory = categories.FirstOrDefault(c => c.CategoryID == existingProduct.CategoryID);
+                SelectedManufacturer = manufacturers.FirstOrDefault(m => m.ManufacturerID == existingProduct.ManufacturerID);
 
-                Weight = existingProduct.Weight ?? 0;
-                Price = existingProduct.Price ?? 0;
+                Weight = (existingProduct.Weight ?? 0).ToString("G");
+                Price = (existingProduct.Price ?? 0).ToString("G");
                 BarCode = existingProduct.BarCode ?? "";
             }
 
@@ -95,15 +154,15 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
                 return;
             }
 
-            if (Weight <= 0)
+            if (!double.TryParse(Weight.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double weightValue) || weightValue <= 0)
             {
-                MessageBox.Show("Weight must be greater than zero.");
+                MessageBox.Show("Weight must be a valid number greater than zero.");
                 return;
             }
 
-            if (Price <= 0)
+            if (!double.TryParse(Price.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double priceValue) || priceValue <= 0)
             {
-                MessageBox.Show("Price must be greater than zero.");
+                MessageBox.Show("Price must be a valid number greater than zero.");
                 return;
             }
 
@@ -111,12 +170,10 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
             {
                 ProductID = ProductID == Guid.Empty ? Guid.NewGuid() : ProductID,
                 ProductName = ProductName,
-
                 CategoryID = SelectedCategory.CategoryID,
                 ManufacturerID = SelectedManufacturer.ManufacturerID,
-
-                Weight = Weight,
-                Price = Price,
+                Weight = weightValue,
+                Price = priceValue,
                 BarCode = BarCode
             };
 
@@ -128,6 +185,60 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
         {
             _onSave?.Invoke(null);
             _window.Close();
+        }
+
+        // --- Filtering ---  
+        public ObservableCollection<CategoryResponse> FilteredCategories { get; set; }
+        private void FilterCategories()
+        {
+            var filtered = Categories
+                .Where(c => string.IsNullOrWhiteSpace(CategorySearchText) ||
+                            c.CategoryName.Contains(CategorySearchText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            FilteredCategories.Clear();
+            foreach (var c in filtered) FilteredCategories.Add(c);
+        }
+
+        public string CategorySearchText
+        {
+            get => _categorySearchText;
+            set
+            {
+                if (_categorySearchText != value)
+                {
+                    _categorySearchText = value;
+                    OnPropertyChanged();
+                    FilterCategories();
+                }
+            }
+        }
+        private string _categorySearchText = "";
+
+        public ObservableCollection<ManufacturerResponse> FilteredManufacturers { get; set; }
+        public string ManufacturerSearchText
+        {
+            get => _manufacturerSearchText;
+            set
+            {
+                if (_manufacturerSearchText != value)
+                {
+                    _manufacturerSearchText = value;
+                    OnPropertyChanged();
+                    FilterManufacturers();
+                }
+            }
+        }
+        private string _manufacturerSearchText = "";
+        private void FilterManufacturers()
+        {
+            var filtered = Manufacturers
+                .Where(m => string.IsNullOrWhiteSpace(ManufacturerSearchText) ||
+                            m.ManufacturerName.Contains(ManufacturerSearchText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            FilteredManufacturers.Clear();
+            foreach (var m in filtered) FilteredManufacturers.Add(m);
         }
     }
 }

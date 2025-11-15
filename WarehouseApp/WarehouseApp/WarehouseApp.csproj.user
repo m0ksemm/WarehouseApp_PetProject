@@ -26,6 +26,9 @@
     <Compile Update="Views\ProductsViews\ProductAddEditView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ProductsViews\ProductDeleteView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\ProductsViews\ProductsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

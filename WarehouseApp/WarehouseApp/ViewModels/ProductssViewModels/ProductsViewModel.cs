@@ -338,8 +338,66 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             window.DataContext = vm;
             window.ShowDialog();
         }
-        private Task UpdateProduct() => Task.CompletedTask;
-        private Task DeleteProduct() => Task.CompletedTask;
+        private async Task UpdateProduct() 
+        {
+            //////////DOES NOT WORK
+
+            if (SelectedProduct == null) return;
+
+            var window = new ProductAddEditView();
+            var vm = new ProductAddEditViewModel(window, async result =>
+            {
+                if (result != null)
+                {
+                    var updateRequest = new ProductUpdateRequest
+                    {
+                        ProductID = SelectedProduct.ProductID,
+                        ManufacturerID = result.ManufacturerID,
+                        ProductName = result.ProductName,
+                        Weight = result.Weight,
+                        Price = result.Price,
+                        BarCode = result.BarCode
+                    };
+
+                    try
+                    {
+                        await _productsService.UpdateProduct(updateRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error updating product: {ex.Message}");
+                    }
+
+                    await LoadProducts();
+                }
+            }, _allCategories,
+                _allManufacturers, existingProduct: SelectedProduct);
+
+            window.DataContext = vm;
+            window.ShowDialog();
+        }
+        private async Task DeleteProduct() 
+        {
+
+            var window = new ProductDeleteView();
+            var vm = new ProductDeleteViewModel(window, SelectedProduct.ProductName ?? "this product", async confirmed =>
+            {
+                if (confirmed)
+                {
+                    try
+                    {
+                        await _productsService.DeleteProduct(SelectedProduct.ProductID);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error deleting product: {ex.Message}");
+                    }
+                    await LoadProducts();
+                }
+            });
+            window.DataContext = vm;
+            window.ShowDialog();
+        }
     }
 }
 
