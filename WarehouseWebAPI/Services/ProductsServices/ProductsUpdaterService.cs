@@ -28,10 +28,10 @@ namespace Services.ProductsServices
             ValidationHelper.ModelValidation(productUpdateRequest);
 
             List<Product> products = await _productRepository.GetAllProducts();
-            if (products.Select(product => product.ProductName).Contains(productUpdateRequest.ProductName))
-            {
-                throw new ArgumentException("Product with this name already exists.");
-            }
+            //if (products.Select(product => product.ProductName).Contains(productUpdateRequest.ProductName))
+            //{
+            //    throw new ArgumentException("Product with this name already exists.");
+            //}
 
             Product? matchingProduct = await _productRepository
                 .GetProductById(productUpdateRequest.ProductID);

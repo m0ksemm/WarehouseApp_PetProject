@@ -353,6 +353,7 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
                     {
                         ProductID = SelectedProduct.ProductID,
                         ManufacturerID = result.ManufacturerID,
+                        CategoryID = result.CategoryID,
                         ProductName = result.ProductName,
                         Weight = result.Weight,
                         Price = result.Price,
