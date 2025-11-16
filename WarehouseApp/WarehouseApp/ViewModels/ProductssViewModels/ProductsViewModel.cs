@@ -280,7 +280,10 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             var filtered = _allProducts.AsEnumerable();
 
             if (!string.IsNullOrWhiteSpace(SearchText))
-                filtered = filtered.Where(p => !string.IsNullOrEmpty(p.ProductName) && p.ProductName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
+                filtered = filtered.Where(p => !string.IsNullOrEmpty(p.ProductName) && p.ProductName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0  
+                    || p.BarCode.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                    || p.Category.CategoryName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                    || p.Manufacturer.ManufacturerName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0 );
 
             if (SelectedCategoryFilter != null && SelectedCategoryFilter.CategoryID != Guid.Empty)
                 filtered = filtered.Where(p => p.Category != null && p.Category.CategoryID == SelectedCategoryFilter.CategoryID);
@@ -340,8 +343,6 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
         }
         private async Task UpdateProduct() 
         {
-            //////////DOES NOT WORK
-
             if (SelectedProduct == null) return;
 
             var window = new ProductAddEditView();
