@@ -11,7 +11,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
     public class WarehouseResponse
     {
         public Guid WarehouseID { get; set; }
-        public string? Name { get; set; }
+        public string? WarehouseName { get; set; }
         [Range(typeof(decimal), "100", "1000000")]
         public double SquareArea { get; set; }
         public string? Address { get; set; }
@@ -23,7 +23,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
             }
             WarehouseResponse warehouse_to_compare = (WarehouseResponse)obj;
             return WarehouseID == warehouse_to_compare.WarehouseID &&
-               Name == warehouse_to_compare.Name &&
+               WarehouseName == warehouse_to_compare.WarehouseName &&
                SquareArea == warehouse_to_compare.SquareArea &&
                Address == warehouse_to_compare.Address;
         }
@@ -41,7 +41,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
             return new WarehouseResponse
             {
                 WarehouseID = warehouse.WarehouseID,
-                Name = warehouse.WarehouseName,
+                WarehouseName = warehouse.WarehouseName,
                 SquareArea = warehouse.SquareArea,
                 Address = warehouse.Address
             };

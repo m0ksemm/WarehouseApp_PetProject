@@ -8,7 +8,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
 {
     public class WarehouseAddRequest
     {
-        public string? Name { get; set; }
+        public string? WarehouseName { get; set; }
         public double SquareArea { get; set; }
         public string? Address { get; set; }
     }

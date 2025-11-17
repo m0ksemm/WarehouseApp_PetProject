@@ -1,9 +1,12 @@
 ﻿using Entities;
 using GalaSoft.MvvmLight.Command;
+using ServiceContracts.DTOs.CategoriesDTOs;
+using ServiceContracts.DTOs.ManufacturersDTOs;
 using ServiceContracts.DTOs.ProductsDTOs;
 using ServiceContracts.DTOs.WarehousesDTOs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,59 +49,54 @@ namespace WarehouseApp.ViewModels.WarehousesViewModel
         }
         private string _squareArea = "0";
 
+        public Guid WarehouseID { get; set; }
 
         public ICommand SaveCommand { get; }
         public ICommand CancelCommand { get; }
 
         public WarehouseAddEditViewModel(Window window,
-            Action<WarehouseResponse?> onSave)
+            Action<WarehouseResponse?> onSave, WarehouseResponse? existingWarehouse = null)
         {
+            _window = window;
             _onSave = onSave;
 
-            SaveCommand = new RelayCommand<Window>(Save);
+
+            if (existingWarehouse != null)
+            {
+                WarehouseID = existingWarehouse.WarehouseID;
+                WarehouseName = existingWarehouse.WarehouseName ?? "";
+                SquareArea = (existingWarehouse.SquareArea).ToString("G");
+                Address = existingWarehouse.Address ?? "";
+            }
+
+            SaveCommand = new RelayCommand(_ => Save());
+            CancelCommand = new RelayCommand(_ => Cancel());
         }
 
-        private void Save(Window _window)
+        private void Save()
         {
-            //if (string.IsNullOrWhiteSpace(ProductName))
-            //{
-            //    MessageBox.Show("Product name cannot be empty.");
-            //    return;
-            //}
-
-            //if (SelectedCategory == null)
-            //{
-            //    MessageBox.Show("Please select a category.");
-            //    return;
-            //}
-
-            //if (SelectedManufacturer == null)
-            //{
-            //    MessageBox.Show("Please select a manufacturer.");
-            //    return;
-            //}
-
-            //if (!double.TryParse(Weight.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double weightValue) || weightValue <= 0)
-            //{
-            //    MessageBox.Show("Weight must be a valid number greater than zero.");
-            //    return;
-            //}
-
-            //if (!double.TryParse(Price.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double priceValue) || priceValue <= 0)
-            //{
-            //    MessageBox.Show("Price must be a valid number greater than zero.");
-            //    return;
-            //}
+            if (string.IsNullOrWhiteSpace(WarehouseName))
+            {
+                MessageBox.Show("Warehouse name cannot be empty.");
+                return;
+            }
+            if (!double.TryParse(SquareArea.Replace(',', '.'), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out double squareArea) || squareArea <= 0)
+            {
+                MessageBox.Show("Weight must be a valid number greater than zero.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(Address))
+            {
+                MessageBox.Show("Address name cannot be empty.");
+                return;
+            }
 
             var result = new WarehouseResponse
             {
-                //ProductID = ProductID == Guid.Empty ? Guid.NewGuid() : ProductID,
-                //ProductName = ProductName,
-                //CategoryID = SelectedCategory.CategoryID,
-                //ManufacturerID = SelectedManufacturer.ManufacturerID,
-                //Weight = weightValue,
-                //Price = priceValue,
-                //BarCode = BarCode
+                WarehouseID = WarehouseID == Guid.Empty ? Guid.NewGuid() : WarehouseID,
+                WarehouseName = WarehouseName,
+                SquareArea = squareArea,
+                Address = Address
             };
 
             _onSave?.Invoke(result);

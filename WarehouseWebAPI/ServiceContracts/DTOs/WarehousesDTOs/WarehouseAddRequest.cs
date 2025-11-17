@@ -12,7 +12,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
     {
         [Required(ErrorMessage = "Warehouse Name can't be blank.")]
         [StringLength(40, ErrorMessage = "Warehouse name is too long. It has to be less than 40 characters.")]
-        public string? Name { get; set; }
+        public string? WarehouseName { get; set; }
         [Required(ErrorMessage = "Square Area can't be zero.")]
         public double SquareArea { get; set; }
         [Required(ErrorMessage = "Address can't be blank")]
@@ -21,7 +21,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
 
         public Warehouse ToWarehouse()
         {
-            return new Warehouse() { WarehouseName = Name, SquareArea = SquareArea, Address = Address };
+            return new Warehouse() { WarehouseName = WarehouseName, SquareArea = SquareArea, Address = Address };
         }
     }
 }

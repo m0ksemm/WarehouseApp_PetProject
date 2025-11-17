@@ -35,14 +35,14 @@ namespace Services.WarehousesServices
             }
 
             List<Warehouse> warehouses = await _warehouseRepository.GetAllWarehouses();
-            if (warehouses.Any(warehouse => warehouse.WarehouseName == warehouseUpdateRequest.Name &&
+            if (warehouses.Any(warehouse => warehouse.WarehouseName == warehouseUpdateRequest.WarehouseName &&
                 warehouse.Address == warehouseUpdateRequest.Address &&
                 warehouse.SquareArea == warehouseUpdateRequest.SquareArea))
             {
                 throw new ArgumentException("Such Warehouse already exists.");
             }
 
-            matchingWarehouse.WarehouseName = warehouseUpdateRequest.Name;
+            matchingWarehouse.WarehouseName = warehouseUpdateRequest.WarehouseName;
             matchingWarehouse.Address = warehouseUpdateRequest.Address;
             matchingWarehouse.SquareArea = warehouseUpdateRequest.SquareArea;
 

@@ -7,7 +7,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"        
         xmlns:local="clr-namespace:WarehouseApp.Views.WarehousesViews"
         mc:Ignorable="d"
-        Title="Warehouse" Height="300" Width="400"
+        Title="Warehouse" Height="380" Width="400"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -17,6 +17,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+
         </Grid.RowDefinitions>
 
         <!-- WAREHOUSE NAME -->
@@ -90,5 +92,21 @@
                 </Style>
             </TextBox.Resources>
         </TextBox>
+
+        <!-- BUTTONS -->
+        <StackPanel Grid.Row="6"
+             Orientation="Horizontal"
+             HorizontalAlignment="Right">
+
+            <Button Content="Save"
+             Command="{Binding SaveCommand}"
+             Width="100" Height="45"
+             Style="{StaticResource RoundedSaveButtonStyle}"/>
+
+            <Button Content="Cancel"
+             Command="{Binding CancelCommand}"
+             Width="100" Height="45"
+             Style="{StaticResource RoundedDefaultButtonStyle}"/>
+        </StackPanel>
     </Grid>
 </Window>

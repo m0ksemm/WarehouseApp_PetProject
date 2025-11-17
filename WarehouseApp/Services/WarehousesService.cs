@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Services
 {
-    internal class WarehousesService : IWarehousesService
+    public class WarehousesService : IWarehousesService
     {
         private readonly HttpClient _httpClient;
 

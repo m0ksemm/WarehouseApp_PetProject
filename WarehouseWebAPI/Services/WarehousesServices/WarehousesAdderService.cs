@@ -24,12 +24,12 @@ namespace Services.WarehousesServices
             {
                 throw new ArgumentNullException(nameof(warehouseAddRequest));
             }
-            if (warehouseAddRequest.Name == null)
+            if (warehouseAddRequest.WarehouseName == null)
             {
-                throw new ArgumentException(nameof(warehouseAddRequest.Name));
+                throw new ArgumentException(nameof(warehouseAddRequest.WarehouseName));
             }
             List<Warehouse> warehouses = await _warehouseRepository.GetAllWarehouses();
-            if (warehouses.Any(warehouse => warehouse.WarehouseName == warehouseAddRequest.Name &&
+            if (warehouses.Any(warehouse => warehouse.WarehouseName == warehouseAddRequest.WarehouseName &&
                 warehouse.SquareArea == warehouseAddRequest.SquareArea &&
                 warehouse.Address == warehouseAddRequest.Address))
             {

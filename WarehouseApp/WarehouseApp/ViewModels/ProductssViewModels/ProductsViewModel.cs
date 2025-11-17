@@ -165,7 +165,7 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
         {
             _productsService = new ProductsService();
             _categoriesService = new CategoriesService();
-            _manufacturersService = new ManufacturersService(); // <- fix your field name if differs
+            _manufacturersService = new ManufacturersService(); 
 
             AddCommand = new RelayCommand(async _ => await AddProduct());
             UpdateCommand = new RelayCommand(async _ => await UpdateProduct(), _ => SelectedProduct != null);

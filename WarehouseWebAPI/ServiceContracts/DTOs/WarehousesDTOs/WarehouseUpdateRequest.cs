@@ -14,7 +14,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
         public Guid WarehouseID { get; set; }
         [Required(ErrorMessage = "Warehouse Name can't be blank")]
         [StringLength(40, ErrorMessage = "Warehouse Name is too long. It has to be less than 40 characters.")]
-        public string? Name { get; set; }
+        public string? WarehouseName { get; set; }
         [Required(ErrorMessage = "Square Area can't be zero.")]
         public double SquareArea { get; set; }
         [Required(ErrorMessage = "Address can't be blank")]
@@ -26,7 +26,7 @@ namespace ServiceContracts.DTOs.WarehousesDTOs
             return new Warehouse
             {
                 WarehouseID = WarehouseID,
-                WarehouseName = Name,
+                WarehouseName = WarehouseName,
                 SquareArea = SquareArea,
                 Address = Address
             };
