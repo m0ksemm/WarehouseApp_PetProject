@@ -6,10 +6,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WarehouseApp.ViewModels.CategoriesViewModels;
 using WarehouseApp.ViewModels.ManufacturersViewModels;
 using WarehouseApp.ViewModels.ProductsViewModels;
+using WarehouseApp.ViewModels.WarehousesViewModel;
+using WarehouseApp.Views.WarehousesViews;
 
 namespace WarehouseApp.ViewModels
 {
@@ -24,6 +27,10 @@ namespace WarehouseApp.ViewModels
         public ICommand NavigateToManufacturersCommand { get; }
         public ICommand ToggleWarehousesMenuCommand { get; }
         public ICommand SelectWarehouseCommand { get; }
+
+        public ICommand AddWarehouseCommand { get; }
+        public ICommand EditWarehouseCommand { get; }
+        public ICommand DeleteWarehouseCommand { get; }
 
         private bool _isWarehousesExpanded;
         public bool IsWarehousesExpanded
@@ -44,6 +51,10 @@ namespace WarehouseApp.ViewModels
 
             ToggleWarehousesMenuCommand = new RelayCommand(_ =>
                 IsWarehousesExpanded = !IsWarehousesExpanded);
+
+            AddWarehouseCommand = new RelayCommand(_ => AddWarehouse());
+            EditWarehouseCommand = new RelayCommand<string>(EditWarehouse);
+            DeleteWarehouseCommand = new RelayCommand<string>(DeleteWarehouse);
 
             SelectWarehouseCommand = new RelayCommand<string>(OnWarehouseSelected);
             _navigationService.CurrentViewModelChanged += () =>
@@ -67,6 +78,50 @@ namespace WarehouseApp.ViewModels
             // Навігація до продуктів конкретного складу
             // Поки просто ProductsViewModel, далі можна передати warehouseName як параметр
             _navigationService.NavigateTo<ProductsViewModel>();
+        }
+
+        private void AddWarehouse()
+        {
+            var dialog = new WarehouseAddEditView();               // Створюємо вікно
+            var vm = new WarehouseAddEditViewModel(name =>
+            {
+                if (!string.IsNullOrWhiteSpace(name))
+                    Warehouses.Add(name);
+            });
+            dialog.DataContext = vm;
+
+            dialog.ShowDialog();
+        }
+
+        private void EditWarehouse(string warehouse)
+        {
+            if (warehouse == null) return;
+
+            var dialog = new WarehouseAddEditView();
+            var vm = new WarehouseAddEditViewModel(newName =>
+            {
+                if (!string.IsNullOrWhiteSpace(newName))
+                {
+                    int index = Warehouses.IndexOf(warehouse);
+                    Warehouses[index] = newName;
+                }
+            }, warehouse);
+
+            dialog.DataContext = vm;
+            dialog.ShowDialog();
+        }
+
+        private void DeleteWarehouse(string warehouse)
+        {
+            if (warehouse == null) return;
+
+            if (MessageBox.Show($"Delete warehouse '{warehouse}'?",
+                                "Confirm",
+                                MessageBoxButton.YesNo,
+                                MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                Warehouses.Remove(warehouse);
+            }
         }
     }
 }

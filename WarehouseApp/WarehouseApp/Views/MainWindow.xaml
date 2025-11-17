@@ -34,25 +34,6 @@
                     </StackPanel>
                 </Button>
 
-                <!-- Products -->
-                <Button 
-                        Foreground="White"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        FontSize="16"
-                        Padding="10"
-                        HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateToProductsCommand}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="/Images/product.png" Width="30" Height="30" Margin="0,0,10,0"/>
-                        <TextBlock Text="Products"
-                           Foreground="White"
-                           FontSize="16"
-                           VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-
                 <!-- Manufacturers -->
                 <Button 
                         Foreground="White"
@@ -69,9 +50,9 @@
                            FontSize="16"
                            VerticalAlignment="Center"/>
                     </StackPanel>
-                </Button> 
+                </Button>
 
-                <!-- Warehouses -->
+                <!-- Products -->
                 <Button 
                         Foreground="White"
                         Background="Transparent"
@@ -79,30 +60,78 @@
                         FontSize="16"
                         Padding="10"
                         HorizontalContentAlignment="Left"
-                        Command="{Binding ToggleWarehousesMenuCommand}">
+                        Command="{Binding NavigateToProductsCommand}">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="/Images/warehouse.png" Width="30" Height="30" Margin="0,0,10,0"/>
-                        <TextBlock Text="Warehouses"
-                           Foreground="White"
-                           FontSize="16"
-                           VerticalAlignment="Center"/>
+                                <Image Source="/Images/product.png" Width="30" Height="30" Margin="0,0,10,0"/>
+                                <TextBlock Text="Products"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   VerticalAlignment="Center"/> 
                     </StackPanel>
                 </Button>
 
+                <!-- Warehouses -->
+                <Button 
+                    Foreground="White"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    FontSize="16"
+                    Padding="10"
+                    HorizontalContentAlignment="Left"
+                    Command="{Binding ToggleWarehousesMenuCommand}">    
+
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add warehouse"
+                      Command="{Binding AddWarehouseCommand}"/>
+                        </ContextMenu>
+                    </Button.ContextMenu>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Image Source="/Images/warehouse.png" Width="30" Height="30" Margin="0,0,10,0"/>
+                        <TextBlock Text="Warehouses"
+                   Foreground="White"
+                   FontSize="16"
+                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                
+                
                 <!-- Підменю складів -->
                 <ItemsControl ItemsSource="{Binding Warehouses}"
-                              Visibility="{Binding IsWarehousesExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+                    Visibility="{Binding IsWarehousesExpanded,
+                                     Converter={StaticResource BoolToVisibilityConverter}}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button Content="{Binding}"
-                                    Foreground="#E0E0E0"
-                                    Background="Transparent"
-                                    BorderBrush="Transparent"
-                                    FontSize="14"
-                                    Padding="20,5,5,5"
-                                    HorizontalContentAlignment="Left"
-                                    Command="{Binding DataContext.SelectWarehouseCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    CommandParameter="{Binding}"/>
+                    Foreground="#E0E0E0"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    FontSize="14"
+                    Padding="20,5,5,5"
+                    HorizontalContentAlignment="Left"
+                    Command="{Binding DataContext.SelectWarehouseCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}">
+
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Edit"
+                                  Command="{Binding DataContext.EditWarehouseCommand,
+                                                     RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding}"/>
+
+                                        <Separator/>
+
+                                        <MenuItem Header="Delete"
+                                  Command="{Binding DataContext.DeleteWarehouseCommand,
+                                                     RelativeSource={RelativeSource AncestorType=Window}}"
+                                  CommandParameter="{Binding}"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
