@@ -11,7 +11,6 @@ namespace Entities
     {
         [Key]
         public Guid CategoryID { get; set; }
-        [Required]
         [StringLength(40)]
         public string? CategoryName { get; set; }
     }

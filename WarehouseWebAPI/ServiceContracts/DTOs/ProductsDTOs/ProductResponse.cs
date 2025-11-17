@@ -64,6 +64,7 @@ namespace ServiceContracts.DTOs.ProductsDTO
                 {
                     ManufacturerID = product.Manufacturer!.ManufacturerID,
                     ManufacturerName = product.Manufacturer.ManufacturerName,
+                    Deliveries = product.Manufacturer.Deliveries
                 }
             };
         }

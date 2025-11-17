@@ -2,6 +2,8 @@
 using RepositoryContracts;
 using ServiceContracts.DTOs.ProductsDTO;
 using ServiceContracts.ProductsServiceContracts;
+using ServiceContracts.CategoriesServiceContracts;
+
 using Services.Helpers;
 using System;
 using System.Collections.Generic;
@@ -15,9 +17,14 @@ namespace Services.ProductsServices
     public class ProductsUpdaterService : IProductsUpdaterService
     {
         private readonly IProductRepository _productRepository;
-        public ProductsUpdaterService(IProductRepository productsRepository)
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IManufacturerRepository _manufacturerRepository;
+
+        public ProductsUpdaterService(IProductRepository productsRepository, ICategoryRepository categoriesRepository, IManufacturerRepository manufacturerRepository)
         {
             _productRepository = productsRepository;
+            _categoryRepository = categoriesRepository;
+            _manufacturerRepository = manufacturerRepository;
         }
         public async Task<ProductResponse> UpdateProduct(ProductUpdateRequest? productUpdateRequest)
         {
@@ -44,12 +51,51 @@ namespace Services.ProductsServices
             {
                 throw new ArgumentException("Given Product ID does not exist.");
             }
-            matchingProduct.ProductName = productUpdateRequest.ProductName;
-            matchingProduct.CategoryID = productUpdateRequest.CategoryID;
-            matchingProduct.ManufacturerID = productUpdateRequest.ManufacturerID;
-            matchingProduct.Weight = productUpdateRequest.Weight;
-            matchingProduct.Price = productUpdateRequest.Price;
-            matchingProduct.BarCode = productUpdateRequest.BarCode;
+            if (matchingProduct.ProductName != productUpdateRequest.ProductName) 
+            {
+                matchingProduct.ProductName = productUpdateRequest.ProductName;
+            }
+            if (matchingProduct.CategoryID != productUpdateRequest.CategoryID) 
+            {
+                matchingProduct.CategoryID = productUpdateRequest.CategoryID;
+                Category? updatedCategory = await _categoryRepository.GetCategoryById(productUpdateRequest.CategoryID!.Value);
+                if (updatedCategory == null)
+                {
+                    throw new ArgumentException("Given for update Category does not exist.");
+                }
+                matchingProduct.Category = new Category
+                {
+                    CategoryID = updatedCategory.CategoryID,
+                    CategoryName = updatedCategory.CategoryName
+                };
+            }
+
+            if (matchingProduct.ManufacturerID != productUpdateRequest.ManufacturerID)
+            {
+                matchingProduct.ManufacturerID = productUpdateRequest.ManufacturerID;
+                Manufacturer? updatedManufacturer = await _manufacturerRepository.GetManufacturerById(productUpdateRequest.ManufacturerID!.Value);
+                if (updatedManufacturer == null)
+                {
+                    throw new ArgumentException("Given for update Manufacturer does not exist.");
+                }
+                matchingProduct.Manufacturer = new Manufacturer
+                {
+                    ManufacturerID = updatedManufacturer.ManufacturerID,
+                    ManufacturerName = updatedManufacturer.ManufacturerName
+                };
+            }
+            if (matchingProduct.Weight != productUpdateRequest.Weight)
+            {
+                matchingProduct.Weight = productUpdateRequest.Weight;
+            }
+            if (matchingProduct.Price != productUpdateRequest.Price)
+            {
+                matchingProduct.Price = productUpdateRequest.Price;
+            }
+            if (matchingProduct.BarCode != productUpdateRequest.BarCode)
+            {
+                matchingProduct.BarCode = productUpdateRequest.BarCode;
+            }
 
             await _productRepository.UpdateProduct(matchingProduct);
             return matchingProduct.ToProductResponse();
