@@ -18,7 +18,6 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
         private readonly Action<ProductResponse?> _onSave;
         private readonly Window _window;
 
-        // --- Properties ---  
         public string ProductName { get; set; } = string.Empty;
 
         public ObservableCollection<CategoryResponse> Categories { get; set; } = new ObservableCollection<CategoryResponse>();

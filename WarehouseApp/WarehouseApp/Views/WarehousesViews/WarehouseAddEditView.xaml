@@ -3,25 +3,92 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:helpers="clr-namespace:WarehouseApp.Helpers"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"        
         xmlns:local="clr-namespace:WarehouseApp.Views.WarehousesViews"
         mc:Ignorable="d"
-        Title="Warehouse" Height="180" Width="400"
+        Title="Warehouse" Height="300" Width="400"
         WindowStartupLocation="CenterScreen">
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBox Text="{Binding WarehouseName}"
-                 FontSize="18"
-                 Margin="0 0 0 20"/>
+        <!-- WAREHOUSE NAME -->
+        <TextBlock Text="Warehouse Name:" 
+            FontSize="16" FontWeight="Bold"
+            Foreground="#2D2D30" />
 
-        <Button Grid.Row="1"
-                Content="Save"
-                FontSize="18"
-                HorizontalAlignment="Right"
-                Width="100"
-                Command="{Binding SaveCommand}"/>
+        <TextBox Grid.Row="1"
+          Text="{Binding WarehouseName, UpdateSourceTrigger=PropertyChanged}"
+          FontSize="16"
+          Padding="10,0"
+          Height="40"
+          BorderThickness="2"
+          BorderBrush="#CCCCCC"
+          VerticalAlignment="Center"
+          Margin="0,5,0,15"
+          VerticalContentAlignment="Center">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <!-- SQUARE AREA -->
+        <TextBlock Grid.Row="2"
+           Text="Square Area:"
+           FontSize="16" FontWeight="Bold"
+           Foreground="#2D2D30"
+           Margin="0,0,0,5"/>
+
+
+        <TextBox Grid.Row="3"
+             Text="{Binding SquareArea, UpdateSourceTrigger=PropertyChanged}"
+             FontSize="16"
+             Height="40"
+             Padding="10,0"
+             VerticalContentAlignment="Center"
+             BorderBrush="#CCCCCC"
+             BorderThickness="2"
+             Margin="0,0,0,15">
+            <i:Interaction.Behaviors>
+                <helpers:DecimalInputBehavior/>
+            </i:Interaction.Behaviors>
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
+
+        <!-- WAREHOUSE NAME -->
+        <TextBlock Text="Address:" 
+            Grid.Row="4"
+            FontSize="16" FontWeight="Bold"
+            Foreground="#2D2D30" />
+
+        <TextBox Grid.Row="5"
+              Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"
+              FontSize="16"
+              Padding="10,0"
+              Height="40"
+              BorderThickness="2"
+              BorderBrush="#CCCCCC"
+              VerticalAlignment="Center"
+              Margin="0,5,0,15"
+              VerticalContentAlignment="Center">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
+        </TextBox>
     </Grid>
 </Window>

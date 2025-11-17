@@ -109,6 +109,11 @@
          BorderBrush="#CCCCCC"
          BorderThickness="2"
          Margin="0,0,0,15">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
             <i:Interaction.Behaviors>
                 <helpers:DecimalInputBehavior/>
             </i:Interaction.Behaviors>
@@ -132,6 +137,11 @@
          BorderBrush="#CCCCCC"
          BorderThickness="2"
          Margin="0,0,0,15">
+            <TextBox.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="10"/>
+                </Style>
+            </TextBox.Resources>
             <i:Interaction.Behaviors>
                 <helpers:DecimalInputBehavior/>
             </i:Interaction.Behaviors>
