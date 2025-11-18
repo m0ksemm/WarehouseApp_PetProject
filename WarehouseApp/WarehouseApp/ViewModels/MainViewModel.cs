@@ -1,15 +1,11 @@
 ﻿using Entities;
 using GalaSoft.MvvmLight.Command;
 using ServiceContracts;
-using ServiceContracts.DTOs.ProductsDTOs;
 using ServiceContracts.DTOs.WarehousesDTOs;
 using ServiceContracts.ServiceContracts;
 using Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -18,7 +14,6 @@ using WarehouseApp.ViewModels.ManufacturersViewModels;
 using WarehouseApp.ViewModels.ProductssViewModels;
 using WarehouseApp.ViewModels.ProductsViewModels;
 using WarehouseApp.ViewModels.WarehousesViewModel;
-using WarehouseApp.Views.ProductsViews;
 using WarehouseApp.Views.WarehousesViews;
 
 namespace WarehouseApp.ViewModels
@@ -54,6 +49,13 @@ namespace WarehouseApp.ViewModels
             set => SetProperty(ref _isWarehousesExpanded, value);
         }
 
+        private WarehouseResponse _selectedWarehouse;
+        public WarehouseResponse SelectedWarehouse
+        {
+            get => _selectedWarehouse;
+            set => SetProperty(ref _selectedWarehouse, value);
+        }
+
         public MainViewModel(INavigationService navigationService)
         {
             _navigationService = navigationService;
@@ -67,8 +69,8 @@ namespace WarehouseApp.ViewModels
                 IsWarehousesExpanded = !IsWarehousesExpanded);
 
             AddWarehouseCommand = new RelayCommand(_ => AddWarehouse());
-            EditWarehouseCommand = new RelayCommand(_ => EditWarehouse());
-            DeleteWarehouseCommand = new RelayCommand(_ => DeleteWarehouse());
+            EditWarehouseCommand = new RelayCommand<WarehouseResponse>(EditWarehouse);
+            DeleteWarehouseCommand = new RelayCommand<WarehouseResponse>(DeleteWarehouse);
 
             SelectWarehouseCommand = new RelayCommand<WarehouseResponse>(OnWarehouseSelected);
 
@@ -77,6 +79,7 @@ namespace WarehouseApp.ViewModels
                 OnPropertyChanged(nameof(CurrentViewModel));
             };
 
+            // default
             _navigationService.NavigateTo<CategoriesViewModel>();
 
             _ = LoadWarehouses();
@@ -107,52 +110,92 @@ namespace WarehouseApp.ViewModels
             if (warehouse == null)
                 return;
 
+            SelectedWarehouse = warehouse;
             _navigationService.NavigateTo<ProductsViewModel>();
         }
 
         private void AddWarehouse()
         {
             var window = new WarehouseAddEditView();
-            var vm = new WarehouseAddEditViewModel(
-                window,
-                async result =>
+            var vm = new WarehouseAddEditViewModel(window, async result =>
+            {
+                if (result != null)
                 {
-                    if (result != null)
+                    var req = new WarehouseAddRequest
                     {
-                        var req = new WarehouseAddRequest
-                        {
-                            WarehouseName = result.WarehouseName,
-                            Address = result.Address,
-                            SquareArea = result.SquareArea
-                        };
+                        WarehouseName = result.WarehouseName,
+                        Address = result.Address,
+                        SquareArea = result.SquareArea
+                    };
 
-                        try
-                        {
-                            await _warehousesService.AddWarehouse(req);
-                            await LoadWarehouses();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error adding warehouse: {ex.Message}");
-                        }
+                    try
+                    {
+                        await _warehousesService.AddWarehouse(req);
+                        await LoadWarehouses();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error adding warehouse: {ex.Message}");
                     }
                 }
-            );
+            });
 
             window.DataContext = vm;
             window.ShowDialog();
         }
 
-        private void EditWarehouse()
+        private void EditWarehouse(WarehouseResponse warehouse)
         {
+            if (warehouse == null) return;
 
-            // TODO: реалізація редагування
+            SelectedWarehouse = warehouse;
+
+            var window = new WarehouseAddEditView();
+            var vm = new WarehouseAddEditViewModel(window, async result =>
+            {
+                if (result != null)
+                {
+                    var updateRequest = new WarehouseUpdateRequest
+                    {
+                        WarehouseID = warehouse.WarehouseID,
+                        WarehouseName = result.WarehouseName,
+                        Address = result.Address,
+                        SquareArea = result.SquareArea
+                    };
+
+                    try
+                    {
+                        await _warehousesService.UpdateWarehouse(updateRequest);
+                        await LoadWarehouses();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error updating warehouse: {ex.Message}");
+                    }
+                }
+            }, warehouse);
+
+            window.DataContext = vm;
+            window.ShowDialog();
         }
 
-        private void DeleteWarehouse()
+        private async void DeleteWarehouse(WarehouseResponse warehouse)
         {
+            if (warehouse == null) return;
 
-            // TODO: реалізація видалення
+            // Example simple confirm:
+            var res = MessageBox.Show($"Delete warehouse '{warehouse.WarehouseName}'?", "Confirm", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (res != MessageBoxResult.Yes) return;
+
+            try
+            {
+                await _warehousesService.DeleteWarehouse(warehouse.WarehouseID);
+                await LoadWarehouses();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting warehouse: {ex.Message}");
+            }
         }
     }
 }

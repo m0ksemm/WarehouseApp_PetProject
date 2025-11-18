@@ -11,17 +11,20 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Бічне меню -->
+        <!-- LEFT SIDE MENU -->
         <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled"
                       Background="#59595e"
                       Grid.Column="0">
 
             <StackPanel>
+
                 <!-- Categories -->
                 <Button Foreground="White" Background="Transparent" BorderBrush="Transparent"
                         FontSize="16" Padding="10" HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateToCategoriesCommand}">
+                        Command="{Binding NavigateToCategoriesCommand}"
+                        Tag="{Binding}">
+                    <!-- Tag = MainViewModel (for consistency) -->
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Images/categories.png" Width="30" Height="30" Margin="0,0,10,0"/>
                         <TextBlock Text="Categories" Foreground="White" FontSize="16"/>
@@ -31,7 +34,8 @@
                 <!-- Manufacturers -->
                 <Button Foreground="White" Background="Transparent" BorderBrush="Transparent"
                         FontSize="16" Padding="10" HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateToManufacturersCommand}">
+                        Command="{Binding NavigateToManufacturersCommand}"
+                        Tag="{Binding}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Images/manufacture.png" Width="30" Height="30" Margin="0,0,10,0"/>
                         <TextBlock Text="Manufacturers" Foreground="White" FontSize="16"/>
@@ -41,22 +45,26 @@
                 <!-- Products -->
                 <Button Foreground="White" Background="Transparent" BorderBrush="Transparent"
                         FontSize="16" Padding="10" HorizontalContentAlignment="Left"
-                        Command="{Binding NavigateToProductsCommand}">
+                        Command="{Binding NavigateToProductsCommand}"
+                        Tag="{Binding}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Images/product.png" Width="30" Height="30" Margin="0,0,10,0"/>
                         <TextBlock Text="Products" Foreground="White" FontSize="16"/>
                     </StackPanel>
                 </Button>
 
-                <!-- Warehouses -->
+                <!-- Warehouses header -->
                 <Button Foreground="White" Background="Transparent" BorderBrush="Transparent"
                         FontSize="16" Padding="10" HorizontalContentAlignment="Left"
-                        Command="{Binding ToggleWarehousesMenuCommand}">
+                        Command="{Binding ToggleWarehousesMenuCommand}"
+                        Tag="{Binding}">
+                    <!-- Tag = MainViewModel -->
 
                     <Button.ContextMenu>
+                        <!-- Use PlacementTarget.Tag to access VM from the menu -->
                         <ContextMenu>
                             <MenuItem Header="Add warehouse"
-                                      Command="{Binding AddWarehouseCommand}"/>
+                                      Command="{Binding PlacementTarget.Tag.AddWarehouseCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                         </ContextMenu>
                     </Button.ContextMenu>
 
@@ -66,41 +74,46 @@
                     </StackPanel>
                 </Button>
 
-                <!-- Підменю складів -->
+                <!-- Warehouse submenu -->
                 <ItemsControl ItemsSource="{Binding Warehouses}"
                               Visibility="{Binding IsWarehousesExpanded,
-                                      Converter={StaticResource BoolToVisibilityConverter}}">
+                                           Converter={StaticResource BoolToVisibilityConverter}}">
 
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button 
-        Background="Transparent"
-        BorderBrush="Transparent"
-        Foreground="#E0E0E0"
-        FontSize="14"
-        Padding="20,5,5,5"
-        HorizontalContentAlignment="Left"
-        Command="{Binding DataContext.SelectWarehouseCommand,
-                          RelativeSource={RelativeSource AncestorType=Window}}"
-        CommandParameter="{Binding}">
 
+                            <!--
+                              Button.DataContext inside template = WarehouseResponse (current item).
+                              We set Button.Tag = MainViewModel (via RelativeSource AncestorType=Window)
+                              so the ContextMenu can reference PlacementTarget.Tag to get VM.
+                            -->
+                            <Button Background="Transparent"
+                                    BorderBrush="Transparent"
+                                    Foreground="#E0E0E0"
+                                    FontSize="14"
+                                    Padding="20,5,5,5"
+                                    HorizontalContentAlignment="Left"
+                                    Command="{Binding DataContext.SelectWarehouseCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"
+                                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">
                                 <Button.Content>
                                     <TextBlock Text="{Binding WarehouseName}" />
                                 </Button.Content>
 
+                                <!-- ContextMenu for each warehouse item -->
                                 <Button.ContextMenu>
                                     <ContextMenu>
+                                        <!-- CommandParameter should be the current WarehouseResponse (PlacementTarget.DataContext) -->
                                         <MenuItem Header="Edit"
-                                      Command="{Binding PlacementTarget.DataContext.DataContext.EditWarehouseCommand,
-                                                        RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                      CommandParameter="{Binding}" />
+                                                  Command="{Binding PlacementTarget.Tag.EditWarehouseCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
 
-                                                            <Separator/>
+                                        <Separator/>
 
-                                                        <MenuItem Header="Delete"
-                                      Command="{Binding PlacementTarget.DataContext.DataContext.DeleteWarehouseCommand,
-                                                        RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                                      CommandParameter="{Binding}" />   
+                                        <MenuItem Header="Delete"
+                                                  Command="{Binding PlacementTarget.Tag.DeleteWarehouseCommand, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                     </ContextMenu>
                                 </Button.ContextMenu>
 
@@ -111,10 +124,9 @@
                 </ItemsControl>
 
             </StackPanel>
-
         </ScrollViewer>
 
-        <!-- Контент -->
+        <!-- MAIN CONTENT -->
         <ContentControl Grid.Column="1"
                         Content="{Binding CurrentViewModel}" />
 
