@@ -93,7 +93,7 @@
                                     FontSize="14"
                                     Padding="20,5,5,5"
                                     HorizontalContentAlignment="Left"
-                                    Command="{Binding DataContext.SelectWarehouseCommand,
+                                    Command="{Binding DataContext.NavigateToWarehouseProductsCommand,
                                                       RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding}"
                                     Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}">

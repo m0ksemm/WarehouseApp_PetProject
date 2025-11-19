@@ -8,6 +8,7 @@ using WarehouseApp.ViewModels;
 using WarehouseApp.ViewModels.CategoriesViewModels;
 using WarehouseApp.ViewModels.ManufacturersViewModels;
 using WarehouseApp.ViewModels.ProductsViewModels;
+using WarehouseApp.ViewModels.WarehouseProductsViewModel;
 
 namespace WarehouseApp
 {
@@ -30,6 +31,7 @@ namespace WarehouseApp
             services.AddTransient<CategoriesViewModel>();
             services.AddTransient<ProductsViewModel>();
             services.AddTransient<ManufacturersViewModel>();
+            services.AddTransient<WarehouseProductsViewModel>();
 
             // Вікна
             services.AddSingleton<Views.MainWindow>();

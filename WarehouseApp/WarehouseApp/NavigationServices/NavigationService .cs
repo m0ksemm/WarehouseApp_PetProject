@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Entities;
+using Microsoft.Extensions.DependencyInjection;
 using ServiceContracts;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace WarehouseApp.Services
         public BaseViewModel CurrentViewModel
         {
             get => _currentViewModel;
-            private set
+            set
             {
                 _currentViewModel = value;
                 CurrentViewModelChanged?.Invoke();
@@ -33,6 +34,12 @@ namespace WarehouseApp.Services
         public event Action CurrentViewModelChanged;
 
         public void NavigateTo<TViewModel>() where TViewModel : BaseViewModel
+        {
+            var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
+            CurrentViewModel = viewModel;
+        }
+
+        public void NavigateToWarehouse<TViewModel>(Warehouse warehouse) where TViewModel : BaseViewModel
         {
             var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
             CurrentViewModel = viewModel;

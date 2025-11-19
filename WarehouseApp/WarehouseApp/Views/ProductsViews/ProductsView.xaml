@@ -140,7 +140,7 @@
                   HeadersVisibility="Column"
                   CanUserAddRows="False"
                   Margin="10"
-                  FontSize="18"
+                  FontSize="20"
                   Foreground="#2D2D30"
                   IsReadOnly="True"
                   GridLinesVisibility="Horizontal"
