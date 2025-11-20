@@ -41,7 +41,6 @@ namespace WarehouseApp.ViewModels
 
         public ICommand ToggleWarehousesMenuCommand { get; }
 
-        public ICommand SelectWarehouseCommand { get; }
         public ICommand AddWarehouseCommand { get; }
         public ICommand EditWarehouseCommand { get; }
         public ICommand DeleteWarehouseCommand { get; }
@@ -69,7 +68,14 @@ namespace WarehouseApp.ViewModels
             NavigateToProductsCommand = new RelayCommand(_ => _navigationService.NavigateTo<ProductsViewModel>());
             NavigateToManufacturersCommand = new RelayCommand(_ => _navigationService.NavigateTo<ManufacturersViewModel>());
 
-            NavigateToWarehouseProductsCommand = new RelayCommand(_ => _navigationService.NavigateTo<WarehouseProductsViewModel.WarehouseProductsViewModel>());
+            NavigateToWarehouseProductsCommand = new RelayCommand<WarehouseResponse>(warehouse =>
+            {
+                if (warehouse != null)
+                {
+                    SelectedWarehouse = warehouse;
+                    _navigationService.NavigateTo(new WarehouseProductsViewModel.WarehouseProductsViewModel(warehouse));
+                }
+            });
 
             ToggleWarehousesMenuCommand = new RelayCommand(_ =>
                 IsWarehousesExpanded = !IsWarehousesExpanded);
@@ -78,7 +84,6 @@ namespace WarehouseApp.ViewModels
             EditWarehouseCommand = new RelayCommand<WarehouseResponse>(EditWarehouse);
             DeleteWarehouseCommand = new RelayCommand<WarehouseResponse>(DeleteWarehouse);
 
-            SelectWarehouseCommand = new RelayCommand<WarehouseResponse>(OnWarehouseSelected);
 
             _navigationService.CurrentViewModelChanged += () =>
             {
@@ -111,15 +116,8 @@ namespace WarehouseApp.ViewModels
             }
         }
 
-        private void OnWarehouseSelected(WarehouseResponse warehouse)
-        {
-            if (warehouse == null)
-                return;
 
-            SelectedWarehouse = warehouse;
-            _navigationService.NavigateTo<ProductsViewModel>();
-        }
-
+        
         private void AddWarehouse()
         {
             var window = new WarehouseAddEditView();

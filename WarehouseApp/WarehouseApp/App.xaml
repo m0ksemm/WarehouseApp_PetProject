@@ -4,10 +4,12 @@
              xmlns:vmCat="clr-namespace:WarehouseApp.ViewModels.CategoriesViewModels"
              xmlns:vmProd="clr-namespace:WarehouseApp.ViewModels.ProductsViewModels"
              xmlns:vmMan="clr-namespace:WarehouseApp.ViewModels.ManufacturersViewModels"
+             xmlns:vmWarProds="clr-namespace:WarehouseApp.ViewModels.WarehouseProductsViewModel"
+
              xmlns:vCat="clr-namespace:WarehouseApp.Views.CategoriesViews"
              xmlns:vProd="clr-namespace:WarehouseApp.Views.ProductsViews"
              xmlns:vMan="clr-namespace:WarehouseApp.Views.ManufacturersViews"
-
+             xmlns:vWarProds="clr-namespace:WarehouseApp.Views.WarehouseProductsViews"
              xmlns:conv="clr-namespace:WarehouseApp.Converters"
              >
     <Application.Resources>
@@ -23,6 +25,10 @@
             <vMan:ManufacturersView />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type vmWarProds:WarehouseProductsViewModel}">
+            <vWarProds:WarehouseProductsView />
+        </DataTemplate>
+        
         <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <conv:RowIndexConverter x:Key="RowIndexConverter" />
