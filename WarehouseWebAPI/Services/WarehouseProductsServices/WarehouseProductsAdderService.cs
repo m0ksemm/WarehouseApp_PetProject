@@ -59,7 +59,6 @@ namespace Services.WarehouseProductsServices
             if (warehouseProducts.Any(warehouseProduct => 
                 warehouseProduct.WarehouseID == warehouseProductAddRequest.WarehouseID &&
                 warehouseProduct.ProductID == warehouseProductAddRequest.ProductID &&
-                warehouseProduct.UpdatedAt == warehouseProductAddRequest.UpdatedAt &&
                 warehouseProduct.Count == warehouseProductAddRequest.Count))
             {
                 throw new ArgumentException("Such Product already exists in this Warehouse.");

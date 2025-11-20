@@ -5,10 +5,12 @@ using RepositoryContracts;
 using ServiceContracts.CategoriesServiceContracts;
 using ServiceContracts.ManufacturersServiceContracts;
 using ServiceContracts.ProductsServiceContracts;
+using ServiceContracts.WarehouseProductsServiceContracts;
 using ServiceContracts.WarehousesServiceContracts;
 using Services.CategoriesServices;
 using Services.ManufacturersService;
 using Services.ProductsServices;
+using Services.WarehouseProductsServices;
 using Services.WarehousesServices;
 
 namespace WarehouseWebAPI.StartupExtensions
@@ -46,6 +48,11 @@ namespace WarehouseWebAPI.StartupExtensions
             services.AddScoped<IWarehousesDeleterService, WarehousesDeleterService>();
             services.AddScoped<IWarehousesGetterService, WarehousesGetterService>();
             services.AddScoped<IWarehousesUpdaterService, WarehousesUpdaterService>();
+
+            services.AddScoped<IWarehouseProductsAdderService, WarehouseProductsAdderService>();
+            services.AddScoped<IWarehouseProductsGetterService, WarehouseProductsGetterService>();
+            services.AddScoped<IWarehouseProductsUpdaterService, WarehouseProductsUpdaterService>();
+            services.AddScoped<IWarehouseProductsDeleterService, WarehouseProductsDeleterService>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),

@@ -54,6 +54,8 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
                 ProductID = warehouseProduct.ProductID,
                 UpdatedAt = warehouseProduct.UpdatedAt,
                 Count = warehouseProduct.Count
+                //Warehouse=
+                //Product=
             };
         }
     }
