@@ -30,7 +30,7 @@ namespace Services.WarehouseProductsServices
             {
                 return null;
             }
-            WarehouseProduct? warehouseProduct_response_from_list = await _warehouseProductRepository.GetWarehouseProductById(guid.Value);
+            WarehouseProduct? warehouseProduct_response_from_list = await _warehouseProductRepository.GetWarehouseProductByWarehouseProductId(guid.Value);
             if (warehouseProduct_response_from_list == null)
             {
                 return null;

@@ -29,7 +29,7 @@ namespace Services.WarehouseProductsServices
             ValidationHelper.ModelValidation(warehouseProductUpdateRequest);
 
             WarehouseProduct? matchingWarehouseProduct = await _warehouseProductRepository
-                .GetWarehouseProductById(warehouseProductUpdateRequest.WarehouseProductID);
+                .GetWarehouseProductByWarehouseProductId(warehouseProductUpdateRequest.WarehouseProductID);
             if (matchingWarehouseProduct == null)
             {
                 throw new ArgumentException("Threr is no such product in warehouse.");

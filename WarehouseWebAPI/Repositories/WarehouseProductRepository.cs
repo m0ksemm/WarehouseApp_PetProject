@@ -37,9 +37,14 @@ namespace Repositories
             return await _dbContext.WarehouseProducts.Include("Product").Include("Warehouse").ToListAsync();
         }
 
-        public async Task<WarehouseProduct?> GetWarehouseProductById(Guid guid)
+        public async Task<WarehouseProduct?> GetWarehouseProductByWarehouseProductId(Guid warehouseProductId)
         {
-            return await _dbContext.WarehouseProducts.Include("Product").Include("Warehouse").FirstOrDefaultAsync(temp => temp.WarehouseProductID == guid);
+            return await _dbContext.WarehouseProducts.Include("Product").Include("Warehouse").FirstOrDefaultAsync(temp => temp.WarehouseProductID == warehouseProductId);
+        }
+
+        public async Task<List<WarehouseProduct>?> GetWarehouseProductsByWarehouseId(Guid guid)
+        {
+            return await _dbContext.WarehouseProducts.Include("Product").Include("Warehouse").Where(temp => temp.WarehouseID == guid).ToListAsync();
         }
 
         public async Task<bool> UpdateWarehouseProduct(WarehouseProduct warehouseProduct)

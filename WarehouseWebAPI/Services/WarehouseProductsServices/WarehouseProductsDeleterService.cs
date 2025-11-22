@@ -22,7 +22,7 @@ namespace Services.WarehouseProductsServices
             {
                 throw new ArgumentNullException(nameof(warehouseProductID));
             }
-            WarehouseProduct? warehouseProduct = await _warehouseProductRepository.GetWarehouseProductById(warehouseProductID.Value);
+            WarehouseProduct? warehouseProduct = await _warehouseProductRepository.GetWarehouseProductByWarehouseProductId(warehouseProductID.Value);
             if (warehouseProduct == null)
             {
                 return false;

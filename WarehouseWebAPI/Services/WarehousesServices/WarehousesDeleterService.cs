@@ -30,7 +30,7 @@ namespace Services.WarehousesServices
                 return false;
             }
             List<WarehouseProduct> warehouseProducts = await _warehouseProductRepository.GetAllWarehouseProducts();
-            if (warehouseProducts.Select(warehouseProduct => warehouseProduct.WarehouseID == warehouseID).Count() != 0)
+            if (warehouseProducts.Any(warehouseProduct => warehouseProduct.WarehouseID == warehouseID))
             {
                 throw new ArgumentException("This warehouse can not be deleted since there are products that belong to it.");
             }
