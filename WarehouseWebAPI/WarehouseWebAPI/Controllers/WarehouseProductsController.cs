@@ -52,17 +52,30 @@ namespace WarehouseWebAPI.Controllers
             return Ok(warehouseProduct);
         }
 
-        //[HttpGet]
-        //[Route("[action]/{warehouseID}")]
-        //public async Task<ActionResult<WarehouseResponse>> GetWarehouseById(Guid warehouseID)
-        //{
-        //    WarehouseResponse? warehouseResponse = await _warehousesGetterService.GetWarehouseById(warehouseID);
-        //    if (warehouseResponse == null)
-        //    {
-        //        return NotFound("Warehouse does not exist.");
-        //    }
-        //    return Ok(warehouseResponse);
-        //}
+        [HttpGet]
+        [Route("[action]/{warehouseID}")]
+        public async Task<ActionResult<WarehouseProductResponse>> GetWarehouseProductByWarehouseProductId(Guid warehouseID)
+        {
+            WarehouseProductResponse? warehouseResponse = await _warehouseProductsGetterService.GetWarehouseProductByWarehouseProductId(warehouseID);
+            if (warehouseResponse == null)
+            {
+                return NotFound("Product in this Warehouse does not exist.");
+            }
+            return Ok(warehouseResponse); 
+        }
+
+
+        [HttpGet]
+        [Route("[action]/{warehouseID}")]
+        public async Task<ActionResult<IEnumerable<WarehouseProductResponse>>> GetWarehouseProductsByWarehouseId(Guid warehouseID)
+        {
+            List<WarehouseProductResponse>? warehouseProductsResponses = await _warehouseProductsGetterService.GetWarehouseProductsByWarehouseId(warehouseID);
+            if (warehouseProductsResponses == null)
+            {
+                return NotFound("Product in this Warehouse does not exist.");
+            }
+            return Ok(warehouseProductsResponses);
+        }
 
         [HttpDelete]
         [Route("[action]/{warehouseProductID}")]

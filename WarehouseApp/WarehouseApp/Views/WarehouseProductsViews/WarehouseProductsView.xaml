@@ -5,77 +5,140 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WarehouseApp.Views.WarehouseProductsViews"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="620" d:DesignWidth="1000">
     <Grid Background="White">
 
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        
         <!-- Назва -->
         <TextBlock Text="{Binding WarehouseTitle}"
+                   Grid.ColumnSpan="3"
                    FontSize="22"
                    FontWeight="Bold"
                    Foreground="#2D2D30"
                    VerticalAlignment="Center"
                    Margin="10"/>
 
-        <!-- Фільтри -->
-        <StackPanel Grid.Row="1"
-                    Orientation="Horizontal"
-                    Margin="10"
-                    VerticalAlignment="Center"
-                    Height="40">
+        <!-- Кнопки -->
+        <Button Grid.Row="1" Content="Add"
+        FontSize="16" FontWeight="Bold"
+        Foreground="#2D2D30"
+        Command="{Binding AddCommand}"
+        Style="{StaticResource RoundedButtonStyle}">
+        </Button>
 
-            <TextBox Width="250"
-                     Style="{StaticResource RoundedSearchBoxStyle}"
-                     Tag="Search..."
-                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     Margin="0,0,10,0"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="Update"
+        FontSize="16" FontWeight="Bold"
+        Foreground="#2D2D30"
+        Command="{Binding UpdateCommand}"
+    Style="{StaticResource RoundedButtonStyle}">
+        </Button>
+
+        <Button Grid.Row="1" Grid.Column="2" Content="Delete"
+        FontSize="16" FontWeight="Bold"
+        Foreground="#2D2D30"
+        Command="{Binding DeleteCommand}"
+        Style="{StaticResource RoundedButtonStyle}">
+        </Button>
+
+        <TextBox Grid.Row="1"
+         Grid.Column="3"
+         Style="{StaticResource RoundedSearchBoxStyle}"
+         Tag="Search..."
+         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+        <!-- Фільтри -->
+        <StackPanel Grid.Row="2"
+            Grid.ColumnSpan="4"
+            Orientation="Horizontal"
+            Margin="0,10,10,10"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Height="40">    
 
             <TextBlock Text="Category:"
-                       FontSize="18"
-                       Margin="10,0,10,0"
-                       VerticalAlignment="Center"/>
+                       Grid.Row="2"
+               FontSize="18"
+               Margin="10,0,10,0"
+               Foreground="#2D2D30"
+               VerticalAlignment="Center"/>
 
-            <ComboBox Width="200"
-                      ItemsSource="{Binding Categories}"
-                      SelectedItem="{Binding SelectedCategory}"
-                      DisplayMemberPath="CategoryName"
-                      FontSize="18"
-                      Margin="0,0,10,0"/>
+
+            <ComboBox Width="220"
+  IsEditable="True"
+  IsTextSearchEnabled="False"
+  StaysOpenOnEdit="True"
+  Text="{Binding CategorySearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+  ItemsSource="{Binding CategoriesFilter}"
+  SelectedItem="{Binding SelectedCategoryFilter, Mode=TwoWay}"
+  DisplayMemberPath="CategoryName"
+  FontSize="18"
+              Padding="5"
+  Foreground="#2D2D30"
+  Margin="0,0,10,0"
+
+              VerticalAlignment="Center"/>
 
             <TextBlock Text="Manufacturer:"
-                       FontSize="18"
-                       Margin="10,0,10,0"
-                       VerticalAlignment="Center"/>
+   FontSize="18"
+               Margin="10,0,10,0"
+   Foreground="#2D2D30"
+   VerticalAlignment="Center"/>
 
-            <ComboBox Width="200"
-                      ItemsSource="{Binding Manufacturers}"
-                      SelectedItem="{Binding SelectedManufacturer}"
-                      DisplayMemberPath="ManufacturerName"
-                      FontSize="18"
-                      Margin="0,0,10,0"/>
+            <!-- Manufacturer ComboBox -->
+            <ComboBox Width="220"
+              IsEditable="True"
+              IsTextSearchEnabled="False"
+              StaysOpenOnEdit="True"
+              Text="{Binding ManufacturerSearchText, UpdateSourceTrigger=PropertyChanged}"
+              ItemsSource="{Binding ManufacturersFilter}"
+              SelectedItem="{Binding SelectedManufacturerFilter, Mode=TwoWay}"
+              DisplayMemberPath="ManufacturerName"
+              FontSize="18"
+              Foreground="#2D2D30"
+              Margin="0,0,10,0"
+              Padding="5"
+              VerticalAlignment="Center"/>
+
+
         </StackPanel>
 
         <!-- Таблиця товарів -->
-        <DataGrid Grid.Row="2"
+        <DataGrid Grid.Row="3"
+                  Grid.ColumnSpan="4"
                   ItemsSource="{Binding WarehouseProducts}"
                   SelectedItem="{Binding SelectedProduct}"
                   AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
                   Margin="10"
-                  FontSize="18"
-                  IsReadOnly="True">
+                  FontSize="20"
+                  Foreground="#2D2D30"
+                  IsReadOnly="True"
+                  GridLinesVisibility="Horizontal"
+                  BorderThickness="0">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="№" Binding="{Binding RowNumber}" Width="40"/>
-                <DataGridTextColumn Header="Product" Binding="{Binding Product.ProductName}" Width="2*"/>
+                <DataGridTextColumn Header="Product Name" Binding="{Binding Product.ProductName}" Width="2*"/>
                 <DataGridTextColumn Header="Category" Binding="{Binding Product.Category.CategoryName}" Width="1.2*"/>
-                <DataGridTextColumn Header="Manufacturer" Binding="{Binding Product.Manufacturer.ManufacturerName}" Width="1.2*"/>
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="0.8*"/>
+                <DataGridTextColumn Header="Manufacturer" Binding="{Binding Product.Manufacturer.ManufacturerName}" Width="1.5*"/>
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Count}" Width="1*"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Product.Price}" Width="1*"/>
+                <DataGridTextColumn Header="Latest Update" Binding="{Binding UpdatedAt}" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -53,9 +54,34 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
                 WarehouseID = warehouseProduct.WarehouseID,
                 ProductID = warehouseProduct.ProductID,
                 UpdatedAt = warehouseProduct.UpdatedAt,
-                Count = warehouseProduct.Count
-                //Warehouse=
-                //Product=
+                Count = warehouseProduct.Count,
+                Warehouse = new Warehouse 
+                {
+                    WarehouseID = warehouseProduct.Warehouse.WarehouseID,
+                    WarehouseName = warehouseProduct.Warehouse.WarehouseName,
+                    SquareArea = warehouseProduct.Warehouse.SquareArea,
+                    Address = warehouseProduct.Warehouse.Address
+                },
+                Product = new Product
+                {
+                    ProductID = warehouseProduct.Product.ProductID,
+                    ProductName = warehouseProduct.Product.ProductName,
+                    CategoryID = warehouseProduct.Product.CategoryID,
+                    ManufacturerID = warehouseProduct.Product.ManufacturerID,
+                    Weight = warehouseProduct.Product.Weight,
+                    Price = warehouseProduct.Product.Price,
+                    BarCode = warehouseProduct.Product.BarCode,
+                    Category = new Category
+                    {
+                        CategoryID = warehouseProduct.Product.Category.CategoryID,
+                        CategoryName = warehouseProduct.Product.Category.CategoryName
+                    },
+                    Manufacturer = new Manufacturer
+                    {
+                        ManufacturerID = warehouseProduct.Product.Manufacturer.ManufacturerID,
+                        ManufacturerName = warehouseProduct.Product.Manufacturer.ManufacturerName
+                    }
+                }
             };
         }
     }

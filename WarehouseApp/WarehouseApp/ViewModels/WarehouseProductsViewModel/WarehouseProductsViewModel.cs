@@ -1,7 +1,10 @@
 ﻿using ServiceContracts.DTOs.CategoriesDTOs;
 using ServiceContracts.DTOs.ManufacturersDTOs;
+using ServiceContracts.DTOs.ProductsDTOs;
 using ServiceContracts.DTOs.WarehouseProductsDTOs;
 using ServiceContracts.DTOs.WarehousesDTOs;
+using ServiceContracts.ServiceContracts;
+using Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,6 +17,10 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
     public class WarehouseProductsViewModel : BaseViewModel
     {
         private readonly WarehouseResponse _warehouse;
+
+        private readonly IWarehouseProductsService _warehouseProductsService;
+        private readonly ICategoriesService _categoriesService;
+        private readonly IManufacturersService _manufacturersService;
 
         public string WarehouseTitle => $"Products in '{_warehouse.WarehouseName}'";
 
@@ -49,6 +56,7 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         public WarehouseProductsViewModel(WarehouseResponse warehouse)
         {
             _warehouse = warehouse;
+            _warehouseProductsService = new WarehouseProductsService();
 
             LoadData();
         }
@@ -56,11 +64,24 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         private async void LoadData()
         {
             // Завантаження
-            //_allProducts = await Api.GetWarehouseProducts(_warehouse.Id);
-            //Categories = new ObservableCollection<CategoryResponse>(await Api.GetCategories());
-            //Manufacturers = new ObservableCollection<ManufacturerResponse>(await Api.GetManufacturers());
+            try
+            {
+                var warehouseProducts = await _warehouseProductsService.GetWarehouseProductsByWarehouseId(_warehouse.WarehouseID);
+                if (warehouseProducts != null)
+                {
+                    for (int i = 0; i < warehouseProducts.Count; i++)
+                        warehouseProducts[i].RowNumber = i + 1;
 
-            //WarehouseProducts = new ObservableCollection<WarehouseProductResponse>(_allProducts);
+                    _allProducts = warehouseProducts.ToList(); // не забуваємо
+
+                    WarehouseProducts = new ObservableCollection<WarehouseProductResponse>(warehouseProducts);
+                    OnPropertyChanged(nameof(WarehouseProducts)); // MUST HAVE
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading products: {ex.Message}");
+            }
         }
 
         private void FilterProducts()
