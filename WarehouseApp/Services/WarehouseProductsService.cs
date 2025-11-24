@@ -68,7 +68,7 @@ namespace Services
 
         public async Task<bool> UpdateWarehouseProduct(WarehouseProductUpdateRequest warehouseProductUpdateRequest)
         {
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7053/Products/UpdateProduct/{warehouseProductUpdateRequest.WarehouseProductID}", warehouseProductUpdateRequest);
+            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7053/Products/UpdateWarehouseProduct/{warehouseProductUpdateRequest.WarehouseProductID}", warehouseProductUpdateRequest);
 
             if (response.IsSuccessStatusCode)
             {

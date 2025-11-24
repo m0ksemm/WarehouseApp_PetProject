@@ -12,6 +12,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using WarehouseApp.ViewModels.ProductssViewModels;
+using WarehouseApp.Views.ProductsViews;
+using WarehouseApp.Views.WarehouseProductsViews;
 
 namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
 {
@@ -22,10 +27,17 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         private readonly IWarehouseProductsService _warehouseProductsService;
         private readonly ICategoriesService _categoriesService;
         private readonly IManufacturersService _manufacturersService;
+        private readonly IProductsService _productsService;
 
         public string WarehouseTitle => $"Products in '{_warehouse.WarehouseName}'";
 
-        public ObservableCollection<WarehouseProductResponse> WarehouseProducts { get; set; }
+        private ObservableCollection<WarehouseProductResponse> _warehouseProducts = new();
+        public ObservableCollection<WarehouseProductResponse> WarehouseProducts
+        {
+            get => _warehouseProducts;
+            set => SetProperty(ref _warehouseProducts, value);
+        }
+
         public ObservableCollection<CategoryResponse> Categories { get; set; }
         public ObservableCollection<ManufacturerResponse> Manufacturers { get; set; }
 
@@ -82,30 +94,45 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         }
 
 
-        public WarehouseProductResponse SelectedProduct { get; set; }
+        private WarehouseProductResponse _selectedWarehouseProduct;
+
+        public WarehouseProductResponse SelectedWarehouseProduct 
+        {
+            get => _selectedWarehouseProduct;
+            set => SetProperty(ref _selectedWarehouseProduct, value);
+        }
+
+        private string _searchText;
 
         public string SearchText
         {
             get => _searchText;
-            set { _searchText = value; FilterProducts(); OnPropertyChanged(); }
+            set { if (SetProperty(ref _searchText, value)) ApplyFilter(); }
         }
-        private string _searchText;
+
 
         public CategoryResponse SelectedCategory
         {
             get => _selectedCategory;
-            set { _selectedCategory = value; FilterProducts(); OnPropertyChanged(); }
+            set { _selectedCategory = value; ApplyFilter(); OnPropertyChanged(); }
         }
         private CategoryResponse _selectedCategory;
 
         public ManufacturerResponse SelectedManufacturer
         {
             get => _selectedManufacturer;
-            set { _selectedManufacturer = value; FilterProducts(); OnPropertyChanged(); }
+            set { _selectedManufacturer = value; ApplyFilter(); OnPropertyChanged(); }
         }
         private ManufacturerResponse _selectedManufacturer;
 
-        private List<WarehouseProductResponse> _allProducts;
+        private List<WarehouseProductResponse> _allWarehouseProducts;
+
+        private ObservableCollection<ProductResponse> _allProducts;
+
+
+        public ICommand AddCommand { get; }
+        public ICommand UpdateCommand { get; }
+        public ICommand DeleteCommand { get; }
 
         public WarehouseProductsViewModel(WarehouseResponse warehouse)
         {
@@ -113,6 +140,11 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
             _warehouseProductsService = new WarehouseProductsService();
             _categoriesService = new CategoriesService();
             _manufacturersService = new ManufacturersService();
+            _productsService = new ProductsService();
+
+            AddCommand = new RelayCommand(async _ => await AddWarehouseProduct());
+            UpdateCommand = new RelayCommand(async _ => await UpdateProduct(), _ => SelectedWarehouseProduct != null);
+            DeleteCommand = new RelayCommand(async _ => await DeleteProduct(), _ => SelectedWarehouseProduct != null);
 
             _ = InitializeAsync();
         }
@@ -129,14 +161,17 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
             try
             {
                 var warehouseProducts = await _warehouseProductsService.GetWarehouseProductsByWarehouseId(_warehouse.WarehouseID);
+                var allProducts = await _productsService.GetAllProducts();
                 if (warehouseProducts != null)
                 {
                     for (int i = 0; i < warehouseProducts.Count; i++)
                         warehouseProducts[i].RowNumber = i + 1;
 
-                    _allProducts = warehouseProducts.ToList(); // не забуваємо
+                    _allWarehouseProducts = warehouseProducts.ToList(); // не забуваємо ||||||||||\ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!this is  not all
+                    ApplyFilter();
 
                     WarehouseProducts = new ObservableCollection<WarehouseProductResponse>(warehouseProducts);
+                    _allProducts = new ObservableCollection<ProductResponse>(allProducts);
                     OnPropertyChanged(nameof(WarehouseProducts)); // MUST HAVE
                 }
             }
@@ -178,47 +213,122 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
 
         private void ApplyFilter()
         {
-            var filtered = _allProducts.AsEnumerable();
+            var filtered = _allWarehouseProducts.AsEnumerable();
 
-            //if (!string.IsNullOrWhiteSpace(SearchText))
-            //    filtered = filtered.Where(p => !string.IsNullOrEmpty(p.ProductName) && p.ProductName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
-            //        || p.BarCode.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
-            //        || p.Category.CategoryName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
-            //        || p.Manufacturer.ManufacturerName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
+            if (!string.IsNullOrWhiteSpace(SearchText))
+                filtered = filtered.Where(p => !string.IsNullOrEmpty(p.Product.ProductName) && p.Product.ProductName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                    || p.Product.BarCode.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                    || p.Product.Category.CategoryName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                    || p.Product.Manufacturer.ManufacturerName.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                    || p.Product.Price.ToString().IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0
+                    || p.Product.BarCode.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0);
 
-            //if (SelectedCategoryFilter != null && SelectedCategoryFilter.CategoryID != Guid.Empty)
-            //    filtered = filtered.Where(p => p.Category != null && p.Category.CategoryID == SelectedCategoryFilter.CategoryID);
+            if (SelectedCategoryFilter != null && SelectedCategoryFilter.CategoryID != Guid.Empty)
+                filtered = filtered.Where(p => p.Product.Category != null && p.Product.Category.CategoryID == SelectedCategoryFilter.CategoryID);
 
-            //if (SelectedManufacturerFilter != null && SelectedManufacturerFilter.ManufacturerID != Guid.Empty)
-            //    filtered = filtered.Where(p => p.Manufacturer != null && p.Manufacturer.ManufacturerID == SelectedManufacturerFilter.ManufacturerID);
+            if (SelectedManufacturerFilter != null && SelectedManufacturerFilter.ManufacturerID != Guid.Empty)
+                filtered = filtered.Where(p => p.Product.Manufacturer != null && p.Product.Manufacturer.ManufacturerID == SelectedManufacturerFilter.ManufacturerID);
 
-            //if (MinPriceFilter.HasValue)
-            //    filtered = filtered.Where(p => p.Price >= (double)MinPriceFilter.Value);
 
-            //if (MaxPriceFilter.HasValue)
-            //    filtered = filtered.Where(p => p.Price <= (double)MaxPriceFilter.Value);
-
-            //var result = filtered.Select((p, idx) => { p.RowNumber = idx + 1; return p; }).ToList();
-            //Products = new ObservableCollection<ProductResponse>(result);
+            var result = filtered.Select((p, idx) => { p.RowNumber = idx + 1; return p; }).ToList();
+            WarehouseProducts = new ObservableCollection<WarehouseProductResponse>(result);
         }
 
-        private void FilterProducts()
+        private async Task AddWarehouseProduct()
         {
-            //if (_allProducts == null) return;
+            var window = new WarehouseProductAddEditView();
 
-            //var filtered = _allProducts.AsEnumerable();
+            var vm = new WarehouseProductAddEditViewModel(
+                window,
+                async result =>
+                {
+                    if (result != null)
+                    {
+                        var addReq = new WarehouseProductAddRequest
+                        {
+                            ProductID = result.ProductID,
+                            WarehouseID = result.WarehouseID,
+                            Count = result.Count                       
+                        };
+                        try
+                        {
+                            await _warehouseProductsService.AddWarehouseProduct(addReq);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error adding product: {ex.Message}");
+                        }
 
-            //if (!string.IsNullOrWhiteSpace(SearchText))
-            //    filtered = filtered.Where(p => p.Product.ProductName.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+                        await LoadData();
+                    }
+                },
+                _allProducts,
+                SelectedWarehouseProduct,
+                _warehouse.WarehouseID
+            );
 
-            //if (SelectedCategory != null)
-            //    filtered = filtered.Where(p => p.Product.Category.Id == SelectedCategory.Id);
+            window.DataContext = vm;
+            window.ShowDialog();
+        }
 
-            //if (SelectedManufacturer != null)
-            //    filtered = filtered.Where(p => p.Product.Manufacturer.Id == SelectedManufacturer.Id);
 
-            //WarehouseProducts = new ObservableCollection<WarehouseProductResponse>(filtered);
-            //OnPropertyChanged(nameof(WarehouseProducts));
+        private async Task UpdateProduct()
+        {
+            if (SelectedWarehouseProduct == null) return;
+
+            var window = new WarehouseProductAddEditView();
+            var vm = new WarehouseProductAddEditViewModel(window, async result =>
+            {
+                if (result != null)
+                {
+                    var updateRequest = new WarehouseProductUpdateRequest
+                    {
+
+                        WarehouseProductID = SelectedWarehouseProduct.WarehouseProductID,
+                        WarehouseID = result.WarehouseID.Value,
+                        ProductID = result.ProductID.Value,
+                        Count = result.Count
+                    };
+
+                    try
+                    {
+                        await _warehouseProductsService.UpdateWarehouseProduct(updateRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error updating product: {ex.Message}");
+                    }
+
+                    await LoadData();
+                }
+            }, _allProducts,
+                SelectedWarehouseProduct,
+                _warehouse.WarehouseID);
+
+            window.DataContext = vm;
+            window.ShowDialog();
+        }
+        private async Task DeleteProduct()
+        {
+
+            //var window = new ProductDeleteView();
+            //var vm = new ProductDeleteViewModel(window, SelectedProduct.ProductName ?? "this product", async confirmed =>
+            //{
+            //    if (confirmed)
+            //    {
+            //        try
+            //        {
+            //            await _productsService.DeleteProduct(SelectedProduct.ProductID);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            MessageBox.Show($"Error deleting product: {ex.Message}");
+            //        }
+            //        await LoadProducts();
+            //    }
+            //});
+            //window.DataContext = vm;
+            //window.ShowDialog();
         }
     }
 

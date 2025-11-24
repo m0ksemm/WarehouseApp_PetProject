@@ -20,5 +20,10 @@ namespace ServiceContracts.DTOs.ProductsDTOs
         public Manufacturer? Manufacturer { get; set; }
 
         public int RowNumber { get; set; }
+
+        public override string ToString()
+        {
+            return $" {ProductName} | {Manufacturer.ManufacturerName} | {Category.CategoryName} | {BarCode} ";
+        }
     }
 }

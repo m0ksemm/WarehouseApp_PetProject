@@ -19,5 +19,6 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
 
         public int RowNumber { get; set; }
 
+
     }
 }
