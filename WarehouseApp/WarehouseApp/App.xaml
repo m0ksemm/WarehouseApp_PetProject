@@ -32,6 +32,7 @@
         <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <conv:RowIndexConverter x:Key="RowIndexConverter" />
+        <conv:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
 
 
         <Style TargetType="Button" x:Key="RoundedButtonStyle">

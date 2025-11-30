@@ -80,9 +80,9 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         public WarehouseProductAddEditViewModel(
             Window window,
             Action<WarehouseProductResponse?> onSave,
-            ObservableCollection<ProductResponse> products,
-            WarehouseProductResponse? existingWarehouseProduct = null,
-            Guid warehouseID = default)
+            ObservableCollection<ProductResponse> products, Guid warehouseID,
+            WarehouseProductResponse? existingWarehouseProduct = null
+            )
         {
             _window = window;
             _onSave = onSave;

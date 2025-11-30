@@ -263,8 +263,9 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                     }
                 },
                 _allProducts,
-                SelectedWarehouseProduct,
-                _warehouse.WarehouseID
+                _warehouse.WarehouseID,
+                SelectedWarehouseProduct
+
             );
 
             window.DataContext = vm;
@@ -302,8 +303,8 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                     await LoadData();
                 }
             }, _allProducts,
-                SelectedWarehouseProduct,
-                _warehouse.WarehouseID);
+                _warehouse.WarehouseID, 
+                SelectedWarehouseProduct);
 
             window.DataContext = vm;
             window.ShowDialog();

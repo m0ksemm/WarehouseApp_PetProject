@@ -32,6 +32,7 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
                 {
                     _selectedCategory = value;
                     OnPropertyChanged();
+
                     if (_selectedCategory != null)
                     {
                         _categorySearchText = _selectedCategory.CategoryName;
