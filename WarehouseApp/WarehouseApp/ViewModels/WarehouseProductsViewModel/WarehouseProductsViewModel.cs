@@ -311,25 +311,27 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         }
         private async Task DeleteProduct()
         {
-
-            //var window = new ProductDeleteView();
-            //var vm = new ProductDeleteViewModel(window, SelectedProduct.ProductName ?? "this product", async confirmed =>
-            //{
-            //    if (confirmed)
-            //    {
-            //        try
-            //        {
-            //            await _productsService.DeleteProduct(SelectedProduct.ProductID);
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            MessageBox.Show($"Error deleting product: {ex.Message}");
-            //        }
-            //        await LoadProducts();
-            //    }
-            //});
-            //window.DataContext = vm;
-            //window.ShowDialog();
+            var window = new WarehouseProductDeleteView();
+            var vm = new WarehouseProductDeleteViewModel(window, 
+                SelectedWarehouseProduct.Product.ProductName ?? "this product",
+                _warehouse.WarehouseName ?? "this warehouse", 
+                async confirmed =>
+                {
+                    if (confirmed)
+                    {
+                        try
+                        {
+                            await _warehouseProductsService.DeleteWarehouseProduct(SelectedWarehouseProduct.WarehouseProductID);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error deleting product: {ex.Message}");
+                        }
+                        await LoadData();
+                    }
+                });
+            window.DataContext = vm;
+            window.ShowDialog();
         }
     }
 

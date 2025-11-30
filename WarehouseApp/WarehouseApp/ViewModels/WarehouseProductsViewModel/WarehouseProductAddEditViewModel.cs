@@ -31,7 +31,6 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                     _selectedProduct = value;
                     OnPropertyChanged();
 
-                    // коли обрали — замінюємо текст у полі
                     if (_selectedProduct != null) 
                     {
                         ProductSearchText = _selectedProduct.ProductName;
@@ -95,9 +94,6 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                 WarehouseProductID = existingWarehouseProduct.WarehouseProductID;
                 SelectedProduct = products.FirstOrDefault(p => p.ProductID == existingWarehouseProduct.ProductID);
                 Count = existingWarehouseProduct.Count.ToString();
-                //ProductSearchText = SelectedProduct?.ProductName ?? "";
-
-              //  ProductSearchText = SelectedProduct?.ToString() ?? "";
             }
 
             WarehouseID = warehouseID;
