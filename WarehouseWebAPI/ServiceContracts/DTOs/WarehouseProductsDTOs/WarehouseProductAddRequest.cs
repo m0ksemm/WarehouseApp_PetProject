@@ -17,7 +17,7 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
         [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than 0.")]
         [Required(ErrorMessage = "Number of products can't blank.")]
         public int Count { get; set; }
-
+        public double WarehouseAreaUsed { get; set; }
         public WarehouseProduct ToWarehouseProduct()
         {
             return new WarehouseProduct()
@@ -26,7 +26,7 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
                 ProductID = ProductID,
                 UpdatedAt = DateTime.Now,
                 Count = Count,
-
+                WarehouseAreaUsed = WarehouseAreaUsed
             };
         }
     }
