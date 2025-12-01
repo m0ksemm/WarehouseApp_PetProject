@@ -17,16 +17,19 @@ namespace Services.WarehouseProductsServices
         private readonly IWarehouseProductRepository _warehouseProductRepository;
         private readonly IWarehouseRepository _warehouseRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IManufacturerRepository _manufacturerRepository;
 
 
         public WarehouseProductsAdderService(
             IWarehouseProductRepository warehouseProductRepository, 
             IWarehouseRepository warehouseRepository, 
-            IProductRepository productRepository)
+            IProductRepository productRepository,
+            IManufacturerRepository manufacturerRepository)
         {
             _warehouseProductRepository = warehouseProductRepository;
             _warehouseRepository = warehouseRepository;
             _productRepository = productRepository;
+            _manufacturerRepository = manufacturerRepository;
         }
         public async Task<WarehouseProductResponse> AddWarehouseProduct(WarehouseProductAddRequest? warehouseProductAddRequest)
         {
@@ -58,9 +61,10 @@ namespace Services.WarehouseProductsServices
             List<WarehouseProduct> warehouseProducts = await _warehouseProductRepository.GetAllWarehouseProducts();
             if (warehouseProducts.Any(warehouseProduct => 
                 warehouseProduct.WarehouseID == warehouseProductAddRequest.WarehouseID &&
-                warehouseProduct.ProductID == warehouseProductAddRequest.ProductID &&
-                warehouseProduct.Count == warehouseProductAddRequest.Count))
+                warehouseProduct.ProductID == warehouseProductAddRequest.ProductID 
+                ))
             {
+                //just add
                 throw new ArgumentException("Such Product already exists in this Warehouse.");
             }
 
@@ -70,7 +74,18 @@ namespace Services.WarehouseProductsServices
             warehouseProduct.WarehouseProductID = Guid.NewGuid();
             warehouseProduct.UpdatedAt = DateTime.Now;
 
-            await _warehouseProductRepository.AddWarehouseProduct(warehouseProduct);
+
+
+            if (product.Manufacturer != null)
+            {
+                await _manufacturerRepository.UpdateManufacturerDeliveries(product.Manufacturer.ManufacturerID, 1);
+            }
+            else 
+            {
+                throw new ArgumentNullException("Manufacturer that needs to be updated was not found.");
+            }
+
+                await _warehouseProductRepository.AddWarehouseProduct(warehouseProduct);
             return warehouseProduct.ToWarehouseProductResponse();
         }
     }

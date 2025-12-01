@@ -25,7 +25,8 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
                 WarehouseID = WarehouseID,
                 ProductID = ProductID,
                 UpdatedAt = DateTime.Now,
-                Count = Count
+                Count = Count,
+
             };
         }
     }
