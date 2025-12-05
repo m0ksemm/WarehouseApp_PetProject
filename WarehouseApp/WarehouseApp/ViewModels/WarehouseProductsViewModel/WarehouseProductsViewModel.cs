@@ -130,6 +130,29 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         private ObservableCollection<ProductResponse> _allProducts;
 
 
+        private string _categorySearchText;
+        public string CategorySearchText
+        {
+            get => _categorySearchText;
+            set
+            {
+                if (SetProperty(ref _categorySearchText, value))
+                    ApplyCategorySearch();
+            }
+        }
+
+        private string _manufacturerSearchText;
+        public string ManufacturerSearchText
+        {
+            get => _manufacturerSearchText;
+            set
+            {
+                if (SetProperty(ref _manufacturerSearchText, value))
+                    ApplyManufacturerSearch();
+            }
+        }
+
+
         public ICommand AddCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
@@ -263,9 +286,7 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                     }
                 },
                 _allProducts,
-                _warehouse.WarehouseID,
-                SelectedWarehouseProduct
-
+                _warehouse.WarehouseID
             );
 
             window.DataContext = vm;
@@ -304,7 +325,8 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                 }
             }, _allProducts,
                 _warehouse.WarehouseID, 
-                SelectedWarehouseProduct);
+                SelectedWarehouseProduct
+            );
 
             window.DataContext = vm;
             window.ShowDialog();
@@ -332,6 +354,47 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                 });
             window.DataContext = vm;
             window.ShowDialog();
+        }
+
+        private void ApplyCategorySearch()
+        {
+            if (string.IsNullOrWhiteSpace(CategorySearchText))
+            {
+                // rebuild from full
+                var cats = new ObservableCollection<CategoryResponse> { new CategoryResponse { CategoryID = Guid.Empty, CategoryName = "All Categories" } };
+                foreach (var c in _allCategories) cats.Add(c);
+                CategoriesFilter = cats;
+            }
+            else
+            {
+                var filtered = _allCategories
+                    .Where(c => !string.IsNullOrWhiteSpace(c.CategoryName) && c.CategoryName.IndexOf(CategorySearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
+
+                var cats = new ObservableCollection<CategoryResponse> { new CategoryResponse { CategoryID = Guid.Empty, CategoryName = "All Categories" } };
+                foreach (var c in filtered) cats.Add(c);
+                CategoriesFilter = cats;
+            }
+        }
+
+        private void ApplyManufacturerSearch()
+        {
+            if (string.IsNullOrWhiteSpace(ManufacturerSearchText))
+            {
+                var mans = new ObservableCollection<ManufacturerResponse> { new ManufacturerResponse { ManufacturerID = Guid.Empty, ManufacturerName = "All Manufacturers" } };
+                foreach (var m in _allManufacturers) mans.Add(m);
+                ManufacturersFilter = mans;
+            }
+            else
+            {
+                var filtered = _allManufacturers
+                    .Where(m => !string.IsNullOrWhiteSpace(m.ManufacturerName) && m.ManufacturerName.IndexOf(ManufacturerSearchText, StringComparison.OrdinalIgnoreCase) >= 0)
+                    .ToList();
+
+                var mans = new ObservableCollection<ManufacturerResponse> { new ManufacturerResponse { ManufacturerID = Guid.Empty, ManufacturerName = "All Manufacturers" } };
+                foreach (var m in filtered) mans.Add(m);
+                ManufacturersFilter = mans;
+            }
         }
     }
 

@@ -17,7 +17,7 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         private readonly Action<WarehouseProductResponse?> _onSave;
         private readonly Window _window;
 
-        public ObservableCollection<ProductResponse> Products { get; }
+        public ObservableCollection<ProductResponse> Products { get; } = new ObservableCollection<ProductResponse>();
         public ObservableCollection<ProductResponse> FilteredProducts { get; }
 
         private ProductResponse? _selectedProduct;
@@ -33,14 +33,13 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
 
                     if (_selectedProduct != null) 
                     {
-                        ProductSearchText = _selectedProduct.ProductName;
+                        _productSearchText = _selectedProduct.ProductName;
                         OnPropertyChanged(nameof(ProductSearchText));
                     }
                         
                 }
             }
         }
-
         private string _productSearchText = "";
         public string ProductSearchText
         {
@@ -88,6 +87,7 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
 
             Products = products;
             FilteredProducts = new ObservableCollection<ProductResponse>(products);
+            WarehouseID = warehouseID;
 
             if (existingWarehouseProduct != null)
             {
@@ -96,7 +96,6 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
                 Count = existingWarehouseProduct.Count.ToString();
             }
 
-            WarehouseID = warehouseID;
 
             SaveCommand = new RelayCommand(_ => Save());
             CancelCommand = new RelayCommand(_ => Cancel());
@@ -138,7 +137,7 @@ namespace WarehouseApp.ViewModels.WarehouseProductsViewModel
         {
             var filtered = Products
                 .Where(p => string.IsNullOrWhiteSpace(ProductSearchText) ||
-                            p.ProductName.Contains(ProductSearchText, StringComparison.OrdinalIgnoreCase))
+                            p.ToString().Contains(ProductSearchText, StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
             FilteredProducts.Clear();

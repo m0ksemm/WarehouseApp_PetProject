@@ -23,7 +23,7 @@ namespace ServiceContracts.DTOs.ProductsDTOs
 
         public override string ToString()
         {
-            return $" {ProductName} | {Manufacturer.ManufacturerName} | {Category.CategoryName} | {BarCode} ";
+            return ProductName;
         }
     }
 }

@@ -23,6 +23,9 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        
+        
+        
         <!-- Product -->
         <TextBlock Grid.Row="1"
                Text="Product:"
@@ -31,45 +34,17 @@
                Margin="0,0,0,5"/>
 
         <ComboBox Grid.Row="3"
-          ItemsSource="{Binding FilteredProducts}"
-          SelectedItem="{Binding SelectedProduct}"
-          IsEditable="True"
-          StaysOpenOnEdit="True"
-          IsTextSearchEnabled="False"
-          Height="40"
-          VerticalContentAlignment="Center"
-          FontSize="16"
-          Margin="0,0,0,10">
+                ItemsSource="{Binding FilteredProducts}"
+                SelectedItem="{Binding SelectedProduct}"
+                Text="{Binding ProductSearchText, UpdateSourceTrigger=PropertyChanged}"
+                IsEditable="True"
+                IsTextSearchEnabled="False"
+                StaysOpenOnEdit="True"
+                VerticalContentAlignment="Center"
+                Height="40"
+                FontSize="16"
+                Margin="0,0,0,10">
 
-            <!-- Поле вводу -->
-            <ComboBox.Template>
-                <ControlTemplate TargetType="ComboBox">
-                    <Grid>
-                        <TextBox x:Name="PART_EditableTextBox"
-                         Text="{Binding ProductSearchText, UpdateSourceTrigger=PropertyChanged}"
-                         Background="White"
-                         Padding="6"
-                         VerticalContentAlignment="Center"/>
-
-                        <ToggleButton Grid.Column="1"
-                              Focusable="False"
-                              IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                              Content="▼"
-                              Width="25"
-                              HorizontalAlignment="Right"/>
-
-                        <Popup Name="Popup"
-                       Placement="Bottom"
-                       IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}">
-                            <Border BorderThickness="1" BorderBrush="Gray" Background="White">
-                                <ScrollViewer MaxHeight="200">
-                                    <ItemsPresenter />
-                                </ScrollViewer>
-                            </Border>
-                        </Popup>
-                    </Grid>
-                </ControlTemplate>
-            </ComboBox.Template>
         </ComboBox>
 
 

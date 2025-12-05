@@ -87,7 +87,7 @@
               FontSize="18"
               Padding="5"
               Foreground="#2D2D30"
-              Margin="0,0,10,0"
+              Margin="0,0,10,0" 
               VerticalAlignment="Center"/>
 
             <TextBlock Text="Manufacturer:"
@@ -98,18 +98,18 @@
 
             <!-- Manufacturer ComboBox -->
             <ComboBox Width="220"
-              IsEditable="True"
-              IsTextSearchEnabled="False"
-              StaysOpenOnEdit="True"
-              Text="{Binding ManufacturerSearchText, UpdateSourceTrigger=PropertyChanged}"
-              ItemsSource="{Binding ManufacturersFilter}"
-              SelectedItem="{Binding SelectedManufacturerFilter, Mode=TwoWay}"
-              DisplayMemberPath="ManufacturerName"
-              FontSize="18"
-              Foreground="#2D2D30"
-              Margin="0,0,10,0"
-              Padding="5"
-              VerticalAlignment="Center"/>
+                      IsEditable="True"
+                      IsTextSearchEnabled="False"
+                      StaysOpenOnEdit="True"
+                      Text="{Binding ManufacturerSearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                      ItemsSource="{Binding ManufacturersFilter}"
+                      SelectedItem="{Binding SelectedManufacturerFilter, Mode=TwoWay}"
+                      DisplayMemberPath="ManufacturerName"
+                      FontSize="18"
+                      Foreground="#2D2D30"
+                      Margin="0,0,10,0"
+                      Padding="5" 
+                      VerticalAlignment="Center"/>
 
 
         </StackPanel>
@@ -118,7 +118,7 @@
         <DataGrid Grid.Row="3"
                   Grid.ColumnSpan="4"
                   ItemsSource="{Binding WarehouseProducts}"
-                  SelectedItem="{Binding SelectedWarehouseProduct}"
+                  SelectedItem="{Binding SelectedWarehouseProduct, Mode=TwoWay}"
                   AutoGenerateColumns="False"
                   HeadersVisibility="Column"
                   CanUserAddRows="False"

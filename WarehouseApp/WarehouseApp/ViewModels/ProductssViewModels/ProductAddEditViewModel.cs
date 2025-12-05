@@ -41,6 +41,21 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
                 }
             }
         }
+        private string _categorySearchText = "";
+        public string CategorySearchText
+        {
+            get => _categorySearchText;
+            set
+            {
+                if (_categorySearchText != value)
+                {
+                    _categorySearchText = value;
+                    OnPropertyChanged();
+                    FilterCategories();
+                }
+            }
+        }
+
 
         public ObservableCollection<ManufacturerResponse> Manufacturers { get; set; } = new ObservableCollection<ManufacturerResponse>();
 
@@ -200,22 +215,11 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
             foreach (var c in filtered) FilteredCategories.Add(c);
         }
 
-        public string CategorySearchText
-        {
-            get => _categorySearchText;
-            set
-            {
-                if (_categorySearchText != value)
-                {
-                    _categorySearchText = value;
-                    OnPropertyChanged();
-                    FilterCategories();
-                }
-            }
-        }
-        private string _categorySearchText = "";
+       
 
         public ObservableCollection<ManufacturerResponse> FilteredManufacturers { get; set; }
+
+        private string _manufacturerSearchText = "";
         public string ManufacturerSearchText
         {
             get => _manufacturerSearchText;
@@ -229,7 +233,6 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
                 }
             }
         }
-        private string _manufacturerSearchText = "";
         private void FilterManufacturers()
         {
             var filtered = Manufacturers
@@ -238,7 +241,8 @@ namespace WarehouseApp.ViewModels.ProductssViewModels
                 .ToList();
 
             FilteredManufacturers.Clear();
-            foreach (var m in filtered) FilteredManufacturers.Add(m);
+            foreach (var m in filtered) 
+                FilteredManufacturers.Add(m);
         }
     }
 }
