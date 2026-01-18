@@ -82,6 +82,9 @@ namespace WarehouseApp.ViewModels.ProductsViewModels
             }
         }
 
+        /// <summary>
+        /// ///////////////////////////////////////////////////////////////////////
+        /// </summary>
         // Search text for ComboBoxes (live filter)
         private string _categorySearchText;
         public string CategorySearchText

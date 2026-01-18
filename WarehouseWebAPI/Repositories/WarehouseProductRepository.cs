@@ -34,12 +34,33 @@ namespace Repositories
 
         public async Task<List<WarehouseProduct>> GetAllWarehouseProducts()
         {
-            return await _dbContext.WarehouseProducts.Include("Product").Include("Warehouse").ToListAsync();
+            return await _dbContext.WarehouseProducts.Include(wp => wp.Warehouse)
+                .Include(wp => wp.Product)
+                    .ThenInclude(p => p.Category)
+                .Include(wp => wp.Product)
+                    .ThenInclude(p => p.Manufacturer).ToListAsync();
         }
 
-        public async Task<WarehouseProduct?> GetWarehouseProductById(Guid guid)
+        public async Task<WarehouseProduct?> GetWarehouseProductByWarehouseProductId(Guid warehouseProductId)
         {
-            return await _dbContext.WarehouseProducts.Include("Product").Include("Warehouse").FirstOrDefaultAsync(temp => temp.WarehouseProductID == guid);
+            return await _dbContext.WarehouseProducts
+                .Include(wp => wp.Warehouse)
+                .Include(wp => wp.Product)
+                    .ThenInclude(p => p.Category)
+                .Include(wp => wp.Product)
+                    .ThenInclude(p => p.Manufacturer)
+                .FirstOrDefaultAsync(wp => wp.WarehouseProductID == warehouseProductId);
+        }
+
+        public async Task<List<WarehouseProduct>?> GetWarehouseProductsByWarehouseId(Guid guid)
+        {
+            return await _dbContext.WarehouseProducts
+                .Include(wp => wp.Warehouse)
+                .Include(wp => wp.Product)
+                    .ThenInclude(p => p.Category)
+                .Include(wp => wp.Product)
+                    .ThenInclude(p => p.Manufacturer)
+                .Where(wp => wp.WarehouseID == guid).ToListAsync();
         }
 
         public async Task<bool> UpdateWarehouseProduct(WarehouseProduct warehouseProduct)

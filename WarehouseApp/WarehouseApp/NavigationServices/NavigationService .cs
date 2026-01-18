@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Entities;
+using Microsoft.Extensions.DependencyInjection;
 using ServiceContracts;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WarehouseApp.ViewModels;
+using WarehouseApp.ViewModels.WarehouseProductsViewModel;
 
 
 namespace WarehouseApp.Services
@@ -14,10 +16,7 @@ namespace WarehouseApp.Services
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public NavigationService(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+        public event Action CurrentViewModelChanged;
 
         private BaseViewModel _currentViewModel;
         public BaseViewModel CurrentViewModel
@@ -30,11 +29,21 @@ namespace WarehouseApp.Services
             }
         }
 
-        public event Action CurrentViewModelChanged;
+        public NavigationService(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
 
+        // 1️⃣ Навігація через DI
         public void NavigateTo<TViewModel>() where TViewModel : BaseViewModel
         {
             var viewModel = _serviceProvider.GetRequiredService<TViewModel>();
+            CurrentViewModel = viewModel;
+        }
+
+        // 2️⃣ Навігація переданим ViewModel
+        public void NavigateTo(BaseViewModel viewModel)
+        {
             CurrentViewModel = viewModel;
         }
     }

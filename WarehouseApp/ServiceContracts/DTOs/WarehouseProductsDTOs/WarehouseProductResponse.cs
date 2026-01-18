@@ -16,5 +16,9 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
         public int Count { get; set; }
         public Warehouse? Warehouse { get; set; }
         public Product? Product { get; set; }
+
+        public int RowNumber { get; set; }
+
+
     }
 }

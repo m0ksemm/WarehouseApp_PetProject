@@ -11,7 +11,8 @@ namespace RepositoryContracts
     {
         Task<WarehouseProduct> AddWarehouseProduct(WarehouseProduct warehouseProduct);
         Task<List<WarehouseProduct>> GetAllWarehouseProducts();
-        Task<WarehouseProduct?> GetWarehouseProductById(Guid guid);
+        Task<WarehouseProduct?> GetWarehouseProductByWarehouseProductId(Guid warehouseProductId);
+        Task<List<WarehouseProduct>?> GetWarehouseProductsByWarehouseId(Guid guid);
         Task<bool> UpdateWarehouseProduct(WarehouseProduct warehouseProduct);
         Task<bool> DeleteWarehouseProduct(Guid warehouseProductID);
     }

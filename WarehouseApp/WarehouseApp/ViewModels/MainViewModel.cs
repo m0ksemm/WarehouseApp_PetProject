@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Input;
 using WarehouseApp.ViewModels.CategoriesViewModels;
 using WarehouseApp.ViewModels.ManufacturersViewModels;
-using WarehouseApp.ViewModels.ProductssViewModels;
+using WarehouseApp.ViewModels.WarehouseProductsViewModel;
 using WarehouseApp.ViewModels.ProductsViewModels;
 using WarehouseApp.ViewModels.WarehousesViewModel;
 using WarehouseApp.Views.WarehousesViews;
@@ -35,9 +35,12 @@ namespace WarehouseApp.ViewModels
         public ICommand NavigateToCategoriesCommand { get; }
         public ICommand NavigateToProductsCommand { get; }
         public ICommand NavigateToManufacturersCommand { get; }
+
+        public ICommand NavigateToWarehouseProductsCommand { get; }
+
+
         public ICommand ToggleWarehousesMenuCommand { get; }
 
-        public ICommand SelectWarehouseCommand { get; }
         public ICommand AddWarehouseCommand { get; }
         public ICommand EditWarehouseCommand { get; }
         public ICommand DeleteWarehouseCommand { get; }
@@ -65,6 +68,15 @@ namespace WarehouseApp.ViewModels
             NavigateToProductsCommand = new RelayCommand(_ => _navigationService.NavigateTo<ProductsViewModel>());
             NavigateToManufacturersCommand = new RelayCommand(_ => _navigationService.NavigateTo<ManufacturersViewModel>());
 
+            NavigateToWarehouseProductsCommand = new RelayCommand<WarehouseResponse>(warehouse =>
+            {
+                if (warehouse != null)
+                {
+                    SelectedWarehouse = warehouse;
+                    _navigationService.NavigateTo(new WarehouseProductsViewModel.WarehouseProductsViewModel(warehouse));
+                }
+            });
+
             ToggleWarehousesMenuCommand = new RelayCommand(_ =>
                 IsWarehousesExpanded = !IsWarehousesExpanded);
 
@@ -72,7 +84,6 @@ namespace WarehouseApp.ViewModels
             EditWarehouseCommand = new RelayCommand<WarehouseResponse>(EditWarehouse);
             DeleteWarehouseCommand = new RelayCommand<WarehouseResponse>(DeleteWarehouse);
 
-            SelectWarehouseCommand = new RelayCommand<WarehouseResponse>(OnWarehouseSelected);
 
             _navigationService.CurrentViewModelChanged += () =>
             {
@@ -105,15 +116,8 @@ namespace WarehouseApp.ViewModels
             }
         }
 
-        private void OnWarehouseSelected(WarehouseResponse warehouse)
-        {
-            if (warehouse == null)
-                return;
 
-            SelectedWarehouse = warehouse;
-            _navigationService.NavigateTo<ProductsViewModel>();
-        }
-
+        
         private void AddWarehouse()
         {
             var window = new WarehouseAddEditView();
@@ -197,5 +201,10 @@ namespace WarehouseApp.ViewModels
                 MessageBox.Show($"Error deleting warehouse: {ex.Message}");
             }
         }
+
+        //private void SelectWarehouse(WarehouseResponse warehouse)
+        //{
+        //    CurrentViewModel = new WarehouseProductsViewModel(warehouse);
+        //}
     }
 }

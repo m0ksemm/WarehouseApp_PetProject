@@ -11,6 +11,8 @@ namespace ServiceContracts
     {
         BaseViewModel CurrentViewModel { get; }
         void NavigateTo<TViewModel>() where TViewModel : BaseViewModel;
+        public void NavigateTo(BaseViewModel viewModel);
+
         public event Action CurrentViewModelChanged;
 
     }

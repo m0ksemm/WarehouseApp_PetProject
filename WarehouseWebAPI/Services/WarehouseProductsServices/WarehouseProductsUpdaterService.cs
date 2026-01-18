@@ -29,7 +29,7 @@ namespace Services.WarehouseProductsServices
             ValidationHelper.ModelValidation(warehouseProductUpdateRequest);
 
             WarehouseProduct? matchingWarehouseProduct = await _warehouseProductRepository
-                .GetWarehouseProductById(warehouseProductUpdateRequest.WarehouseProductID);
+                .GetWarehouseProductByWarehouseProductId(warehouseProductUpdateRequest.WarehouseProductID);
             if (matchingWarehouseProduct == null)
             {
                 throw new ArgumentException("Threr is no such product in warehouse.");
@@ -38,8 +38,7 @@ namespace Services.WarehouseProductsServices
             List<WarehouseProduct> warehouseProducts = await _warehouseProductRepository.GetAllWarehouseProducts();
             if (warehouseProducts.Any(warehouse => warehouse.WarehouseID == warehouseProductUpdateRequest.WarehouseID &&
                 warehouse.ProductID == warehouseProductUpdateRequest.ProductID &&
-                warehouse.Count == warehouseProductUpdateRequest.Count && 
-                warehouse.UpdatedAt == warehouseProductUpdateRequest.UpdatedAt))
+                warehouse.Count == warehouseProductUpdateRequest.Count ))
             {
                 throw new ArgumentException("Such Product already already exists in this Warehouse.");
             }

@@ -1,4 +1,5 @@
-﻿using ServiceContracts.DTOs.WarehouseProductsDTOs;
+﻿using Entities;
+using ServiceContracts.DTOs.WarehouseProductsDTOs;
 using ServiceContracts.DTOs.WarehousesDTOs;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace ServiceContracts.WarehouseProductsServiceContracts
     {
         Task<List<WarehouseProductResponse>> GetAllWarehouseProducts();
         Task<WarehouseProductResponse?> GetWarehouseProductById(Guid? guid);
+        Task<WarehouseProductResponse?> GetWarehouseProductByWarehouseProductId(Guid? warehouseProductId);
+        Task<List<WarehouseProductResponse>?> GetWarehouseProductsByWarehouseId(Guid? guid);
     }
 }

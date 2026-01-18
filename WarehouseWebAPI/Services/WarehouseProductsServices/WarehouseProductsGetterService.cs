@@ -1,5 +1,6 @@
 ﻿using Entities;
 using RepositoryContracts;
+using ServiceContracts.DTOs.ProductsDTO;
 using ServiceContracts.DTOs.WarehouseProductsDTOs;
 using ServiceContracts.DTOs.WarehousesDTOs;
 using ServiceContracts.WarehouseProductsServiceContracts;
@@ -30,12 +31,35 @@ namespace Services.WarehouseProductsServices
             {
                 return null;
             }
-            WarehouseProduct? warehouseProduct_response_from_list = await _warehouseProductRepository.GetWarehouseProductById(guid.Value);
+            WarehouseProduct? warehouseProduct_response_from_list = await _warehouseProductRepository.GetWarehouseProductByWarehouseProductId(guid.Value);
             if (warehouseProduct_response_from_list == null)
             {
                 return null;
             }
             return warehouseProduct_response_from_list.ToWarehouseProductResponse();
+        }
+
+        public async Task<WarehouseProductResponse?> GetWarehouseProductByWarehouseProductId(Guid? warehouseProductId)
+        {
+            if (warehouseProductId == null)
+                return null;
+
+            WarehouseProduct? product = await _warehouseProductRepository.GetWarehouseProductByWarehouseProductId(warehouseProductId.Value);
+
+            if (product == null)
+                return null;
+
+            return product.ToWarehouseProductResponse();
+        }
+
+        public async Task<List<WarehouseProductResponse>?> GetWarehouseProductsByWarehouseId(Guid? guid)
+        {
+            if (guid == null || guid == Guid.Empty)
+            {
+                return null;
+            }
+            List<WarehouseProduct>? warehouseProducts = await _warehouseProductRepository.GetWarehouseProductsByWarehouseId(guid.Value);
+            return warehouseProducts.Select(warehouseProduct => warehouseProduct.ToWarehouseProductResponse()).ToList();
         }
     }
 }

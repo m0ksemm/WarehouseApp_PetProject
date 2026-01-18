@@ -14,20 +14,19 @@ namespace ServiceContracts.DTOs.WarehouseProductsDTOs
         public Guid? WarehouseID { get; set; }
         [Required(ErrorMessage = "Product ID can't be blank")]
         public Guid? ProductID { get; set; }
-        [Required(ErrorMessage = "Date can't be blank")]
-        public DateTime? UpdatedAt { get; set; }
         [Range(1, int.MaxValue, ErrorMessage = "Value must be greater than 0.")]
         [Required(ErrorMessage = "Number of products can't blank.")]
         public int Count { get; set; }
-
+        public double WarehouseAreaUsed { get; set; }
         public WarehouseProduct ToWarehouseProduct()
         {
             return new WarehouseProduct()
             {
                 WarehouseID = WarehouseID,
                 ProductID = ProductID,
-                UpdatedAt = UpdatedAt,
-                Count = Count
+                UpdatedAt = DateTime.Now,
+                Count = Count,
+                WarehouseAreaUsed = WarehouseAreaUsed
             };
         }
     }
