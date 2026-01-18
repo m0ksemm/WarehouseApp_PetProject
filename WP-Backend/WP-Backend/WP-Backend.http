@@ -1,0 +1,6 @@
+@WP_Backend_HostAddress = http://localhost:5004
+
+GET {{WP_Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
