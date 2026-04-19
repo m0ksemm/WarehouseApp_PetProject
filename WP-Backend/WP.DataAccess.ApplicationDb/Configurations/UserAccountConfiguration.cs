@@ -1,16 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using WP.DataAccess.Entities;
-using WP.DataAccess.Entities.Permisions;
-using WP.Infrastructure.Enums;
 
 namespace WP.DataAccess.ApplicationDb.Configurations
 {
-    public class UserAccountConfiguration : BaseEntityTypeConfiguration<Entities.UserAccount>
+    public class UserAccountConfiguration : BaseEntityTypeConfiguration<UserAccount>
     {
         public override void Configure(EntityTypeBuilder<UserAccount> builder)
         {

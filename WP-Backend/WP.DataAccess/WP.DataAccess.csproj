@@ -13,8 +13,4 @@
     <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="10.105.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\WP.Infrastructure\WP.Infrastructure.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -2,7 +2,7 @@
 {
     public class Manufacturer : BaseEntity
     {
-        public string Name { get; set; }
+        public string ManufacturerName { get; set; }
 
         public string? Country { get; set; }
 
@@ -13,8 +13,6 @@
         public string? Address { get; set; }
 
         public int TotalDeliveries { get; set; }
-
-        public int? AverageLeadTimeDays { get; set; }
 
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }

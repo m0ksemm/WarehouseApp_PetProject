@@ -1,17 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11626.88 stable
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP-Host", "WP-Backend\WP-Host.csproj", "{CE33BC60-1418-4323-A1E8-4F7F47E34B1B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP.BusinessLogic", "WP.BusinessLogic\WP.BusinessLogic.csproj", "{6A9198FF-41AE-4E41-BCFA-5BE4A5100891}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP.DataAccess", "WP.DataAccess\WP.DataAccess.csproj", "{FF247134-8077-4707-A629-BF5C23E23970}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP.DataAccess.ApplicationDb", "WP.DataAccess.ApplicationDb\WP.DataAccess.ApplicationDb.csproj", "{A6471C45-01E8-4585-87B3-0248CD194A03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP.Infrastructure", "WP.Infrastructure\WP.Infrastructure.csproj", "{33AA7866-4A8D-4AA2-99FF-A24D67D8AF9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP-Host", "WP-Host\WP-Host.csproj", "{5EFD0AD4-46E9-2838-934A-0053009039DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WP.Infrastructure", "WP.Infrastructure\WP.Infrastructure.csproj", "{A7F896BB-0184-90CB-ABEA-0A2F74FE4CEC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CE33BC60-1418-4323-A1E8-4F7F47E34B1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE33BC60-1418-4323-A1E8-4F7F47E34B1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE33BC60-1418-4323-A1E8-4F7F47E34B1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE33BC60-1418-4323-A1E8-4F7F47E34B1B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A9198FF-41AE-4E41-BCFA-5BE4A5100891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A9198FF-41AE-4E41-BCFA-5BE4A5100891}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A9198FF-41AE-4E41-BCFA-5BE4A5100891}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,10 +31,14 @@ Global
 		{A6471C45-01E8-4585-87B3-0248CD194A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6471C45-01E8-4585-87B3-0248CD194A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6471C45-01E8-4585-87B3-0248CD194A03}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33AA7866-4A8D-4AA2-99FF-A24D67D8AF9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33AA7866-4A8D-4AA2-99FF-A24D67D8AF9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33AA7866-4A8D-4AA2-99FF-A24D67D8AF9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33AA7866-4A8D-4AA2-99FF-A24D67D8AF9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EFD0AD4-46E9-2838-934A-0053009039DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EFD0AD4-46E9-2838-934A-0053009039DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EFD0AD4-46E9-2838-934A-0053009039DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EFD0AD4-46E9-2838-934A-0053009039DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7F896BB-0184-90CB-ABEA-0A2F74FE4CEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7F896BB-0184-90CB-ABEA-0A2F74FE4CEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7F896BB-0184-90CB-ABEA-0A2F74FE4CEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7F896BB-0184-90CB-ABEA-0A2F74FE4CEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

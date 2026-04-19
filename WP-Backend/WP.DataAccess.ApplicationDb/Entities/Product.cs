@@ -2,17 +2,19 @@
 {
     public class Product : BaseEntity
     {
-        public string Name { get; set; } = null!;
+        public string ProductName { get; set; }
 
         public string? Description { get; set; }
 
-        public string SKU { get; set; } = null!;
+        public string SKU { get; set; }
 
-        public string? BarCode { get; set; }
+        public string BarCode { get; set; }
 
         public Guid CategoryId { get; set; }
 
         public Guid ManufacturerId { get; set; }
+
+        public Guid PackagingProfileId { get; set; }
 
         public decimal WeightKg { get; set; }
 
@@ -32,12 +34,10 @@
 
         public decimal? MaxStorageTemperature { get; set; }
 
-        public decimal VolumeM3 => (LengthCm / 100m) * (WidthCm / 100m) * (HeightCm / 100m);
-
         public Category Category { get; set; } = null!;
 
         public Manufacturer Manufacturer { get; set; } = null!;
 
-        public PackagingProfile? PackagingProfile { get; set; }
+        public PackagingProfile PackagingProfile { get; set; }
     }
 }
