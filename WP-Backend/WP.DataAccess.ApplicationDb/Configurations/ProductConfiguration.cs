@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using WP.DataAccess.Entities;
+using WP.DataAccess.Extensions;
 
 namespace WP.DataAccess.ApplicationDb.Configurations
 {
@@ -27,23 +28,23 @@ namespace WP.DataAccess.ApplicationDb.Configurations
 
             builder.Property(e => e.PackagingProfileId).HasColumnName("PackagingProfileId").IsRequired();
 
-            builder.Property(e => e.WeightKg).HasColumnName("WeightKg");
+            builder.Property(e => e.WeightKg).HasColumnName("WeightGrams").HasWeightConversion().HasPrecision(18, 2);
 
-            builder.Property(e => e.LengthCm).HasColumnName("LengthCm");
+            builder.Property(e => e.LengthCm).HasColumnName("LengthCm").HasPrecision(18, 2);
 
-            builder.Property(e => e.WidthCm).HasColumnName("WidthCm");
+            builder.Property(e => e.WidthCm).HasColumnName("WidthCm").HasPrecision(18, 2);
 
-            builder.Property(e => e.HeightCm).HasColumnName("HeightCm");
+            builder.Property(e => e.HeightCm).HasColumnName("HeightCm").HasPrecision(18, 2);
 
-            builder.Property(e => e.Price).HasColumnName("Price").IsRequired();
+            builder.Property(e => e.Price).HasColumnName("Price").HasPrecision(18, 2).IsRequired();
 
             builder.Property(e => e.IsFragile).HasColumnName("IsFragile");
 
             builder.Property(e => e.RequiresTemperatureControl).HasColumnName("RequiresTemperatureControl");
 
-            builder.Property(e => e.MinStorageTemperature).HasColumnName("MinStorageTemperature");
+            builder.Property(e => e.MinStorageTemperature).HasColumnName("MinStorageTemperature").HasPrecision(18, 2);
 
-            builder.Property(e => e.MaxStorageTemperature).HasColumnName("MaxStorageTemperature");
+            builder.Property(e => e.MaxStorageTemperature).HasColumnName("MaxStorageTemperature").HasPrecision(18, 2);
 
             builder
                 .HasOne(e => e.Category)
