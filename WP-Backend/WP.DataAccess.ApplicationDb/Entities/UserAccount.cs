@@ -24,9 +24,7 @@ namespace WP.DataAccess.Entities
 
         public string? WorkPhone { get; set; }
 
-        public EmployeePosition? Position { get; set; }
-
-        public int? ManagerId { get; set; }
+        public Guid? ManagerId { get; set; }
 
         public int? TenantId { get; set; }
 
