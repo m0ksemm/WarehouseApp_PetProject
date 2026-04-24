@@ -4,9 +4,9 @@ namespace WP.DataAccess.Entities
 {
     public class PalletType : BaseEntity
     {
-        public string Name { get; set; } = null!;
+        public string PalletName { get; set; } = null!;
 
-        public PalletStandard Standard { get; set; }
+        public PalletStandard PalletStandard { get; set; }
 
         public decimal LengthCm { get; set; }
 
