@@ -14,8 +14,6 @@
 
         public Guid ManufacturerId { get; set; }
 
-        public Guid PackagingProfileId { get; set; }
-
         public decimal WeightKg { get; set; }
 
         public decimal LengthCm { get; set; }
@@ -39,5 +37,7 @@
         public Manufacturer Manufacturer { get; set; } = null!;
 
         public PackagingProfile PackagingProfile { get; set; }
+
+        public ICollection<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
     }
 }

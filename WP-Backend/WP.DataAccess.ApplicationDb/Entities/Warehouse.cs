@@ -8,8 +8,6 @@
 
         public decimal TotalAreaM2 { get; set; }
 
-        public int MaxPalletCapacity { get; set; }
-
         public bool SupportsEuropeanPallets { get; set; }
 
         public bool SupportsAmericanPallets { get; set; }

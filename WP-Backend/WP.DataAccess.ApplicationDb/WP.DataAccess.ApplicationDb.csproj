@@ -23,4 +23,8 @@
     <ProjectReference Include="..\WP.Infrastructure\WP.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

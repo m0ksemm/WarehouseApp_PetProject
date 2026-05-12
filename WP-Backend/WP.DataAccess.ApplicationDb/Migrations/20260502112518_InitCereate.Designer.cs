@@ -12,8 +12,8 @@ using WP.DataAccess.ApplicationDb;
 namespace WP.DataAccess.ApplicationDb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260413094323_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260502112518_InitCereate")]
+    partial class InitCereate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -246,6 +246,73 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                     b.ToTable("CategoryTable", (string)null);
                 });
 
+            modelBuilder.Entity("WP.DataAccess.Entities.InventoryItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BatchNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("BatchNumber");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ExpirationDate");
+
+                    b.Property<DateTime?>("LastMovementAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastMovementAt");
+
+                    b.Property<decimal>("OccupiedAreaM2")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("OccupiedAreaM2");
+
+                    b.Property<int>("OccupiedPallets")
+                        .HasColumnType("int")
+                        .HasColumnName("OccupiedPallets");
+
+                    b.Property<Guid?>("PalletTypeId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("PalletTypeId");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ProductId");
+
+                    b.Property<int>("QuantityUnits")
+                        .HasColumnType("int")
+                        .HasColumnName("QuantityUnits");
+
+                    b.Property<int>("ReservedUnits")
+                        .HasColumnType("int")
+                        .HasColumnName("ReservedUnits");
+
+                    b.Property<Guid>("StorageLocationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("StorageLocationId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PalletTypeId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("StorageLocationId");
+
+                    b.ToTable("InventoryItemsTable", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Inventory_OccupiedArea_Positive", "[OccupiedAreaM2] > 0");
+
+                            t.HasCheckConstraint("CK_Inventory_OccupiedPallets_Positive", "[OccupiedPallets] > 0");
+
+                            t.HasCheckConstraint("CK_Inventory_QuantityUnits_Positive", "[QuantityUnits] > 0");
+
+                            t.HasCheckConstraint("CK_Inventory_ReservedUnits_Positive", "[ReservedUnits] > 0");
+                        });
+                });
+
             modelBuilder.Entity("WP.DataAccess.Entities.Manufacturer", b =>
                 {
                     b.Property<Guid>("Id")
@@ -289,35 +356,93 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("BoxesPerPallet")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BoxesPerPallet");
 
                     b.Property<bool>("IsStackable")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsStackable");
 
                     b.Property<bool>("IsWrappedInFilm")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsWrappedInFilm");
 
                     b.Property<int?>("MaxStackCount")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MaximumStackCount");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Notes");
 
                     b.Property<int>("PackageType")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PackageType");
 
                     b.Property<decimal>("PackagingWeightKg")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PackagingWeightGrams");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("UnitsPerBox")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UnitsPerBox");
 
                     b.HasKey("Id");
 
-                    b.ToTable("PackagingProfile");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("PackagingProfilesTable", (string)null);
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.PalletType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("LengthCm")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("LengthCm");
+
+                    b.Property<decimal>("MaxHeightCm")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("MaxHeightCm");
+
+                    b.Property<decimal>("MaxLoadKg")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("MaxLoadGrams");
+
+                    b.Property<string>("PalletName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PalletName");
+
+                    b.Property<int>("PalletStandard")
+                        .HasColumnType("int")
+                        .HasColumnName("PalletStandard");
+
+                    b.Property<decimal>("WidthCm")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("WidthCm");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PalletTypesTable", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Pallet_Length_Positive", "[LengthCm] > 0");
+
+                            t.HasCheckConstraint("CK_Pallet_MaxLoad_Positive", "[MaxLoadGrams] > 0");
+
+                            t.HasCheckConstraint("CK_Pallet_Width_Positive", "[WidthCm] > 0");
+                        });
                 });
 
             modelBuilder.Entity("WP.DataAccess.Entities.Permisions.ApplicationPermission", b =>
@@ -383,6 +508,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("Description");
 
                     b.Property<decimal>("HeightCm")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("HeightCm");
 
@@ -391,6 +517,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("IsFragile");
 
                     b.Property<decimal>("LengthCm")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("LengthCm");
 
@@ -399,18 +526,17 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("ManufacturerId");
 
                     b.Property<decimal?>("MaxStorageTemperature")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("MaxStorageTemperature");
 
                     b.Property<decimal?>("MinStorageTemperature")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("MinStorageTemperature");
 
-                    b.Property<Guid>("PackagingProfileId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("PackagingProfileId");
-
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("Price");
 
@@ -429,10 +555,12 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("SKU");
 
                     b.Property<decimal>("WeightKg")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
-                        .HasColumnName("WeightKg");
+                        .HasColumnName("WeightGrams");
 
                     b.Property<decimal>("WidthCm")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)")
                         .HasColumnName("WidthCm");
 
@@ -442,10 +570,39 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.HasIndex("ManufacturerId");
 
-                    b.HasIndex("PackagingProfileId")
-                        .IsUnique();
-
                     b.ToTable("ProductTable", (string)null);
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.StorageLocation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsOccupied")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LocationType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxPallets")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("MaxWeightKg")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("WarehouseSectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseSectionId");
+
+                    b.ToTable("StorageLocation");
                 });
 
             modelBuilder.Entity("WP.DataAccess.Entities.UserAccount", b =>
@@ -492,10 +649,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("ManagerId1")
+                    b.Property<Guid?>("ManagerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("NormalizedEmail")
@@ -515,14 +669,11 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("Position")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TenantId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -549,7 +700,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId1");
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -560,6 +711,82 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.Warehouse", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxPalletCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("SupportsAmericanPallets")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SupportsEuropeanPallets")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("TotalAreaM2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Warehouse");
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.WarehouseSection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AreaM2")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsTemperatureControlled")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MaxPalletCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("MaxTemperature")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MaxWeightKg")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("MinTemperature")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SectionType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseSection");
                 });
 
             modelBuilder.Entity("ApplicationPermissionRole", b =>
@@ -654,6 +881,42 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("WP.DataAccess.Entities.InventoryItem", b =>
+                {
+                    b.HasOne("WP.DataAccess.Entities.PalletType", "PalletType")
+                        .WithMany("InventoryItems")
+                        .HasForeignKey("PalletTypeId");
+
+                    b.HasOne("WP.DataAccess.Entities.Product", "Product")
+                        .WithMany("InventoryItems")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WP.DataAccess.Entities.StorageLocation", "StorageLocation")
+                        .WithMany("InventoryItems")
+                        .HasForeignKey("StorageLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PalletType");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("StorageLocation");
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.PackagingProfile", b =>
+                {
+                    b.HasOne("WP.DataAccess.Entities.Product", "Product")
+                        .WithOne("PackagingProfile")
+                        .HasForeignKey("WP.DataAccess.Entities.PackagingProfile", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("WP.DataAccess.Entities.Product", b =>
                 {
                     b.HasOne("WP.DataAccess.Entities.Category", "Category")
@@ -668,26 +931,40 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WP.DataAccess.Entities.PackagingProfile", "PackagingProfile")
-                        .WithOne("Product")
-                        .HasForeignKey("WP.DataAccess.Entities.Product", "PackagingProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Category");
 
                     b.Navigation("Manufacturer");
+                });
 
-                    b.Navigation("PackagingProfile");
+            modelBuilder.Entity("WP.DataAccess.Entities.StorageLocation", b =>
+                {
+                    b.HasOne("WP.DataAccess.Entities.WarehouseSection", "WarehouseSection")
+                        .WithMany("StorageLocations")
+                        .HasForeignKey("WarehouseSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WarehouseSection");
                 });
 
             modelBuilder.Entity("WP.DataAccess.Entities.UserAccount", b =>
                 {
                     b.HasOne("WP.DataAccess.Entities.UserAccount", "Manager")
                         .WithMany("Subordinates")
-                        .HasForeignKey("ManagerId1");
+                        .HasForeignKey("ManagerId");
 
                     b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.WarehouseSection", b =>
+                {
+                    b.HasOne("WP.DataAccess.Entities.Warehouse", "Warehouse")
+                        .WithMany("Sections")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("WP.DataAccess.Entities.Category", b =>
@@ -700,15 +977,37 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("WP.DataAccess.Entities.PackagingProfile", b =>
+            modelBuilder.Entity("WP.DataAccess.Entities.PalletType", b =>
                 {
-                    b.Navigation("Product")
+                    b.Navigation("InventoryItems");
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.Product", b =>
+                {
+                    b.Navigation("InventoryItems");
+
+                    b.Navigation("PackagingProfile")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.StorageLocation", b =>
+                {
+                    b.Navigation("InventoryItems");
                 });
 
             modelBuilder.Entity("WP.DataAccess.Entities.UserAccount", b =>
                 {
                     b.Navigation("Subordinates");
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.Warehouse", b =>
+                {
+                    b.Navigation("Sections");
+                });
+
+            modelBuilder.Entity("WP.DataAccess.Entities.WarehouseSection", b =>
+                {
+                    b.Navigation("StorageLocations");
                 });
 #pragma warning restore 612, 618
         }

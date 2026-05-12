@@ -12,7 +12,14 @@ namespace WP.DataAccess.ApplicationDb.Configurations
     {
         public override void Configure(EntityTypeBuilder<Product> builder)
         {
-            builder.ToTable("ProductTable").HasKey(e => e.Id);
+            builder.ToTable("ProductTable", t => 
+            {
+                t.HasCheckConstraint("CK_Weight_Grams_Positive", "[WeightGrams] > 0");
+                t.HasCheckConstraint("CK_Length_Cm_Positive", "[LengthCm] > 0");
+                t.HasCheckConstraint("CK_Width_Cm_Positive", "[WidthCm] > 0");
+                t.HasCheckConstraint("CK_Height_Cm_Positive", "[HeightCm] > 0");
+                t.HasCheckConstraint("CK_Price_Positive", "[Price] > 0");
+            }).HasKey(e => e.Id);
 
             builder.Property(e => e.ProductName).HasColumnName("ProductName").IsRequired();
 
@@ -25,8 +32,6 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             builder.Property(e => e.CategoryId).HasColumnName("CategoryId").IsRequired();
 
             builder.Property(e => e.ManufacturerId).HasColumnName("ManufacturerId").IsRequired();
-
-            builder.Property(e => e.PackagingProfileId).HasColumnName("PackagingProfileId").IsRequired();
 
             builder.Property(e => e.WeightKg).HasColumnName("WeightGrams").HasWeightConversion().HasPrecision(18, 2);
 
@@ -58,13 +63,6 @@ namespace WP.DataAccess.ApplicationDb.Configurations
                 .WithMany(e => e.Products)
                 .HasForeignKey(e => e.ManufacturerId)
                 .HasPrincipalKey(e => e.Id)
-                .IsRequired();
-
-            builder
-                .HasOne(e => e.PackagingProfile)
-                .WithOne(e => e.Product)
-                .HasForeignKey<Product>(e => e.PackagingProfileId)
-                .HasPrincipalKey<PackagingProfile>(e => e.Id)
                 .IsRequired();
         }
     }

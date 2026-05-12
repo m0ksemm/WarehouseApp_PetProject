@@ -10,7 +10,7 @@ namespace WP.DataAccess.Entities
 {
     public class WarehouseSection : BaseEntity
     {
-        public int WarehouseId { get; set; }
+        public Guid WarehouseId { get; set; }
 
         public string Code { get; set; } = null!;
 

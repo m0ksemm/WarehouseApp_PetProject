@@ -17,5 +17,7 @@ namespace WP.DataAccess.Entities
         public decimal MaxHeightCm { get; set; }
 
         public decimal AreaM2 => (LengthCm / 100m) * (WidthCm / 100m);
+
+        public ICollection<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
     }
 }

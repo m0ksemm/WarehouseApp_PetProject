@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WP.DataAccess.ApplicationDb.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitCereate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,14 +49,12 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                     UserStatus = table.Column<int>(type: "int", nullable: false),
                     Cellphone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WorkPhone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Position = table.Column<int>(type: "int", nullable: true),
-                    ManagerId = table.Column<int>(type: "int", nullable: true),
-                    TenantId = table.Column<int>(type: "int", nullable: true),
+                    ManagerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    TenantId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     ValidFrom = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ValidUntil = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastLoginTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ManagerId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -76,8 +74,8 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_AspNetUsers_ManagerId1",
-                        column: x => x.ManagerId1,
+                        name: "FK_AspNetUsers_AspNetUsers_ManagerId",
+                        column: x => x.ManagerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -113,23 +111,23 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PackagingProfile",
+                name: "PalletTypesTable",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PackageType = table.Column<int>(type: "int", nullable: false),
-                    IsWrappedInFilm = table.Column<bool>(type: "bit", nullable: false),
-                    IsStackable = table.Column<bool>(type: "bit", nullable: false),
-                    MaxStackCount = table.Column<int>(type: "int", nullable: true),
-                    UnitsPerBox = table.Column<int>(type: "int", nullable: false),
-                    BoxesPerPallet = table.Column<int>(type: "int", nullable: false),
-                    PackagingWeightKg = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PalletName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PalletStandard = table.Column<int>(type: "int", nullable: false),
+                    LengthCm = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    WidthCm = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    MaxLoadGrams = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MaxHeightCm = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PackagingProfile", x => x.Id);
+                    table.PrimaryKey("PK_PalletTypesTable", x => x.Id);
+                    table.CheckConstraint("CK_Pallet_Length_Positive", "[LengthCm] > 0");
+                    table.CheckConstraint("CK_Pallet_MaxLoad_Positive", "[MaxLoadGrams] > 0");
+                    table.CheckConstraint("CK_Pallet_Width_Positive", "[WidthCm] > 0");
                 });
 
             migrationBuilder.CreateTable(
@@ -158,6 +156,23 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Warehouse",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TotalAreaM2 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MaxPalletCapacity = table.Column<int>(type: "int", nullable: false),
+                    SupportsEuropeanPallets = table.Column<bool>(type: "bit", nullable: false),
+                    SupportsAmericanPallets = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Warehouse", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -297,16 +312,15 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                     BarCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ManufacturerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PackagingProfileId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WeightKg = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    LengthCm = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    WidthCm = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    HeightCm = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    WeightGrams = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    LengthCm = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    WidthCm = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    HeightCm = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     IsFragile = table.Column<bool>(type: "bit", nullable: false),
                     RequiresTemperatureControl = table.Column<bool>(type: "bit", nullable: false),
-                    MinStorageTemperature = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    MaxStorageTemperature = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    MinStorageTemperature = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true),
+                    MaxStorageTemperature = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -321,12 +335,6 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         name: "FK_ProductTable_ManufacturerTable_ManufacturerId",
                         column: x => x.ManufacturerId,
                         principalTable: "ManufacturerTable",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductTable_PackagingProfile_PackagingProfileId",
-                        column: x => x.PackagingProfileId,
-                        principalTable: "PackagingProfile",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -379,6 +387,124 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "WarehouseSection",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WarehouseId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SectionType = table.Column<int>(type: "int", nullable: false),
+                    AreaM2 = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MaxPalletCapacity = table.Column<int>(type: "int", nullable: false),
+                    MaxWeightKg = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsTemperatureControlled = table.Column<bool>(type: "bit", nullable: false),
+                    MinTemperature = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    MaxTemperature = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WarehouseSection", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_WarehouseSection_Warehouse_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouse",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PackagingProfilesTable",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PackageType = table.Column<int>(type: "int", nullable: false),
+                    IsWrappedInFilm = table.Column<bool>(type: "bit", nullable: false),
+                    IsStackable = table.Column<bool>(type: "bit", nullable: false),
+                    MaximumStackCount = table.Column<int>(type: "int", nullable: true),
+                    UnitsPerBox = table.Column<int>(type: "int", nullable: false),
+                    BoxesPerPallet = table.Column<int>(type: "int", nullable: false),
+                    PackagingWeightGrams = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PackagingProfilesTable", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PackagingProfilesTable_ProductTable_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "ProductTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StorageLocation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WarehouseSectionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LocationType = table.Column<int>(type: "int", nullable: false),
+                    MaxPallets = table.Column<int>(type: "int", nullable: false),
+                    MaxWeightKg = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsOccupied = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StorageLocation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StorageLocation_WarehouseSection_WarehouseSectionId",
+                        column: x => x.WarehouseSectionId,
+                        principalTable: "WarehouseSection",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryItemsTable",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StorageLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PalletTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    QuantityUnits = table.Column<int>(type: "int", nullable: false),
+                    ReservedUnits = table.Column<int>(type: "int", nullable: false),
+                    OccupiedPallets = table.Column<int>(type: "int", nullable: false),
+                    OccupiedAreaM2 = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    BatchNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastMovementAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryItemsTable", x => x.Id);
+                    table.CheckConstraint("CK_Inventory_OccupiedArea_Positive", "[OccupiedAreaM2] > 0");
+                    table.CheckConstraint("CK_Inventory_OccupiedPallets_Positive", "[OccupiedPallets] > 0");
+                    table.CheckConstraint("CK_Inventory_QuantityUnits_Positive", "[QuantityUnits] > 0");
+                    table.CheckConstraint("CK_Inventory_ReservedUnits_Positive", "[ReservedUnits] > 0");
+                    table.ForeignKey(
+                        name: "FK_InventoryItemsTable_PalletTypesTable_PalletTypeId",
+                        column: x => x.PalletTypeId,
+                        principalTable: "PalletTypesTable",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_InventoryItemsTable_ProductTable_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "ProductTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InventoryItemsTable_StorageLocation_StorageLocationId",
+                        column: x => x.StorageLocationId,
+                        principalTable: "StorageLocation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ApplicationPermissionRole_RolesId",
                 table: "ApplicationPermissionRole",
@@ -417,9 +543,9 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ManagerId1",
+                name: "IX_AspNetUsers_ManagerId",
                 table: "AspNetUsers",
-                column: "ManagerId1");
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -427,6 +553,27 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItemsTable_PalletTypeId",
+                table: "InventoryItemsTable",
+                column: "PalletTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItemsTable_ProductId",
+                table: "InventoryItemsTable",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryItemsTable_StorageLocationId",
+                table: "InventoryItemsTable",
+                column: "StorageLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PackagingProfilesTable_ProductId",
+                table: "PackagingProfilesTable",
+                column: "ProductId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductTable_CategoryId",
@@ -439,12 +586,6 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductTable_PackagingProfileId",
-                table: "ProductTable",
-                column: "PackagingProfileId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
@@ -453,6 +594,16 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 name: "IX_RoleUserAccount_UsersId",
                 table: "RoleUserAccount",
                 column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StorageLocation_WarehouseSectionId",
+                table: "StorageLocation",
+                column: "WarehouseSectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseSection_WarehouseId",
+                table: "WarehouseSection",
+                column: "WarehouseId");
         }
 
         /// <inheritdoc />
@@ -477,7 +628,10 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "ProductTable");
+                name: "InventoryItemsTable");
+
+            migrationBuilder.DropTable(
+                name: "PackagingProfilesTable");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokens");
@@ -495,19 +649,31 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "CategoryTable");
+                name: "PalletTypesTable");
 
             migrationBuilder.DropTable(
-                name: "ManufacturerTable");
+                name: "StorageLocation");
 
             migrationBuilder.DropTable(
-                name: "PackagingProfile");
+                name: "ProductTable");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "WarehouseSection");
+
+            migrationBuilder.DropTable(
+                name: "CategoryTable");
+
+            migrationBuilder.DropTable(
+                name: "ManufacturerTable");
+
+            migrationBuilder.DropTable(
+                name: "Warehouse");
         }
     }
 }

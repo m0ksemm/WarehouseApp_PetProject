@@ -17,7 +17,7 @@ namespace WP.DataAccess.ApplicationDb.Configurations
                 t.HasCheckConstraint("CK_Pallet_MaxLoad_Positive", "[MaxLoadGrams] > 0");
                 t.HasCheckConstraint("CK_Pallet_Length_Positive", "[LengthCm] > 0");
                 t.HasCheckConstraint("CK_Pallet_Width_Positive", "[WidthCm] > 0");
-            });
+            }).HasKey(e => e.Id);
 
             builder.Property(e => e.PalletName).HasColumnName("PalletName").IsRequired();
 

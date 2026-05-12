@@ -26,7 +26,7 @@ namespace WP.DataAccess.Entities
 
         public Guid? ManagerId { get; set; }
 
-        public int? TenantId { get; set; }
+        public Guid? TenantId { get; set; }
 
         public bool IsActive { get; set; } = true;
 
