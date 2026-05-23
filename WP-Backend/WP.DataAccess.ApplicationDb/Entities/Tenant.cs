@@ -7,6 +7,7 @@ namespace WP.DataAccess.Entities
 {
     public class Tenant : BaseEntity
     {
+        public Guid UserAccountId { get; set; }
         public string CompanyName { get; set; } = null!;
 
         public string? ContactPerson { get; set; }
@@ -17,8 +18,8 @@ namespace WP.DataAccess.Entities
 
         public string? Address { get; set; }
 
-        public ICollection<StorageLease> Leases { get; set; } = new List<StorageLease>();
+        public UserAccount UserAccount { get; set; } = null!;
 
-        public ICollection<SpaceReservation> Reservations { get; set; } = new List<SpaceReservation>();
+        public ICollection<StorageLease> StorageLeases { get; set; } = new List<StorageLease>();
     }
 }

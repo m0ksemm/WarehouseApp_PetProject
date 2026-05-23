@@ -15,9 +15,9 @@ namespace WP.DataAccess.Entities
 
         public int? WarehouseSectionId { get; set; }
 
-        public int ReservedPalletPlaces { get; set; }
+        public int RequestedPalletPlaces { get; set; }
 
-        public decimal ReservedAreaM2 { get; set; }
+        public decimal RequestedAreaM2 { get; set; }
 
         public decimal MonthlyPrice { get; set; }
 
@@ -27,9 +27,11 @@ namespace WP.DataAccess.Entities
 
         public LeaseStatus Status { get; set; }
 
-        public Tenant Tenant { get; set; } = null!;
+        public string? Notes { get; set; }
 
-        public Warehouse Warehouse { get; set; } = null!;
+        public Tenant Tenant { get; set; } = null!; 
+
+        public Warehouse Warehouse { get; set; } = null!; 
 
         public WarehouseSection? WarehouseSection { get; set; }
     }

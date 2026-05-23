@@ -33,5 +33,7 @@ namespace WP.DataAccess.Entities
         public Warehouse Warehouse { get; set; } = null!;
 
         public ICollection<StorageLocation> StorageLocations { get; set; } = new List<StorageLocation>();
+
+        public ICollection<StorageLease> StorageLeases { get; set; } = new List<StorageLease>();
     }
 }

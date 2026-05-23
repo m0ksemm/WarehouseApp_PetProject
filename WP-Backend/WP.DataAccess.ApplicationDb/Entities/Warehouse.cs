@@ -13,5 +13,7 @@
         public bool SupportsAmericanPallets { get; set; }
 
         public ICollection<WarehouseSection> Sections { get; set; } = new List<WarehouseSection>();
+
+        public ICollection<StorageLease> StorageLeases { get; set; } = new List<StorageLease>();
     }
 }
