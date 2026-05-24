@@ -9,11 +9,11 @@ namespace WP.DataAccess.Entities
 {
     public class StorageLease : BaseEntity
     {
-        public int TenantId { get; set; }
+        public Guid TenantId { get; set; }
 
-        public int WarehouseId { get; set; }
+        public Guid WarehouseId { get; set; }
 
-        public int? WarehouseSectionId { get; set; }
+        public Guid WarehouseSectionId { get; set; }
 
         public int RequestedPalletPlaces { get; set; }
 
@@ -33,6 +33,6 @@ namespace WP.DataAccess.Entities
 
         public Warehouse Warehouse { get; set; } = null!; 
 
-        public WarehouseSection? WarehouseSection { get; set; }
+        public WarehouseSection WarehouseSection { get; set; }
     }
 }

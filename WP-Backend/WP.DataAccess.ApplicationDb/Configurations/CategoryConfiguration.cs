@@ -13,9 +13,11 @@ namespace WP.DataAccess.ApplicationDb.Configurations
         {
             builder.ToTable("CategoryTable").HasKey(e => e.Id);
 
-            builder.Property(e => e.CategoryName).HasColumnName("CategoryName").IsRequired();
+            builder.Property(e => e.CategoryName).HasColumnName("CategoryName").HasMaxLength(100).IsRequired();
 
-            builder.Property(e => e.Description).HasColumnName("Description");
+            builder.Property(e => e.Description).HasMaxLength(200).HasColumnName("Description");
+
+            builder.HasIndex(e => e.CategoryName).IsUnique();
         }
     }
 }

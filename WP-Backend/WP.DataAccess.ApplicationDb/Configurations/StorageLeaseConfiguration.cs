@@ -17,6 +17,7 @@ namespace WP.DataAccess.ApplicationDb.Configurations
                 t.HasCheckConstraint("CK_Requested_Pallet_Places_Positive", "[RequestedPalletPlaces] > 0");
                 t.HasCheckConstraint("CK_Requested_Area_M2_Positive", "[RequestedAreaM2] > 0");
                 t.HasCheckConstraint("CK_Monthly_Price_Positive", "[MonthlyPrice] > 0");
+                t.HasCheckConstraint("CK_StorageLease_EndDate_After_StartDate", "[EndDate] > [StartDate]");
             }).HasKey(e => e.Id);
 
             builder.Property(e => e.TenantId).HasColumnName("TenantId").IsRequired();
@@ -37,19 +38,22 @@ namespace WP.DataAccess.ApplicationDb.Configurations
 
             builder.Property(e => e.Status).HasColumnName("LeaseStatus").IsRequired();
 
-            builder.Property(e => e.Notes).HasColumnName("Notes");
+            builder.Property(e => e.Notes).HasColumnName("Notes").HasMaxLength(300);
 
             builder.HasOne(e => e.Tenant)
                 .WithMany(t => t.StorageLeases)
-                .HasForeignKey(e => e.TenantId);
+                .HasForeignKey(e => e.TenantId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(e => e.Warehouse)
                 .WithMany(w => w.StorageLeases)
-                .HasForeignKey(e => e.WarehouseId);
+                .HasForeignKey(e => e.WarehouseId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(e => e.WarehouseSection)
                 .WithMany(ws => ws.StorageLeases)
-                .HasForeignKey(e => e.WarehouseSectionId);
+                .HasForeignKey(e => e.WarehouseSectionId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

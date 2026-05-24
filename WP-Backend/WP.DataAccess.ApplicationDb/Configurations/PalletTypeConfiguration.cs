@@ -30,6 +30,8 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             builder.Property(e => e.MaxLoadKg).HasColumnName("MaxLoadGrams").IsRequired().HasWeightConversion();
 
             builder.Property(e => e.MaxHeightCm).HasColumnName("MaxHeightCm").HasPrecision(18, 2).IsRequired();
+
+            builder.HasIndex(e => e.PalletName).IsUnique();
         }
     }
 }

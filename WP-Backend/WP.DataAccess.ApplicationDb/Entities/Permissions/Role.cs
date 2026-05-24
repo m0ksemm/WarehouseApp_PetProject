@@ -8,6 +8,7 @@ namespace WP.DataAccess.Entities.Permisions
         {
             Users = new HashSet<UserAccount>();
             Permissions = new HashSet<ApplicationPermission>();
+            UserTypes = new HashSet<UserType>();
         }
 
         public Roles Id { get; set; }
@@ -23,5 +24,7 @@ namespace WP.DataAccess.Entities.Permisions
         public ICollection<UserAccount> Users { get; set; }
 
         public ICollection<ApplicationPermission> Permissions { get; set; }
+
+        public ICollection<UserType> UserTypes { get; set; }
     }
 }

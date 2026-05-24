@@ -17,15 +17,15 @@ namespace WP.DataAccess.ApplicationDb.Configurations
 
             }).HasKey(e => e.Id);
 
-            builder.Property(e => e.Name).HasColumnName("WarehouseName").IsRequired();
+            builder.Property(e => e.Name).HasColumnName("WarehouseName").HasMaxLength(100).IsRequired();
 
-            builder.Property(e => e.Address).HasColumnName("Address").IsRequired();
+            builder.Property(e => e.Address).HasColumnName("Address").HasMaxLength(300).IsRequired();
 
             builder.Property(e => e.TotalAreaM2).HasColumnName("TotalAreaM2").HasPrecision(18, 2).IsRequired();
 
             builder.Property(e => e.SupportsEuropeanPallets).HasColumnName("SupportsEuropeanPallets").IsRequired();
 
-            builder.Property(e => e.SupportsAmericanPallets).HasColumnName("SupportsAmericanPallets").IsRequired();
+            builder.HasIndex(e => e.Name).IsUnique();
         }
     }
 }

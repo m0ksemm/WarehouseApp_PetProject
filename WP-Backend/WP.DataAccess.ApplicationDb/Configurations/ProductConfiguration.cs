@@ -21,13 +21,13 @@ namespace WP.DataAccess.ApplicationDb.Configurations
                 t.HasCheckConstraint("CK_Price_Positive", "[Price] > 0");
             }).HasKey(e => e.Id);
 
-            builder.Property(e => e.ProductName).HasColumnName("ProductName").IsRequired();
+            builder.Property(e => e.ProductName).HasColumnName("ProductName").HasMaxLength(100).IsRequired();
 
-            builder.Property(e => e.Description).HasColumnName("Description");
+            builder.Property(e => e.Description).HasColumnName("Description").HasMaxLength(300);
 
-            builder.Property(e => e.SKU).HasColumnName("SKU").IsRequired();
+            builder.Property(e => e.SKU).HasColumnName("SKU").HasMaxLength(100).IsRequired();
 
-            builder.Property(e => e.BarCode).HasColumnName("BarCode").IsRequired();
+            builder.Property(e => e.BarCode).HasColumnName("BarCode").HasMaxLength(100).IsRequired();
 
             builder.Property(e => e.CategoryId).HasColumnName("CategoryId").IsRequired();
 
@@ -50,6 +50,10 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             builder.Property(e => e.MinStorageTemperature).HasColumnName("MinStorageTemperature").HasPrecision(18, 2);
 
             builder.Property(e => e.MaxStorageTemperature).HasColumnName("MaxStorageTemperature").HasPrecision(18, 2);
+
+            builder.HasIndex(e => e.SKU).IsUnique();
+
+            builder.HasIndex(e => e.BarCode).IsUnique();
 
             builder
                 .HasOne(e => e.Category)

@@ -8,6 +8,7 @@ namespace WP.DataAccess.Entities
     public class Tenant : BaseEntity
     {
         public Guid UserAccountId { get; set; }
+
         public string CompanyName { get; set; } = null!;
 
         public string? ContactPerson { get; set; }

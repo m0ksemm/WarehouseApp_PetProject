@@ -8,10 +8,10 @@ namespace WP.DataAccess.ApplicationDb.Configurations
     {
         public override void Configure(EntityTypeBuilder<UserAccount> builder)
         {
-            builder.Property(x => x.UserName).IsRequired();
-            builder.Property(x => x.Email);
-            builder.Property(x => x.FirstName).IsRequired();
-            builder.Property(x => x.LastName).IsRequired();
+            builder.Property(x => x.UserName).HasMaxLength(150).IsRequired();
+            builder.Property(x => x.Email).HasMaxLength(150);
+            builder.Property(x => x.FirstName).HasMaxLength(150).IsRequired();
+            builder.Property(x => x.LastName).HasMaxLength(150).IsRequired();
 
             builder.Property(x => x.Id).HasDefaultValueSql("newsequentialid()");
 

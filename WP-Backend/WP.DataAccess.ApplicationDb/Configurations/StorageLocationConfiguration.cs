@@ -15,12 +15,12 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             builder.ToTable("StorageLocationTable", t => 
             {
                 t.HasCheckConstraint("CK_Max_Pallets_Positive", "[MaxPallets] > 0");
-                t.HasCheckConstraint("CK_Max_Weight_Kg_Positive", "[MaxWeightKg] > 0");
+                t.HasCheckConstraint("CK_StorageLocation_MaxWeightKg_Positive", "[MaxWeightKg] > 0");
             }).HasKey(e => e.Id);
 
             builder.Property(e => e.WarehouseSectionId).HasColumnName("WarehouseSectionId").IsRequired();
 
-            builder.Property(e => e.Code).HasColumnName("Code").IsRequired();
+            builder.Property(e => e.Code).HasColumnName("Code").HasMaxLength(100).IsRequired();
 
             builder.Property(e => e.LocationType).HasColumnName("LocationType").IsRequired();
 
@@ -29,6 +29,10 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             builder.Property(e => e.MaxWeightKg).HasColumnName("MaxWeightKg").HasPrecision(18, 2);
 
             builder.Property(e => e.IsOccupied).HasColumnName("IsOccupied");
+
+            builder.HasIndex(e => new { e.WarehouseSectionId, e.Code })
+                .IsUnique()
+                .HasDatabaseName("UX_StorageLocation_WarehouseSectionId_Code");
 
             builder.HasOne(e => e.WarehouseSection)
                 .WithMany(p => p.StorageLocations)

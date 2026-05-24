@@ -11,9 +11,11 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             builder.ToTable("InventoryItemsTable", t =>
             {
                 t.HasCheckConstraint("CK_Inventory_QuantityUnits_Positive", "[QuantityUnits] > 0");
-                t.HasCheckConstraint("CK_Inventory_ReservedUnits_Positive", "[ReservedUnits] > 0");
+                t.HasCheckConstraint("CK_Inventory_ReservedUnits_NonNegative", "[ReservedUnits] >= 0");
                 t.HasCheckConstraint("CK_Inventory_OccupiedPallets_Positive", "[OccupiedPallets] > 0");
                 t.HasCheckConstraint("CK_Inventory_OccupiedArea_Positive", "[OccupiedAreaM2] > 0");
+                t.HasCheckConstraint("CK_Inventory_ReservedUnits_LessOrEqual_QuantityUnits", "[ReservedUnits] <= [QuantityUnits]");
+                t.HasCheckConstraint("CK_Inventory_ReservedUnits_NonNegative", "[ReservedUnits] >= 0");
             }).HasKey(e => e.Id);
 
             builder.Property(e => e.ProductId).HasColumnName("ProductId").IsRequired();
@@ -30,7 +32,7 @@ namespace WP.DataAccess.ApplicationDb.Configurations
 
             builder.Property(e => e.OccupiedAreaM2).HasColumnName("OccupiedAreaM2").HasPrecision(18, 2).IsRequired();
 
-            builder.Property(e => e.BatchNumber).HasColumnName("BatchNumber");
+            builder.Property(e => e.BatchNumber).HasColumnName("BatchNumber").HasMaxLength(100);
 
             builder.Property(e => e.ExpirationDate).HasColumnName("ExpirationDate").HasConversion<DateTime?>();
 

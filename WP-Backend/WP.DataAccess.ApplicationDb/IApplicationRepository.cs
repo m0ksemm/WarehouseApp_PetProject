@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WP.DataAccess.Interfaces;
+﻿using WP.DataAccess.Interfaces;
 
 namespace WP.DataAccess.ApplicationDb
 {

@@ -16,14 +16,14 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             {
                 t.HasCheckConstraint("CK_Area_M2_Positive", "[AreaM2] > 0");
                 t.HasCheckConstraint("CK_Max_Pallet_Capacity_Positive", "[MaxPalletCapacity] > 0");
-                t.HasCheckConstraint("CK_Max_Weight_Kg_Positive", "[MaxWeightKg] > 0");
+                t.HasCheckConstraint("CK_WarehouseSection_MaxWeightKg_Positive", "[MaxWeightKg] > 0");
             }).HasKey(e => e.Id);
 
             builder.Property(e => e.WarehouseId).HasColumnName("WarehouseId").IsRequired();
 
-            builder.Property(e => e.Code).HasColumnName("Code").IsRequired();
+            builder.Property(e => e.Code).HasColumnName("Code").HasMaxLength(100).IsRequired();
 
-            builder.Property(e => e.Name).HasColumnName("Name").IsRequired();
+            builder.Property(e => e.Name).HasColumnName("Name").HasMaxLength(100).IsRequired();
 
             builder.Property(e => e.AreaM2).HasColumnName("AreaM2").HasPrecision(18, 2).IsRequired();
 
@@ -36,6 +36,10 @@ namespace WP.DataAccess.ApplicationDb.Configurations
             builder.Property(e => e.MinTemperature).HasColumnName("MinTemperature").HasPrecision(18, 2);
 
             builder.Property(e => e.MaxTemperature).HasColumnName("MaxTemperature").HasPrecision(18, 2);
+
+            builder.HasIndex(e => new { e.WarehouseId, e.Code })
+                .IsUnique()
+                .HasDatabaseName("UX_WarehouseSection_WarehouseId_Code");
 
             builder.HasOne(e => e.Warehouse)
                 .WithMany(w => w.Sections)

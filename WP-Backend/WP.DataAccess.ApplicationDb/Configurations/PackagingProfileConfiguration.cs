@@ -32,7 +32,7 @@ namespace WP.DataAccess.ApplicationDb.Configurations
                 .HasPrecision(18, 2)
                 .IsRequired();
 
-            builder.Property(e => e.Notes).HasColumnName("Notes");
+            builder.Property(e => e.Notes).HasColumnName("Notes").HasMaxLength(300);
 
             builder.HasOne(e => e.Product)
                 .WithOne(p => p.PackagingProfile)

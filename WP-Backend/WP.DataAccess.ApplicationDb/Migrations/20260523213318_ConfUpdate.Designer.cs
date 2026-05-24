@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WP.DataAccess.ApplicationDb;
 
@@ -11,9 +12,11 @@ using WP.DataAccess.ApplicationDb;
 namespace WP.DataAccess.ApplicationDb.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260523213318_ConfUpdate")]
+    partial class ConfUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,19 +234,14 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("CategoryName");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Description");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryName")
-                        .IsUnique();
 
                     b.ToTable("CategoryTable", (string)null);
                 });
@@ -255,8 +253,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BatchNumber")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("BatchNumber");
 
                     b.Property<DateTime?>("ExpirationDate")
@@ -312,9 +309,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                             t.HasCheckConstraint("CK_Inventory_QuantityUnits_Positive", "[QuantityUnits] > 0");
 
-                            t.HasCheckConstraint("CK_Inventory_ReservedUnits_LessOrEqual_QuantityUnits", "[ReservedUnits] <= [QuantityUnits]");
-
-                            t.HasCheckConstraint("CK_Inventory_ReservedUnits_NonNegative", "[ReservedUnits] >= 0");
+                            t.HasCheckConstraint("CK_Inventory_ReservedUnits_Positive", "[ReservedUnits] > 0");
                         });
                 });
 
@@ -325,29 +320,24 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Address");
 
                     b.Property<string>("ContactEmail")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("ContactEmail");
 
                     b.Property<string>("ContactPhone")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("ContactPhone");
 
                     b.Property<string>("Country")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Country");
 
                     b.Property<string>("ManufacturerName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("ManufacturerName");
 
                     b.Property<int>("TotalDeliveries")
@@ -355,9 +345,6 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("TotalDeliveries");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ManufacturerName")
-                        .IsUnique();
 
                     b.ToTable("ManufacturerTable", (string)null);
                 });
@@ -385,8 +372,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("MaximumStackCount");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Notes");
 
                     b.Property<int>("PackageType")
@@ -435,7 +421,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("PalletName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("PalletName");
 
                     b.Property<int>("PalletStandard")
@@ -448,9 +434,6 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("WidthCm");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PalletName")
-                        .IsUnique();
 
                     b.ToTable("PalletTypesTable", null, t =>
                         {
@@ -500,10 +483,6 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.PrimitiveCollection<string>("UserTypes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Role");
@@ -517,8 +496,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("BarCode")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("BarCode");
 
                     b.Property<Guid>("CategoryId")
@@ -526,8 +504,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("CategoryId");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Description");
 
                     b.Property<decimal>("HeightCm")
@@ -565,8 +542,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("ProductName");
 
                     b.Property<bool>("RequiresTemperatureControl")
@@ -575,8 +551,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("SKU")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("SKU");
 
                     b.Property<decimal>("WeightKg")
@@ -591,15 +566,9 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BarCode")
-                        .IsUnique();
-
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ManufacturerId");
-
-                    b.HasIndex("SKU")
-                        .IsUnique();
 
                     b.ToTable("ProductTable", null, t =>
                         {
@@ -631,8 +600,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("MonthlyPrice");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Notes");
 
                     b.Property<decimal>("RequestedAreaM2")
@@ -679,8 +647,6 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                             t.HasCheckConstraint("CK_Requested_Area_M2_Positive", "[RequestedAreaM2] > 0");
 
                             t.HasCheckConstraint("CK_Requested_Pallet_Places_Positive", "[RequestedPalletPlaces] > 0");
-
-                            t.HasCheckConstraint("CK_StorageLease_EndDate_After_StartDate", "[EndDate] > [StartDate]");
                         });
                 });
 
@@ -692,8 +658,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Code");
 
                     b.Property<bool>("IsOccupied")
@@ -719,15 +684,13 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseSectionId", "Code")
-                        .IsUnique()
-                        .HasDatabaseName("UX_StorageLocation_WarehouseSectionId_Code");
+                    b.HasIndex("WarehouseSectionId");
 
                     b.ToTable("StorageLocationTable", null, t =>
                         {
                             t.HasCheckConstraint("CK_Max_Pallets_Positive", "[MaxPallets] > 0");
 
-                            t.HasCheckConstraint("CK_StorageLocation_MaxWeightKg_Positive", "[MaxWeightKg] > 0");
+                            t.HasCheckConstraint("CK_Max_Weight_Kg_Positive", "[MaxWeightKg] > 0");
                         });
                 });
 
@@ -738,24 +701,20 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Address")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Address");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("CompanyName");
 
                     b.Property<string>("ContactPerson")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("ContactPerson");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Email");
 
                     b.Property<string>("Phone")
@@ -791,16 +750,15 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -810,8 +768,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -850,8 +807,8 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<int>("UserStatus")
                         .HasColumnType("int");
@@ -891,18 +848,17 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Address");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("WarehouseName");
 
                     b.Property<bool>("SupportsAmericanPallets")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("SupportsAmericanPallets");
 
                     b.Property<bool>("SupportsEuropeanPallets")
                         .HasColumnType("bit")
@@ -914,9 +870,6 @@ namespace WP.DataAccess.ApplicationDb.Migrations
                         .HasColumnName("TotalAreaM2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
 
                     b.ToTable("WarehouseTable", null, t =>
                         {
@@ -937,8 +890,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Code");
 
                     b.Property<bool>("IsTemperatureControlled")
@@ -966,8 +918,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Name");
 
                     b.Property<int>("SectionType")
@@ -979,9 +930,7 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WarehouseId", "Code")
-                        .IsUnique()
-                        .HasDatabaseName("UX_WarehouseSection_WarehouseId_Code");
+                    b.HasIndex("WarehouseId");
 
                     b.ToTable("WarehouseSectionTable", null, t =>
                         {
@@ -989,7 +938,8 @@ namespace WP.DataAccess.ApplicationDb.Migrations
 
                             t.HasCheckConstraint("CK_Max_Pallet_Capacity_Positive", "[MaxPalletCapacity] > 0");
 
-                            t.HasCheckConstraint("CK_WarehouseSection_MaxWeightKg_Positive", "[MaxWeightKg] > 0");
+                            t.HasCheckConstraint("CK_Max_Weight_Kg_Positive", "[MaxWeightKg] > 0")
+                                .HasName("CK_Max_Weight_Kg_Positive1");
                         });
                 });
 

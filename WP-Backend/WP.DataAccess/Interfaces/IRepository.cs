@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace WP.DataAccess.Interfaces
 {
-    public interface IRepository<TEntity> : IQueryable<TEntity>, IEnumerable<TEntity>, IEnumerable, IQueryable, IAsyncEnumerable<TEntity>
+    public interface IRepository<TEntity> : IQueryable<TEntity>, IEnumerable<TEntity>, IEnumerable, IQueryable
         where TEntity : class
     {
         Task<int> BatchDeleteAsync(Expression<Func<TEntity, bool>> predicate);
